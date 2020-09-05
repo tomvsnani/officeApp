@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/amainappbarincludelayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerlayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fitsSystemWindows="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/design_navigation_view"
+            android:layout_width="wrap_content"
+            android:background="#ffffff"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:itemTextColor="#6b6b6b"
+            app:menu="@menu/navigationmenu" />
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
