@@ -39,6 +39,7 @@ class MainRecyclerAdapter(var mainActivity: MainActivity,var map:LinkedHashMap<S
         init {
             linearLayout.setOnClickListener {
                 Log.d("clicked","yess")
+
                 mainActivity.supportFragmentManager.beginTransaction().replace(R.id.container,CategoriesFragment(map)).addToBackStack(null)
                     .commit()
             }

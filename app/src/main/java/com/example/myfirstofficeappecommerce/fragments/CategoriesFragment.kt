@@ -3,6 +3,8 @@ package com.example.myfirstofficeappecommerce.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myfirstofficeappecommerce.Adapters.ViewPagerAdapter
@@ -18,6 +20,7 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
     var viewPager2: ViewPager2? = null
     var tablayout: TabLayout? = null;
     var categoryNames: List<String>?=null
+    var toolbar:Toolbar?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +29,9 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
         setHasOptionsMenu(true)
         var view: View = inflater.inflate(R.layout.fragment_categories, container, false)
         categoryNames=list?.keys?.toList()
+        toolbar=view.findViewById(R.id.categoriesFragmenttoolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
         viewPager2 = view.findViewById(R.id.viewpagerincategory)
         (viewPager2 as ViewPager2).adapter=CategoryViewPagerAdapter(this,list!!)
         tablayout = view.findViewById(R.id.tablayoutincategory)

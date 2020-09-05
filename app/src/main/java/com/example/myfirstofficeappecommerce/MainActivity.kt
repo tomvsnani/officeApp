@@ -21,17 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        toolbar = findViewById(R.id.maintoolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        drawerLayout = findViewById(R.id.drawerlayout)
-        actionBarToggle = ActionBarDrawerToggle(
-            this, drawerLayout, R.string.openDrawerLayout,
-            R.string.closeDrawerLayout
-        )
-        (drawerLayout as DrawerLayout).addDrawerListener(actionBarToggle!!)
-        (actionBarToggle as ActionBarDrawerToggle).syncState()
 
         supportFragmentManager.beginTransaction().replace(R.id.container,
             MainFragment()
@@ -40,21 +30,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            if (drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
-                drawerLayout?.closeDrawer(GravityCompat.START)
-            } else {
-                drawerLayout?.openDrawer(GravityCompat.START)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        menuInflater.inflate(R.menu.toolbarmenu, menu)
+        menuInflater.inflate(R.menu.toolbarmenu,menu)
         return super.onCreateOptionsMenu(menu)
     }
+
 }

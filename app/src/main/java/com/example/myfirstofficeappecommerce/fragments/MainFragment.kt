@@ -3,6 +3,10 @@ package com.example.myfirstofficeappecommerce.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +31,9 @@ class MainFragment : Fragment() {
     var tablayout: TabLayout? = null;
     var categoryMap: LinkedHashMap<String, List<CategoriesModelClass>>? = null;
     var isScrollForward: Boolean = true
+    private var toolbar: androidx.appcompat.widget.Toolbar? = null
+    private var drawerLayout: DrawerLayout? = null
+    private var actionBarToggle: ActionBarDrawerToggle? = null
 
     private val SCROLL_TIMEOUT = 4000L
 
@@ -36,7 +43,9 @@ class MainFragment : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
         setHasOptionsMenu(true)
+
         firstLayoutHoriZontalScrollItemNames(view)
+
         viewPager2 = view.findViewById(R.id.viewpager)
         (viewPager2 as ViewPager2).adapter =
             ViewPagerAdapter(this)
@@ -48,6 +57,20 @@ class MainFragment : Fragment() {
         ) { tab: TabLayout.Tab, i: Int ->
 
         }.attach()
+
+
+
+        toolbar = view.findViewById(R.id.maintoolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity). supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        drawerLayout = view.findViewById(R.id.drawerlayout)
+        actionBarToggle = ActionBarDrawerToggle(
+            activity, drawerLayout, R.string.openDrawerLayout,
+            R.string.closeDrawerLayout
+        )
+        (drawerLayout as DrawerLayout).addDrawerListener(actionBarToggle!!)
+        (actionBarToggle as ActionBarDrawerToggle).syncState()
 
         (viewPager2 as ViewPager2).registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -97,10 +120,18 @@ class MainFragment : Fragment() {
         (adapterr as MainRecyclerAdapter).submitList(list)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragmentmenu,menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            if (drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
+                drawerLayout?.closeDrawer(GravityCompat.START)
+            } else {
+                drawerLayout?.openDrawer(GravityCompat.START)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
+
+
 
 
 }
