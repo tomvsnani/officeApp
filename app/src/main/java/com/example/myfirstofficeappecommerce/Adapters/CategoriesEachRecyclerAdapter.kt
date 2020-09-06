@@ -4,28 +4,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 
-class CategoriesEachRecyclerAdapter(callback: (CategoriesModelClass) -> Unit) :
+class CategoriesEachRecyclerAdapter(callback: (Pair<String,CategoriesModelClass>) -> Unit) :
     ListAdapter<CategoriesModelClass, CategoriesEachRecyclerAdapter.CategoryViewHolder>(
         CategoriesModelClass.diffUtil
     ) {
-    var mutableselectedItemsList: MutableLiveData<CategoriesModelClass> = MutableLiveData()
+    var mutableselectedItemsList: MutableLiveData<Pair<String,CategoriesModelClass>> = MutableLiveData()
 
     init {
         mutableselectedItemsList.observeForever(Observer {
+
+           if(it.first=="add") {
+               it.second.quantityOfItem++
+
+           }
+            else
+               it.second.quantityOfItem--
+
+            Log.d("modelclass",it.second.quantityOfItem.toString())
+            notifyItemChanged(currentList.indexOf(it.second))
             callback(it)
-            it.quantityOfItem++
-            notifyItemChanged(currentList.indexOf(it))
         })
     }
 
@@ -38,12 +44,26 @@ class CategoriesEachRecyclerAdapter(callback: (CategoriesModelClass) -> Unit) :
         val itemNetWeight: TextView = itemView.findViewById(R.id.NetWeightTextView)
         val realmrp: TextView = itemView.findViewById(R.id.originalPriceTextView)
         val addToCart: Button = itemView.findViewById(R.id.addToCartButton)
-        val addOrRemoveItemLinearLayout:LinearLayout=itemView.findViewById(R.id.addorremoveitemslinearlayout)
+        val addOrRemoveItemLinearLayout: LinearLayout =
+            itemView.findViewById(R.id.addorremoveitemslinearlayout)
+        val removeItemsImageButton: ImageButton = itemView.findViewById(R.id.removeitemsImageButton)
+        val addItemsImageButton: ImageButton = itemView.findViewById(R.id.additemsImageButton)
+        val quantityOfItemAddaedToCartTextView: TextView =
+            itemView.findViewById(R.id.cartitemquantitiytextview)
 
 
         init {
             addToCart.setOnClickListener {
-                mutableselectedItemsList.value = currentList[adapterPosition]
+                mutableselectedItemsList.value = Pair("add",currentList[adapterPosition])
+
+            }
+
+            removeItemsImageButton.setOnClickListener {
+                mutableselectedItemsList.value = Pair("remove",currentList[adapterPosition])
+            }
+
+            addItemsImageButton.setOnClickListener {
+                mutableselectedItemsList.value = Pair("add",currentList[adapterPosition])
             }
         }
     }
@@ -56,14 +76,13 @@ class CategoriesEachRecyclerAdapter(callback: (CategoriesModelClass) -> Unit) :
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         var modelClass = currentList[position]
-        if(modelClass.quantityOfItem>0)
-        {
-            holder.addToCart.visibility=View.GONE
-            holder.addOrRemoveItemLinearLayout.visibility=View.VISIBLE
-        }
-        else{
-            holder.addToCart.visibility=View.VISIBLE
-            holder.addOrRemoveItemLinearLayout.visibility=View.GONE
+        if (modelClass.quantityOfItem > 0) {
+            holder.addToCart.visibility = View.GONE
+            holder.addOrRemoveItemLinearLayout.visibility = View.VISIBLE
+            holder.quantityOfItemAddaedToCartTextView.text = modelClass.quantityOfItem.toString()
+        } else {
+            holder.addToCart.visibility = View.VISIBLE
+            holder.addOrRemoveItemLinearLayout.visibility = View.GONE
         }
         holder.itemDescription.text = modelClass.itemDescriptionText
         holder.realmrp.text = modelClass.realTimeMrp

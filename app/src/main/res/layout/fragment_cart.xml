@@ -16,23 +16,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="#ffffff">
+        android:layout_marginStart="0dp"
+        android:padding="0dp"
+        app:contentInsetLeft="0dp"
+        app:titleTextColor="#ffffff"
+        android:layout_marginLeft="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/cartToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#212121"
+            app:contentInsetStartWithNavigation="0dp"
+            android:layout_marginStart="0dp"
+            app:contentInsetLeft="0dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:title="">
+            app:title=""
+            android:layout_marginLeft="0dp">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Your Cart"
+                android:layout_marginEnd="?android:attr/actionBarSize"
+                android:textColor="#ffffff"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_marginRight="?android:attr/actionBarSize" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,8 +53,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRecyclerviewRecommondedItems"
@@ -53,8 +62,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -66,105 +74,86 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:elevation="8dp">
+            android:backgroundTint="#ffffff"
+            android:orientation="horizontal"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
 
-                <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#ffffff"
-                    android:orientation="horizontal"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp">
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/addresstextviewtextView"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
+                        android:layout_marginTop="8dp"
+                        android:text="TextView"
+                        android:textColor="#6b6b6b"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/searchItemPiecesTextView"
+                        app:layout_constraintTop_toBottomOf="@+id/searchItemPiecesTextView" />
 
-                        <ImageView
-                            android:id="@+id/cartfragmentLocationImageview"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                    <TextView
+                        android:id="@+id/searchItemPiecesTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Delivery Address"
+                        android:textColor="#212121"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/searchitemNametextView"
+                        app:layout_constraintEnd_toStartOf="@+id/searchfragmentaddtocart"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/cartfragmentLocationImageview"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                            android:layout_marginTop="16dp"
-                            android:layout_weight="0.3"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/download" />
+                    <Button
+                        android:id="@+id/paymentbuttoncart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="0.001"
+                        android:background="?attr/selectableItemBackground"
+                        android:minHeight="20dp"
+                        android:text="Change"
+                        android:textAllCaps="false"
+                        android:textColor="#f4511e"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageView
+                        android:id="@+id/cartfragmentLocationImageview"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="0.3"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/download" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:orientation="vertical">
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                            <TextView
-                                android:id="@+id/searchitemNametextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_marginLeft="12dp"
-                                android:layout_marginTop="20dp"
-                                android:text="TextView"
-                                android:textColor="#6b6b6b"
-                                app:layout_constraintStart_toEndOf="@+id/imageView"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/searchItemPiecesTextView"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="12dp"
-                                    android:layout_marginLeft="12dp"
-                                    android:layout_marginTop="8dp"
-                                    android:text="TextView"
-                                    android:textColor="#6b6b6b"
-                                    app:layout_constraintStart_toEndOf="@+id/imageView"
-                                    app:layout_constraintTop_toBottomOf="@+id/searchitemNametextView" />
-
-                                <TextView
-                                    android:id="@+id/searchItemPriceTextview"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="20dp"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="8dp"
-                                    android:text="TextView"
-                                    android:textColor="#6b6b6b"
-                                    app:layout_constraintStart_toEndOf="@+id/searchItemPiecesTextView"
-                                    app:layout_constraintTop_toBottomOf="@+id/searchitemNametextView" />
-
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/searchfragmentaddtocart"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_weight="0.001"
-                            android:background="@drawable/searchaddtocartdrawable"
-                            android:minHeight="35dp"
-                            android:text="Add to Cart"
-                            android:textColor="#f4511e"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -179,31 +168,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:padding="4dp"
 
-                android:padding="16dp">
+                >
 
                 <TextView
                     android:id="@+id/totalamounttextviewcart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Total:550"
-                    android:textSize="24sp" />
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp" />
 
                 <View
                     android:layout_width="1dp"
-
                     android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:background="#ffffff" />
 
                 <TextView
                     android:id="@+id/proceedTextViewCart"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:drawablePadding="-24dp"
+                    android:gravity="center"
+                    android:padding="8dp"
                     android:text="Proceed"
-                    android:textSize="24sp" />
+                    android:textColor="#ffffff"
+                    android:textSize="18sp"
+                    app:drawableRightCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

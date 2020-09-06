@@ -23,7 +23,8 @@
                 android:id="@+id/categoriesFragmenttoolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+                >
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -55,11 +56,11 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/itemsselectedindicatorcardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="8dp"
-        android:id="@+id/itemsselectedindicatorcardview"
         android:backgroundTint="#303030"
 
         app:contentPadding="8dp">
@@ -67,7 +68,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+
 
             android:orientation="horizontal">
 
@@ -100,12 +101,12 @@
             <Button
                 android:id="@+id/checkoutButton"
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:drawableEnd="@drawable/ic_baseline_arrow_forward_ios_24"
                 android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
                 android:minHeight="24dp"
+                android:padding="8dp"
                 android:text="Checkout"
 
                 android:textAllCaps="false"

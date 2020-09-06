@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -12,13 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.myfirstofficeappecommerce.CategoriesDataProvider
+import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.MainRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Models.ModelClass
-import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.Adapters.ViewPagerAdapter
-import com.example.myfirstofficeappecommerce.Constants
-import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -37,6 +36,7 @@ class MainFragment : Fragment() {
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
     private var drawerLayout: DrawerLayout? = null
     private var actionBarToggle: ActionBarDrawerToggle? = null
+    var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
 
     private val SCROLL_TIMEOUT = 4000L
 
@@ -48,10 +48,11 @@ class MainFragment : Fragment() {
         setHasOptionsMenu(true)
         searchEditText = view.findViewById(R.id.mainfragmentsearchedittext)
         searchEditText!!.setOnFocusChangeListener { view, b ->
-            if(view.hasFocus()){
+            if (view.hasFocus()) {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.container, SearchFragment())
                     ?.addToBackStack(null)?.commit()
+
             }
         }
         firstLayoutHoriZontalScrollItemNames(view)
@@ -73,6 +74,7 @@ class MainFragment : Fragment() {
         toolbar = view.findViewById(R.id.maintoolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.title = null
 
         drawerLayout = view.findViewById(R.id.drawerlayout)
         actionBarToggle = ActionBarDrawerToggle(
@@ -136,9 +138,37 @@ class MainFragment : Fragment() {
             } else {
                 drawerLayout?.openDrawer(GravityCompat.START)
             }
+            return true
+        }
+        if (item.itemId == R.id.cartmenu) {
+            activity!!.supportFragmentManager.beginTransaction()
+                .replace(R.id.container, CartFragment(ApplicationClass.selectedItemsList))
+                .addToBackStack(null)
+                .commit()
         }
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Log.d("incheck", selectedItemsList!!.size.toString())
+        menu.findItem(R.id.cartmenu).actionView.findViewById<ImageView>(R.id.cartmenuitem)
+            .setOnClickListener {
+                activity!!.supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, CartFragment(ApplicationClass.selectedItemsList))
+                    .addToBackStack(null)
+                    .commit()
 
+            }
+        if (Utils.getItemCount().toInt() > 0) {
+            Log.d("incheck", "yes")
+            menu.findItem(R.id.cartmenu).actionView.findViewById<TextView>(R.id.cartitemNumberIndicatormenu)
+                .apply {
+                    visibility = View.VISIBLE
+                    text = Utils.getItemCount()
+                }
+
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 }

@@ -15,7 +15,8 @@ data class CategoriesModelClass(
     var imageUrl: String = "ok",
     var quantityOfItem: Int = 0,
     var itemQueueNumber: Int = 0,
-    var id: Int = -1
+    var id: Int = -1,
+    var groupId: Int = -1
 ) {
     companion object {
         val diffUtil: DiffUtil.ItemCallback<CategoriesModelClass> = object :
@@ -33,7 +34,7 @@ data class CategoriesModelClass(
             ): Boolean {
                 return oldItem.itemName == newItem.itemName && oldItem.offerMrp == newItem.offerMrp
                         && oldItem.realTimeMrp == newItem.realTimeMrp && oldItem.timeToReceiveIt == newItem.timeToReceiveIt
-                        && oldItem.quantityOfItem==newItem.quantityOfItem
+                        && oldItem.quantityOfItem == newItem.quantityOfItem
             }
         }
     }

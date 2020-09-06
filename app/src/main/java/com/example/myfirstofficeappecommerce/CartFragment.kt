@@ -1,11 +1,10 @@
 package com.example.myfirstofficeappecommerce
 
 import android.os.Bundle
+import android.util.Log
+import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,28 +13,44 @@ import com.example.myfirstofficeappecommerce.Adapters.CartItemsSelectedRecyclerV
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 
 
-class CartFragment(var selectedItemsList:List<CategoriesModelClass>) : Fragment() {
+class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragment() {
 
     var toolbar: Toolbar? = null
-    var slecetdItemsRecycler:RecyclerView?=null
-    var recommendedItemsRecycler:RecyclerView?=null
-    var itemsSelectedAdapter:CartItemsSelectedRecyclerViewAdapter?=null
+    var slecetdItemsRecycler: RecyclerView? = null
+    var recommendedItemsRecycler: RecyclerView? = null
+    var itemsSelectedAdapter: CartItemsSelectedRecyclerViewAdapter? = null
+    var totalAmountTextView: TextView? = null
+    var count = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view: View = inflater.inflate(R.layout.fragment_cart, container, false)
+        totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
         toolbar = view.findViewById(R.id.cartToolbar)
-
+        setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
 
-        slecetdItemsRecycler=view.findViewById(R.id.cartSelecetedRecyclerview)
-        recommendedItemsRecycler=view.findViewById(R.id.cartRecyclerviewRecommondedItems)
-        itemsSelectedAdapter= CartItemsSelectedRecyclerViewAdapter()
-        slecetdItemsRecycler!!.adapter=itemsSelectedAdapter
-        slecetdItemsRecycler!!.layoutManager=LinearLayoutManager(context,RecyclerView.VERTICAL,false)
+        selectedItemsList?.filter {
+
+            count += (it.quantityOfItem*it.realTimeMrp.toInt())
+
+            return@filter true
+
+        }
+        slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
+        recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
+        itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this)
+        slecetdItemsRecycler!!.itemAnimator = null
+        slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
+        slecetdItemsRecycler!!.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         itemsSelectedAdapter!!.submitList(selectedItemsList)
+
+        totalAmountTextView!!.text = count.toString()
+
         return view
     }
 
@@ -44,5 +59,12 @@ class CartFragment(var selectedItemsList:List<CategoriesModelClass>) : Fragment(
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        for (i in 0..1) {
+            menu.getItem(i).isVisible = false
+        }
+        super.onPrepareOptionsMenu(menu)
     }
 }

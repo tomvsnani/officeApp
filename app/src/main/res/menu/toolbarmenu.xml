@@ -2,15 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/profile"
+        android:id="@+id/profilemenu"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="profile"
         android:orderInCategory="2"
+        android:title="profile"
+
         app:showAsAction="always" />
     <item
-        android:id="@+id/cart"
-        android:icon="@drawable/ic_baseline_shopping_cart_24"
-        android:title="Cart"
+        android:id="@+id/cartmenu"
         android:orderInCategory="1"
-        app:showAsAction="always"/>
+        android:title="Cart"
+        app:actionLayout="@layout/cart_menu_custom_menu"
+        app:showAsAction="always" />
 </menu>
