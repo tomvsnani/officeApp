@@ -6,21 +6,18 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    android:fitsSystemWindows="false"
-    android:layout_marginTop="0dp"
-    android:paddingTop="0dp"
+
     tools:context=".fragments.MainFragment">
 
     <include
         android:id="@+id/include"
-        layout="@layout/amainappbarincludelayout"
+        layout="@layout/main_app_bar_include_layout"
         />
     <!-- TODO: Update blank fragment layout -->
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:visibility="visible"
        >
 
@@ -50,6 +47,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:hint="Search your items"
+                        android:id="@+id/mainfragmentsearchedittext"
                         android:textColor="#6b6b6b"
                         android:textColorHint="#6b6b6b" />
 
@@ -120,7 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.01"
-                        android:backgroundTint="#c62828"
+                        android:backgroundTint="@color/red"
                         android:text="Join Now"
                         android:textSize="18sp" />
 

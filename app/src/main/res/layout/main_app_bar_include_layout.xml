@@ -13,9 +13,9 @@
             android:id="@+id/maintoolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:menu="@menu/toolbarmenu"
-
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:contentInsetStartWithNavigation="56dp"
             app:title="Ecommerce"
             app:titleTextColor="#000000">
 

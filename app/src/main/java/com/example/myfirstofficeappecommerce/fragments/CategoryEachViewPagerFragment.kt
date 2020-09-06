@@ -12,7 +12,7 @@ import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 
 
-class CategoriesEachViewPagerFragment(var get: List<CategoriesModelClass>?) : Fragment() {
+class CategoryEachViewPagerFragment(var get: List<CategoriesModelClass>?,var callback:(CategoriesModelClass)->Unit) : Fragment() {
     var recyclerView: RecyclerView? = null
     var adapterr: CategoriesEachRecyclerAdapter? = null
     override fun onCreateView(
@@ -20,18 +20,17 @@ class CategoriesEachViewPagerFragment(var get: List<CategoriesModelClass>?) : Fr
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(
-            R.layout.fragment_categories_each_view_pager_fragment,
+            R.layout.fragment_category_each_viewpager,
             container,
             false
         )
         recyclerView = view.findViewById(R.id.categoriesRecyclerview)
-        adapterr = CategoriesEachRecyclerAdapter()
+        adapterr = CategoriesEachRecyclerAdapter(callback )
         (recyclerView as RecyclerView).layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         (recyclerView as RecyclerView).adapter = adapterr
+        recyclerView!!.itemAnimator=null
         (adapterr as CategoriesEachRecyclerAdapter).submitList(get)
-
-
         return view
     }
 

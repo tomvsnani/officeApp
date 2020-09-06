@@ -11,7 +11,11 @@ data class CategoriesModelClass(
     var offerMrp: String,
     var realTimeMrp: String,
     var offerPercentage: String,
-    var timeToReceiveIt: String
+    var timeToReceiveIt: String,
+    var imageUrl: String = "ok",
+    var quantityOfItem: Int = 0,
+    var itemQueueNumber: Int = 0,
+    var id: Int = -1
 ) {
     companion object {
         val diffUtil: DiffUtil.ItemCallback<CategoriesModelClass> = object :
@@ -20,7 +24,7 @@ data class CategoriesModelClass(
                 oldItem: CategoriesModelClass,
                 newItem: CategoriesModelClass
             ): Boolean {
-                return oldItem.itemCategory == newItem.itemCategory
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
@@ -29,6 +33,7 @@ data class CategoriesModelClass(
             ): Boolean {
                 return oldItem.itemName == newItem.itemName && oldItem.offerMrp == newItem.offerMrp
                         && oldItem.realTimeMrp == newItem.realTimeMrp && oldItem.timeToReceiveIt == newItem.timeToReceiveIt
+                        && oldItem.quantityOfItem==newItem.quantityOfItem
             }
         }
     }
