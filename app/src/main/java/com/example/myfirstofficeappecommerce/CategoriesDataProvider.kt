@@ -8,53 +8,53 @@ class CategoriesDataProvider {
     fun getMapDataForCategories():LinkedHashMap<String,List<CategoriesModelClass>>?{
         var map:LinkedHashMap<String,List<CategoriesModelClass>> = LinkedHashMap()
         map.put("Phones" , listOf(CategoriesModelClass("Phones","Samsung phone","too hot" ,
-        "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 1),
+            "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 1),
             CategoriesModelClass("Phones","Samsung phone","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=2,groupId = 1),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=3,groupId = 1),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=4,groupId = 1),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=5,groupId = 1),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=6,groupId = 1),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=7,groupId = 1)
+
+        ))
+
+        map?.put( "Laptops" ,listOf(CategoriesModelClass("Laptops","Samsung laptop","too hot Laptop" ,
+            "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 2),
+            CategoriesModelClass("Laptops","Samsung laptop","too hot Laptop" ,
                 "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=2,groupId = 2),
-            CategoriesModelClass("Phones","Samsung","too hot" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=3,groupId = 3),
-            CategoriesModelClass("Phones","Samsung","too hot" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=4,groupId = 4),
-            CategoriesModelClass("Phones","Samsung","too hot" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=5,groupId = 5),
-            CategoriesModelClass("Phones","Samsung","too hot" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=6,groupId = 6),
-            CategoriesModelClass("Phones","Samsung","too hot" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=7,groupId = 7)
+            CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=3,groupId = 2),
+            CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=4,groupId = 2),
+            CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=5,groupId = 2),
+            CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=6,groupId = 2),
+            CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=7,groupId = 2)
 
-            ))
+        ))
 
-           map?.put( "Laptops" ,listOf(CategoriesModelClass("Laptops","Samsung laptop","too hot Laptop" ,
-               "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 1),
-                CategoriesModelClass("Laptops","Samsung laptop","too hot Laptop" ,
-                    "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=2,groupId = 2),
-                CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
-                    "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=3,groupId = 3),
-                CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
-                    "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=4,groupId = 4),
-                CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
-                    "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=5,groupId = 5),
-                CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
-                    "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=6,groupId = 6),
-                CategoriesModelClass("Laptops","Samsung","too hot Laptop" ,
-                    "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=7,groupId = 7)
-
-            ))
-
-       map?.put( "Soap" , listOf(CategoriesModelClass("Soap","Santoor","too hot Laptop" ,
-           "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 1),
+        map?.put( "Soap" , listOf(CategoriesModelClass("Soap","Santoor","too hot Laptop" ,
+            "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 3),
             CategoriesModelClass("Soap","Samsung","too hot Laptop" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=2,groupId = 2),
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=2,groupId = 3),
             CategoriesModelClass("Soap","Samsung","too hot Laptop" ,
                 "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=3,groupId = 3),
             CategoriesModelClass("Soap","Samsung","too hot Laptop" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=4,groupId = 44),
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=4,groupId = 3),
             CategoriesModelClass("Soap","Samsung","too hot Laptop" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=5,groupId = 5),
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=5,groupId = 3),
             CategoriesModelClass("Soap","Samsung","too hot Laptop" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=6,groupId = 6),
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=6,groupId = 3),
             CategoriesModelClass("Soap","Samsung","too hot Laptop" ,
-                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=7,groupId = 7)
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=7,groupId = 3)
 
         )
         )
@@ -62,7 +62,7 @@ class CategoriesDataProvider {
     }
 
     fun getListDataForHorizontalScroll():List<ModelClass>{
-      return listOf(
+        return listOf(
             ModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
                 "Laptop",
@@ -145,6 +145,25 @@ class CategoriesDataProvider {
                 "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",quantityOfItem = 5,id=6),
             CategoriesModelClass("Soap","Samsung","too hot Laptop" ,
                 "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",quantityOfItem = 1,id=7)
+
+        )
+    }
+
+    fun getRecommendedData(): List<CategoriesModelClass>{
+        return listOf(CategoriesModelClass("Phones","Samsung phone","too hot" ,
+            "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 8),
+            CategoriesModelClass("Phones","Samsung phone","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=2,groupId = 9),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=3,groupId = 10),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=4,groupId = 11),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=5,groupId = 12),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=6,groupId = 13),
+            CategoriesModelClass("Phones","Samsung","too hot" ,
+                "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=7,groupId = 14)
 
         )
     }

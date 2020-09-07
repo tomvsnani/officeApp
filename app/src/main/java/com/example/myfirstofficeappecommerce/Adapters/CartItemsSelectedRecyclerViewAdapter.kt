@@ -1,5 +1,6 @@
 package com.example.myfirstofficeappecommerce.Adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ListAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CartFragment
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
@@ -16,7 +18,7 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
     androidx.recyclerview.widget.ListAdapter<CategoriesModelClass, CartItemsSelectedRecyclerViewAdapter.CardItemsSelectedViewHolder>(
         CategoriesModelClass.diffUtil
     ) {
-    var totalSum:Int=cartFragment.count
+    var totalSum: Int = cartFragment.count
 
     inner class CardItemsSelectedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cartItemnameTextView: TextView? = itemView.findViewById(R.id.cartSelectedItemName)
@@ -35,9 +37,14 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
 
 
         init {
-            cartdeleteItemImageButton?.setOnClickListener {  var list: MutableList<CategoriesModelClass> = ArrayList(currentList)
+
+            cartdeleteItemImageButton?.setOnClickListener {
+                var list: MutableList<CategoriesModelClass> = ArrayList(currentList)
+                currentList[adapterPosition].quantityOfItem=0
                 list.remove(currentList[adapterPosition])
-                submitList(list)}
+                submitList(list)
+
+            }
 
             cartItemremoveItemTextView?.setOnClickListener {
                 var modelClass: CategoriesModelClass = currentList[adapterPosition]
@@ -51,7 +58,8 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
                     }
                     notifyItemChanged(adapterPosition)
                     totalSum -= modelClass.realTimeMrp.toInt()
-                    cartFragment.totalAmountTextView?.text="Total : ${totalSum.toString()}"
+                    cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
+
                 }
 
 
@@ -61,12 +69,29 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
                 currentList[adapterPosition].quantityOfItem++
                 totalSum += (currentList[adapterPosition].realTimeMrp.toInt())
                 notifyItemChanged(adapterPosition)
-                cartFragment.totalAmountTextView?.text="Total : ${totalSum.toString()}"
+                cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
+
 
             }
         }
 
 
+    }
+
+    override fun submitList(list: MutableList<CategoriesModelClass>?) {
+        Log.d("listtsss", list?.size.toString())
+        totalSum = 0
+        list?.filter {
+
+            totalSum += (it.quantityOfItem * it.realTimeMrp.toInt())
+            cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
+
+            return@filter true
+
+        }
+
+        super.submitList(list!!.toList())
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardItemsSelectedViewHolder {
@@ -77,6 +102,7 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
 
     override fun onBindViewHolder(holder: CardItemsSelectedViewHolder, position: Int) {
         var modelclass = currentList[position]
+        Log.d("sssss", modelclass.quantityOfItem.toString())
         holder.carItemQuantityTextView?.text = modelclass.quantityOfItem.toString()
         holder.cartItemPriceTextView?.text = modelclass.realTimeMrp
         holder.cartItemWeightTextView?.text = modelclass.itemNetWeight

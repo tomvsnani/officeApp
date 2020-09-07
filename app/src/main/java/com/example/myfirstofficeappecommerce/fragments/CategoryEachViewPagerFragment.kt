@@ -30,7 +30,7 @@ class CategoryEachViewPagerFragment(var get: List<CategoriesModelClass>?,var cal
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         (recyclerView as RecyclerView).adapter = adapterr
         recyclerView!!.itemAnimator=null
-        (adapterr as CategoriesEachRecyclerAdapter).submitList(get)
+        (adapterr as CategoriesEachRecyclerAdapter).submitList(get as MutableList<CategoriesModelClass>?)
         return view
     }
 

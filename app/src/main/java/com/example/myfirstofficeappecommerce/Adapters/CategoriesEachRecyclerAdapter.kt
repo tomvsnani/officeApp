@@ -74,8 +74,14 @@ class CategoriesEachRecyclerAdapter(callback: (Pair<String,CategoriesModelClass>
         return CategoryViewHolder(view)
     }
 
+
+    override fun submitList(list: MutableList<CategoriesModelClass>?) {
+        super.submitList(list?.toList())
+    }
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+
         var modelClass = currentList[position]
+        Log.d("finding",modelClass.itemName+" "+modelClass.quantityOfItem)
         if (modelClass.quantityOfItem > 0) {
             holder.addToCart.visibility = View.GONE
             holder.addOrRemoveItemLinearLayout.visibility = View.VISIBLE

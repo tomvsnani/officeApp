@@ -25,7 +25,7 @@ data class CategoriesModelClass(
                 oldItem: CategoriesModelClass,
                 newItem: CategoriesModelClass
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.id == newItem.id && oldItem.groupId==newItem.groupId && oldItem.quantityOfItem == newItem.quantityOfItem
             }
 
             override fun areContentsTheSame(
@@ -34,7 +34,7 @@ data class CategoriesModelClass(
             ): Boolean {
                 return oldItem.itemName == newItem.itemName && oldItem.offerMrp == newItem.offerMrp
                         && oldItem.realTimeMrp == newItem.realTimeMrp && oldItem.timeToReceiveIt == newItem.timeToReceiveIt
-                        && oldItem.quantityOfItem == newItem.quantityOfItem
+
             }
         }
     }

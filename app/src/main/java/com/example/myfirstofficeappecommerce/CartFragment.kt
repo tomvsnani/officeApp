@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.Adapters.CartItemRecommendedAdapter
 import com.example.myfirstofficeappecommerce.Adapters.CartItemsSelectedRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 
@@ -21,6 +22,8 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
     var itemsSelectedAdapter: CartItemsSelectedRecyclerViewAdapter? = null
     var totalAmountTextView: TextView? = null
     var count = 0
+    var recommendedAdapter: CartItemRecommendedAdapter? = null
+    var list: MutableList<CategoriesModelClass> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,13 +36,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
 
-        selectedItemsList?.filter {
 
-            count += (it.quantityOfItem*it.realTimeMrp.toInt())
-
-            return@filter true
-
-        }
         slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
         recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
         itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this)
@@ -47,9 +44,28 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
         slecetdItemsRecycler!!.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        itemsSelectedAdapter!!.submitList(selectedItemsList)
+        itemsSelectedAdapter!!.submitList(selectedItemsList as MutableList<CategoriesModelClass>?)
 
-        totalAmountTextView!!.text = count.toString()
+
+
+        recommendedItemsRecycler!!.layoutManager =
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        list = selectedItemsList!!.toMutableList()
+        recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
+            modelClass.quantityOfItem++
+            var count = list.filter { it.id == modelClass.id && it.groupId == modelClass.groupId }
+            if (count.isNotEmpty())
+                list[list.indexOf(modelClass)] = modelClass
+            else
+                list.add(modelClass)
+
+            itemsSelectedAdapter!!.submitList(list)
+        }
+        recommendedItemsRecycler!!.adapter = recommendedAdapter
+        recommendedAdapter!!.submitList(CategoriesDataProvider().getRecommendedData())
+
+
+
 
         return view
     }

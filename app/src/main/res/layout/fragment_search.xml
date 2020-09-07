@@ -16,7 +16,7 @@
             android:id="@+id/searchFragmenttoolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+
             android:fitsSystemWindows="false">
 
             <EditText
@@ -26,7 +26,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="Search for your items"
-                android:textColorHint="#e0e0e0" />
+                android:textColor="#6b6b6b"
+                android:textColorHint="#6b6b6b" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
     <LinearLayout

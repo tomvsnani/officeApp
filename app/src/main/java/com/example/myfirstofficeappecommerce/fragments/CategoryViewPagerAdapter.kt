@@ -19,7 +19,7 @@ class CategoryViewPagerAdapter(
     override fun createFragment(position: Int): Fragment {
         var list = map.get(map.keys.toTypedArray().get(position))?.filter { categoriesModelClass ->
             ApplicationClass.selectedItemsList?.filter {
-                if (it.id == categoriesModelClass.id) {
+                if (it.id == categoriesModelClass.id&& it.groupId==categoriesModelClass.groupId) {
                     categoriesModelClass.quantityOfItem = it.quantityOfItem
                     categoriesModelClass.itemQueueNumber = it.itemQueueNumber
                     return@filter true

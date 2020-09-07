@@ -78,7 +78,8 @@ class SearchFragment : Fragment() {
                         LinearLayoutManager(context, RecyclerView.VERTICAL, false)
                     recyclr!!.adapter = mainRecyclerAdapter
                     mainRecyclerAdapter!!.submitList(
-                        CategoriesDataProvider().getSearhItemsData()
+                        CategoriesDataProvider().getSearhItemsData().filter { it.itemName.contains(
+                            p0.toString(),true) }
                     )
                 }
             }
