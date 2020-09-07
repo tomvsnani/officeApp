@@ -4,103 +4,115 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:layout_margin="8dp"
+    android:background="#ffffff"
+    android:padding="8dp">
+
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="fitXY"
         android:src="@drawable/download"
+        app:layout_constraintBottom_toTopOf="@+id/cartRecommendAddButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.097">
-
-        <TextView
-            android:id="@+id/cartRecommendItemName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Iphone"
-            android:textColor="#000"
-            app:layout_constraintBottom_toTopOf="@+id/cartRecommendOfferMrp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-        <ImageButton
-            android:id="@+id/cartRecommendAddButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-
-            android:background="@drawable/searchaddtocartdrawable"
-            android:padding="8dp"
-            android:src="@drawable/ic_baseline_add_24"
-            app:layout_constraintStart_toEndOf="@+id/cartRecommendItemName"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
+    <TextView
+        android:id="@+id/cartRecommendOfferMrp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:text="tt"
+        android:textColor="#6b6b6b"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cartRecommendRealPriceMrp"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cartRecommendRealPriceMrp"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/cartRecommendRealPriceMrp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:text="TextView"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cartRecommendOfferMrp"
+        app:layout_constraintTop_toTopOf="@+id/cartRecommendWeight"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/cartRecommendItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Iphone"
+        android:textColor="#000"
+        app:layout_constraintBottom_toBottomOf="@+id/cartRecommendAddButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cartRecommendAddButton" />
+
+    <ImageButton
+        android:id="@+id/cartRecommendAddButton"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/searchaddtocartdrawable"
         android:padding="8dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/cartRecommendItemName"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:background="#6b6b6b"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cartRecommendWeight"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cartRecommendRealPriceMrp"
+        app:layout_constraintTop_toTopOf="@+id/cartRecommendWeight"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/cartRecommendWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxEms="4"
+        android:maxLength="4"
+        android:maxLines="1"
+        android:text="ggjfcjrjyfxrjc"
+        android:textColor="#6b6b6b"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toEndOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/cartRecommendAddButton"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/cartRecommendOfferMrp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="#6b6b6b"
-             />
-
-
-        <TextView
-            android:id="@+id/cartRecommendRealPriceMrp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:text="TextView"
-            android:textColor="@color/red"
-            />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="#6b6b6b"
-           />
-        <TextView
-            android:id="@+id/cartRecommendWeight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="TextView g"
-            android:textColor="#6b6b6b"
-            app:layout_constraintStart_toEndOf="@+id/cartRecommendRealPriceMrp"
-            tools:layout_editor_absoluteY="222dp" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
