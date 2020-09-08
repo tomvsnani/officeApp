@@ -16,7 +16,9 @@ class CartItemRecommendedAdapter(var cartFragment: CartFragment, var callback:(C
     ) {
 
 
-
+    override fun submitList(list: MutableList<CategoriesModelClass>?) {
+        super.submitList(list?.toList())
+    }
 
     inner class CardItemsRecommendedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cartItemnameTextView: TextView? = itemView.findViewById(R.id.cartRecommendItemName)

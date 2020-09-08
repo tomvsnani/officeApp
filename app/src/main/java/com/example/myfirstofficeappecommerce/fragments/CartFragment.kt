@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -31,6 +32,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        selectedItemsList=ApplicationClass.selectedItemsList
         var view: View = inflater.inflate(R.layout.fragment_cart, container, false)
         totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
         toolbar = view.findViewById(R.id.cartToolbar)
@@ -40,10 +42,15 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
 
 
+
         slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
         recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
         proceedTextViewCart = view.findViewById(R.id.proceedTextViewCart)
-        itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this)
+        itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this) {
+            this.list.clear()
+            this.list = it as MutableList<CategoriesModelClass>
+
+        }
         slecetdItemsRecycler!!.itemAnimator = null
         slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
         slecetdItemsRecycler!!.layoutManager =
@@ -51,29 +58,41 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         itemsSelectedAdapter!!.submitList(selectedItemsList as MutableList<CategoriesModelClass>?)
 
 
-
         recommendedItemsRecycler!!.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         list = selectedItemsList!!.toMutableList()
         recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
             modelClass.quantityOfItem++
+
             var count = list.filter { it.id == modelClass.id && it.groupId == modelClass.groupId }
-            if (count.isNotEmpty())
+            if (count.isNotEmpty()) {
                 list[list.indexOf(modelClass)] = modelClass
-            else
+
+                (ApplicationClass.selectedItemsList as MutableList)[list.indexOf(modelClass)] =
+                    modelClass
+            } else {
                 list.add(modelClass)
+                (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+            }
 
             itemsSelectedAdapter!!.submitList(list)
+
+
+
         }
+
         recommendedItemsRecycler!!.adapter = recommendedAdapter
         recommendedAdapter!!.submitList(
-            CategoriesDataProvider().getRecommendedData())
+            CategoriesDataProvider().getRecommendedData() as MutableList<CategoriesModelClass>
+        )
 
         proceedTextViewCart!!.setOnClickListener {
             activity!!.supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.container, OrdersFragment(
-                        ApplicationClass.selectedItemsList!!))
+                        ApplicationClass.selectedItemsList!!
+                    )
+                )
                 .addToBackStack(null).commit()
         }
 

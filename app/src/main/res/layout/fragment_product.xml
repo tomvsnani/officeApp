@@ -30,7 +30,7 @@
                 android:gravity="center"
                 android:text="Online Shoppings"
                 android:textColor="#212121"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 

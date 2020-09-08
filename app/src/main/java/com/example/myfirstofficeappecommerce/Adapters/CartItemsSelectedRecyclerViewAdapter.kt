@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.fragments.CartFragment
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 
-class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
+class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var callback:(MutableList<CategoriesModelClass>)->Unit) :
     androidx.recyclerview.widget.ListAdapter<CategoriesModelClass, CartItemsSelectedRecyclerViewAdapter.CardItemsSelectedViewHolder>(
         CategoriesModelClass.diffUtil
     ) {
-    var totalSum: Int = cartFragment.count
+    var totalSum: Int = 0
 
     inner class CardItemsSelectedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cartItemnameTextView: TextView? = itemView.findViewById(R.id.cartSelectedItemName)
@@ -37,9 +38,15 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
 
             cartdeleteItemImageButton?.setOnClickListener {
                 var list: MutableList<CategoriesModelClass> = ArrayList(currentList)
+                totalSum -=(currentList[adapterPosition].realTimeMrp.toInt())*currentList[adapterPosition].quantityOfItem
                 currentList[adapterPosition].quantityOfItem=0
+                 cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
                 list.remove(currentList[adapterPosition])
+                if(adapterPosition>=0  && ApplicationClass.selectedItemsList!!.isNotEmpty())
+                ( ApplicationClass.selectedItemsList as MutableList).removeAt(adapterPosition)
                 submitList(list)
+                callback(list.toMutableList())
+
 
             }
 
@@ -49,13 +56,30 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
 
                     currentList[adapterPosition].quantityOfItem--
                     if (modelClass.quantityOfItem == 0) {
-                        var list: MutableList<CategoriesModelClass> = ArrayList(currentList)
+                        var list: MutableList<CategoriesModelClass> = currentList.toMutableList()
                         list.remove(modelClass)
+                        if(adapterPosition>0&& ApplicationClass.selectedItemsList!!.isNotEmpty())
+                        ( ApplicationClass.selectedItemsList as MutableList).removeAt(adapterPosition)
                         submitList(list)
+
+                        callback(list.toMutableList())
+
                     }
                     notifyItemChanged(adapterPosition)
+                    if(modelClass.quantityOfItem!=0)
                     totalSum -= modelClass.realTimeMrp.toInt()
                     cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
+
+
+                    Log.d(
+                        "comparesize",
+                        (ApplicationClass.selectedItemsList!!).toString()
+                    )
+
+                    Log.d(
+                        "comparesizeokk",
+                        (ApplicationClass.selectedItemsList!!.size).toString()
+                    )
 
                 }
 
@@ -63,11 +87,20 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
             }
 
             cartItemaddItemImagebutton?.setOnClickListener {
+                Log.d(
+                    "comparesize",
+                    (ApplicationClass.selectedItemsList!!).toString()
+                )
                 currentList[adapterPosition].quantityOfItem++
+                Log.d(
+                    "comparesizeokk",
+                    (ApplicationClass.selectedItemsList!!).toString()
+                )
                 totalSum += (currentList[adapterPosition].realTimeMrp.toInt())
                 notifyItemChanged(adapterPosition)
                 cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
 
+                callback(currentList.toMutableList())
 
             }
         }
@@ -76,7 +109,7 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
     }
 
     override fun submitList(list: MutableList<CategoriesModelClass>?) {
-        Log.d("listtsss", list?.size.toString())
+
         totalSum = 0
         list?.filter {
 
@@ -87,7 +120,8 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment) :
 
         }
 
-        super.submitList(list!!.toList())
+        super.submitList(list?.toList())
+
         notifyDataSetChanged()
     }
 

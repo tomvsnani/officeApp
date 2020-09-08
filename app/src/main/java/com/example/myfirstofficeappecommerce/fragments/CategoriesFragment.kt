@@ -56,7 +56,7 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
         checkoutButton!!.setOnClickListener {
             openCartFragment()
         }
-        (viewPager2 as ViewPager2).adapter =
+           (viewPager2 as ViewPager2).adapter =
             CategoryViewPagerAdapter(
                 this, list!!
             ) { categoriesModelClass ->
@@ -65,21 +65,20 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
                     selectedItemsList.add(categoriesModelClass.second)
                 selectedItemsList.filter { a ->
 
-                    Log.d("indexxx", categoriesModelClass.second.quantityOfItem.toString() + " k")
-                    if (a.id == categoriesModelClass.second.id && a.groupId == categoriesModelClass.second.groupId) {
+                     if (a.id == categoriesModelClass.second.id && a.groupId == categoriesModelClass.second.groupId) {
                         indexOfItemInList = selectedItemsList.indexOf(categoriesModelClass.second)
                         return@filter true
                     }
                     return@filter false
                 }
 
-                Log.d("indexxx", indexOfItemInList.toString())
-                if (indexOfItemInList != -1)
+                   if (indexOfItemInList != -1)
                     selectedItemsList[indexOfItemInList] = categoriesModelClass.second
                 else
                     selectedItemsList.add(categoriesModelClass.second)
-                ApplicationClass.selectedItemsList = selectedItemsList
-
+                if(categoriesModelClass.second.quantityOfItem==0)
+                    selectedItemsList.removeAt(indexOfItemInList)
+                ApplicationClass.selectedItemsList=selectedItemsList
                 showOrHideItemCountIndicator()
             }
 
@@ -96,17 +95,29 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
     }
 
     private fun openCartFragment() {
-        activity!!.supportFragmentManager.beginTransaction()
+           activity!!.supportFragmentManager.beginTransaction()
             .replace(
                 R.id.container,
                 CartFragment(
-                    selectedItemsList.filter { it.quantityOfItem > 0 })
+                    ApplicationClass.selectedItemsList?.filter { it.quantityOfItem > 0 })
             ).addToBackStack(null)
             .commit()
     }
 
 
     private fun showOrHideItemCountIndicator() {
+        if(ApplicationClass.selectedItemsList!!.isNotEmpty()){
+                Log.d(
+                    "comparesize",
+                    (ApplicationClass.selectedItemsList!!).toString()
+                )
+
+            Log.d(
+                "comparesize",
+                (ApplicationClass.selectedItemsList!!.size).toString()
+            )
+            }
+
         var itemCount= Utils.getItemCount()
         itemSelectedCountTextView!!.text = itemCount.toString()
         if (itemCount.toInt() > 0) {

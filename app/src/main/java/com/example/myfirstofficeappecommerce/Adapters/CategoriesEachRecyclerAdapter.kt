@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.fragments.CategoryEachViewPagerFragment
@@ -25,6 +26,8 @@ class CategoriesEachRecyclerAdapter(
 
     init {
         mutableselectedItemsList.observeForever(Observer {
+
+
 
            if(it.first=="add") {
                it.second.quantityOfItem++
