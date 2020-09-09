@@ -26,6 +26,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="Search for your items"
+                android:background="@null"
                 android:textColor="#6b6b6b"
                 android:textColorHint="#6b6b6b" />
         </androidx.appcompat.widget.Toolbar>

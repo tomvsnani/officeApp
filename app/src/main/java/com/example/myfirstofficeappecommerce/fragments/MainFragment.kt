@@ -19,6 +19,7 @@ import com.example.myfirstofficeappecommerce.Adapters.MainRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -37,6 +38,7 @@ class MainFragment : Fragment() {
     private var drawerLayout: DrawerLayout? = null
     private var actionBarToggle: ActionBarDrawerToggle? = null
     var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
+    var navigationView: NavigationView? = null
 
     private val SCROLL_TIMEOUT = 4000L
 
@@ -47,6 +49,7 @@ class MainFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
         setHasOptionsMenu(true)
         searchEditText = view.findViewById(R.id.mainfragmentsearchedittext)
+        navigationView = view.findViewById(R.id.navigationview)
         searchEditText!!.setOnFocusChangeListener { view, b ->
             if (view.hasFocus()) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -59,7 +62,10 @@ class MainFragment : Fragment() {
 
         viewPager2 = view.findViewById(R.id.viewpager)
         (viewPager2 as ViewPager2).adapter =
-            HorizontalScrollViewPagerAdapter(this,CategoriesDataProvider().getListDataForHorizontalScroll())
+            HorizontalScrollViewPagerAdapter(
+                this,
+                CategoriesDataProvider().getListDataForHorizontalScroll()
+            )
         tablayout = view.findViewById(R.id.tablayout)
 
         TabLayoutMediator(
@@ -114,6 +120,21 @@ class MainFragment : Fragment() {
             }
         })
 
+
+        navigationView?.setNavigationItemSelectedListener { menuItem ->
+            if (menuItem.itemId == R.id.ordersmenu)
+            activity!!.supportFragmentManager
+                .beginTransaction()
+                .replace(
+                    R.id.container,
+                    OrdersFragment(ApplicationClass.selectedItemsList!!.filter {
+                        it.isOrdered
+                    })
+                ).addToBackStack(null)
+                .commit()
+            return@setNavigationItemSelectedListener true
+        }
+
         return view
     }
 
@@ -123,7 +144,7 @@ class MainFragment : Fragment() {
             CategoriesDataProvider().getMapDataForCategories()
         recyclerView = view.findViewById(R.id.mainfragmentrecyclerhorizontalscrollitemnames)
         adapterr =
-            MainRecyclerAdapter(activity as MainActivity, categoryMap, Constants.SCROLL_TYPE)
+            MainRecyclerAdapter(this, categoryMap, Constants.SCROLL_TYPE)
 
         (recyclerView as RecyclerView).adapter = adapterr
         (recyclerView as RecyclerView).layoutManager =
@@ -142,7 +163,8 @@ class MainFragment : Fragment() {
         }
         if (item.itemId == R.id.cartmenu) {
             activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.container,
+                .replace(
+                    R.id.container,
                     CartFragment(
                         ApplicationClass.selectedItemsList
                     )
@@ -158,7 +180,8 @@ class MainFragment : Fragment() {
         menu.findItem(R.id.cartmenu).actionView.findViewById<ImageView>(R.id.cartmenuitem)
             .setOnClickListener {
                 activity!!.supportFragmentManager.beginTransaction()
-                    .replace(R.id.container,
+                    .replace(
+                        R.id.container,
                         CartFragment(
                             ApplicationClass.selectedItemsList
                         )

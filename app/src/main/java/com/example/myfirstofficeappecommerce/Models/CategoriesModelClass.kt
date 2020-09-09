@@ -3,22 +3,23 @@ package com.example.myfirstofficeappecommerce.Models
 import androidx.recyclerview.widget.DiffUtil
 
 data class CategoriesModelClass(
-    var itemCategory: String=""
-    , var itemName: String=""
-    , var itemDescriptionText: String="",
-    var itemGrossWeight: String="",
-    var itemNetWeight: String="",
-    var offerMrp: String="",
-    var realTimeMrp: String="",
-    var offerPercentage: String="",
-    var timeToReceiveIt: String="",
+    var itemCategory: String = ""
+    , var itemName: String = ""
+    , var itemDescriptionText: String = "",
+    var itemGrossWeight: String = "",
+    var itemNetWeight: String = "",
+    var offerMrp: String = "",
+    var realTimeMrp: String = "",
+    var offerPercentage: String = "",
+    var timeToReceiveIt: String = "",
     var imageUrl: String = "ok",
     var quantityOfItem: Int = 0,
     var itemQueueNumber: Int = 0,
     var id: Int = -1,
     var groupId: Int = -1,
     var dateOrdered: String = "",
-    var location: String = ""
+    var location: String = "",
+    var isOrdered: Boolean = false
 ) {
     companion object {
         val diffUtil: DiffUtil.ItemCallback<CategoriesModelClass> = object :

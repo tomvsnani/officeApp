@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myfirstofficeappecommerce.Adapters.CategoryViewPagerAdapter
@@ -20,7 +21,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelClass>>?) :
+class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelClass>>?,var tabType:Int) :
     Fragment() {
 
 
@@ -84,6 +85,8 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
 
 
         tablayout = view.findViewById(R.id.tablayoutincategory)
+
+
         TabLayoutMediator(
             (tablayout as TabLayout),
             (viewPager2 as ViewPager2)
@@ -91,6 +94,7 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
 
             tab.text = (categoryNames as List<String>)[i]
         }.attach()
+        viewPager2!!.currentItem = tabType
         return view
     }
 
@@ -107,16 +111,16 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
 
     private fun showOrHideItemCountIndicator() {
         if(ApplicationClass.selectedItemsList!!.isNotEmpty()){
-                Log.d(
-                    "comparesize",
-                    (ApplicationClass.selectedItemsList!!).toString()
-                )
+            Log.d(
+                "comparesize",
+                (ApplicationClass.selectedItemsList!!).toString()
+            )
 
             Log.d(
                 "comparesize",
                 (ApplicationClass.selectedItemsList!!.size).toString()
             )
-            }
+        }
 
         var itemCount= Utils.getItemCount()
         itemSelectedCountTextView!!.text = itemCount.toString()

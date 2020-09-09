@@ -5,7 +5,8 @@
     <string name="my_orders">My Orders</string>
     <string name="openDrawerLayout">open</string>
     <string name="closeDrawerLayout">close</string>
+    <string name="Rs">\u20B9</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="enjoy_unlimited_free_delivery_and_perks_crafted_for_true_meat_lovers">ENjoy unlimited free delivery and perks crafted for true meat lovers</string>
+    <string name="enjoy_unlimited_free_delivery_and_perks_crafted_for_true_meat_lovers">Enjoy unlimited free delivery and perks crafted for true meat lovers</string>
 </resources>

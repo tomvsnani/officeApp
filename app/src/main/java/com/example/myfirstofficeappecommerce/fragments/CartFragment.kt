@@ -90,7 +90,8 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
             activity!!.supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.container, OrdersFragment(
-                        ApplicationClass.selectedItemsList!!
+                        ApplicationClass.selectedItemsList!!.map { it.isOrdered=true
+                        return@map it}
                     )
                 )
                 .addToBackStack(null).commit()
@@ -108,7 +109,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        for (i in 0..1) {
+        for (i in 0 until menu.size()) {
             menu.getItem(i).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)

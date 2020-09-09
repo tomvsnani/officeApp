@@ -101,7 +101,7 @@ class CategoriesEachRecyclerAdapter(
             holder.addOrRemoveItemLinearLayout.visibility = View.GONE
         }
         holder.itemDescription.text = modelClass.itemDescriptionText
-        holder.realmrp.text = modelClass.realTimeMrp
+        holder.realmrp.text ="${categoryEachViewPagerFragment.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
         holder.itemGrossweight.text = modelClass.itemGrossWeight
         holder.itemName.text = modelClass.itemName
         holder.itemNetWeight.text = modelClass.itemNetWeight
