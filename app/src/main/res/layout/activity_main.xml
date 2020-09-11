@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-   >
+    android:layout_height="match_parent">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <FrameLayout
             android:id="@+id/container"
@@ -12,7 +17,17 @@
 
             android:layout_height="match_parent" />
 
-
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigationview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#ffffff"
+            android:fitsSystemWindows="true"
+            android:theme="@style/NavigationView"
+            app:itemTextColor="#6b6b6b"
+            app:menu="@menu/navigationmenu" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 
 </LinearLayout>

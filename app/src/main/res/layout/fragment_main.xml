@@ -14,12 +14,7 @@
         layout="@layout/main_app_bar_include_layout"
         />
     <!-- TODO: Update blank fragment layout -->
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerlayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-       >
+
 
 
         <LinearLayout
@@ -139,15 +134,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigationview"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="#ffffff"
-            android:fitsSystemWindows="true"
-            android:theme="@style/NavigationView"
-            app:itemTextColor="#6b6b6b"
-            app:menu="@menu/navigationmenu" />
-    </androidx.drawerlayout.widget.DrawerLayout>
+
+
 </LinearLayout>

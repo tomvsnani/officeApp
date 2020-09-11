@@ -41,17 +41,15 @@ class MainFragment : Fragment() {
     var searchEditText: EditText? = null
     var isScrollForward: Boolean = true
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
-    private var drawerLayout: DrawerLayout? = null
-    private var actionBarToggle: ActionBarDrawerToggle? = null
     var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
     var navigationView: NavigationView? = null
-    var graphh:GraphClient?=null
+    var graphh: GraphClient? = null
 
     private val SCROLL_TIMEOUT = 4000L
 
 
     override fun onStart() {
-        graphh=GraphClient.builder(context)
+        graphh = GraphClient.builder(context)
             .accessToken(getString(R.string.storefront_api_key))
             .shopDomain(getString(R.string.shopify_domain))
             .build()
@@ -66,7 +64,7 @@ class MainFragment : Fragment() {
                                 _queryBuilder.edges { _queryBuilder: CollectionEdgeQuery? ->
                                     _queryBuilder!!.node { _queryBuilder: CollectionQuery? ->
                                         _queryBuilder!!.title()
-                                        _queryBuilder!!.image{_queryBuilder ->_queryBuilder.src()  }
+                                        _queryBuilder!!.image { _queryBuilder -> _queryBuilder.src() }
                                     }
                                 }
                             }
@@ -74,7 +72,7 @@ class MainFragment : Fragment() {
                 }
         }
 
-        var s:Storefront.CustomerResetInput
+        var s: Storefront.CustomerResetInput
 
         val call: QueryGraphCall = graphh!!.queryGraph(query)
 
@@ -92,10 +90,10 @@ class MainFragment : Fragment() {
                     }
                     */
                 }
-                var jsonArr:JsonArray=JsonArray()
+                var jsonArr: JsonArray = JsonArray()
                 jsonArr.add(Gson().toJson(collections))
-                for(i in 0 until jsonArr.size())
-                    Log.i("milla_c",jsonArr[i].asString )
+                for (i in 0 until jsonArr.size())
+                    Log.i("milla_c", jsonArr[i].asString)
             }
 
             override fun onFailure(error: GraphError) {
@@ -111,8 +109,20 @@ class MainFragment : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
         setHasOptionsMenu(true)
+        toolbar = view.findViewById(R.id.maintoolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.title = null
+        (activity as AppCompatActivity).supportActionBar!!.setHomeButtonEnabled(true)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity).actionBarToggle = ActionBarDrawerToggle(
+            activity, (activity as MainActivity).drawerLayout, R.string.openDrawerLayout,
+            R.string.closeDrawerLayout
+        )
+
+        ((activity as MainActivity).drawerLayout as DrawerLayout).addDrawerListener((activity as MainActivity).actionBarToggle!!)
+        ((activity as MainActivity).actionBarToggle as ActionBarDrawerToggle).syncState()
         searchEditText = view.findViewById(R.id.mainfragmentsearchedittext)
-        navigationView = view.findViewById(R.id.navigationview)
+
         searchEditText!!.setOnFocusChangeListener { view, b ->
             if (view.hasFocus()) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -140,18 +150,9 @@ class MainFragment : Fragment() {
 
 
 
-        toolbar = view.findViewById(R.id.maintoolbar)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.title = null
 
-        drawerLayout = view.findViewById(R.id.drawerlayout)
-        actionBarToggle = ActionBarDrawerToggle(
-            activity, drawerLayout, R.string.openDrawerLayout,
-            R.string.closeDrawerLayout
-        )
-        (drawerLayout as DrawerLayout).addDrawerListener(actionBarToggle!!)
-        (actionBarToggle as ActionBarDrawerToggle).syncState()
+
+
 
         (viewPager2 as ViewPager2).registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -184,19 +185,7 @@ class MainFragment : Fragment() {
         })
 
 
-        navigationView?.setNavigationItemSelectedListener { menuItem ->
-            if (menuItem.itemId == R.id.ordersmenu)
-                activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(
-                        R.id.container,
-                        OrdersFragment(ApplicationClass.selectedItemsList!!.filter {
-                            it.isOrdered
-                        })
-                    ).addToBackStack(null)
-                    .commit()
-            return@setNavigationItemSelectedListener true
-        }
+
 
         return view
     }
@@ -217,10 +206,10 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            if (drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
-                drawerLayout?.closeDrawer(GravityCompat.START)
+            if ((activity as MainActivity).drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
+                (activity as MainActivity).drawerLayout?.closeDrawer(GravityCompat.START)
             } else {
-                drawerLayout?.openDrawer(GravityCompat.START)
+                (activity as MainActivity).drawerLayout?.openDrawer(GravityCompat.START)
             }
             return true
         }
@@ -235,7 +224,7 @@ class MainFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -269,7 +258,7 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
-        exitTransition= inflater.inflateTransition(R.transition.fragment_fade_trans)
+        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
         super.onCreate(savedInstanceState)
     }
 }

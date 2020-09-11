@@ -7,14 +7,18 @@ import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.view.GravityCompat
 import androidx.core.view.get
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myfirstofficeappecommerce.Adapters.CategoryViewPagerAdapter
 import com.example.myfirstofficeappecommerce.ApplicationClass
+import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.Utils
@@ -49,8 +53,16 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
         categoryNames = list?.keys?.toList()
         toolbar = view.findViewById(R.id.categoriesFragmenttoolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.title = null
+        (activity as AppCompatActivity).supportActionBar!!.setHomeButtonEnabled(true)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity).actionBarToggle = ActionBarDrawerToggle(
+            activity, (activity as MainActivity).drawerLayout, R.string.openDrawerLayout,
+            R.string.closeDrawerLayout
+        )
+
+        ((activity as MainActivity).drawerLayout as DrawerLayout).addDrawerListener((activity as MainActivity).actionBarToggle!!)
+        ((activity as MainActivity).actionBarToggle as ActionBarDrawerToggle).syncState()
         viewPager2 = view.findViewById(R.id.viewpagerincategory)
         selectedItemDisplayCardView = view.findViewById(R.id.itemsselectedindicatorcardview)
         itemSelectedCountTextView = view.findViewById(R.id.numberOfItemSelectedTextView)
@@ -163,7 +175,12 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
             return true
         }
         if (item.itemId == android.R.id.home) {
-            activity?.onBackPressed()
+            if ((activity as MainActivity).drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
+                (activity as MainActivity).drawerLayout?.closeDrawer(GravityCompat.START)
+            } else {
+                (activity as MainActivity).drawerLayout?.openDrawer(GravityCompat.START)
+            }
+            return true
         }
 
         return super.onOptionsItemSelected(item)
