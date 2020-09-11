@@ -9,4 +9,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enjoy_unlimited_free_delivery_and_perks_crafted_for_true_meat_lovers">Enjoy unlimited free delivery and perks crafted for true meat lovers</string>
+    <string name="storefront_api_key">7847437b634200eb6c3fb65d1f074b48</string>
+    <string name="shopify_domain">analogit.myshopify.com</string>
 </resources>

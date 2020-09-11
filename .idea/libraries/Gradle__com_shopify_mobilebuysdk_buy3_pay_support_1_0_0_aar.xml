@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.shopify.mobilebuysdk:buy3-pay-support:1.0.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fcafa922df4755d66208085fac60028b/jetified-buy3-pay-support-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fcafa922df4755d66208085fac60028b/jetified-buy3-pay-support-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fcafa922df4755d66208085fac60028b/jetified-buy3-pay-support-1.0.0/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.shopify.mobilebuysdk/buy3-pay-support/1.0.0/9de7348fe7eb89806f5071febd79d9e88329229a/buy3-pay-support-1.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.shopify.mobilebuysdk/buy3-pay-support/1.0.0/501c18bfe96cd878763f22ca9ecc308cf3c06dc7/buy3-pay-support-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

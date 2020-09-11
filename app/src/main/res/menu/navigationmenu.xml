@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/homemenu"
-        android:title="@string/home" />
-    <item
-        android:id="@+id/accountmenu"
-        android:title="@string/account" />
-    <item
-        android:id="@+id/ordersmenu"
-        android:title="@string/my_orders" />
+    <group android:id="@+id/firstMenu">
+        <item
+            android:id="@+id/homemenu"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/accountmenu"
+            android:title="@string/account" />
+        <item
+            android:id="@+id/ordersmenu"
+            android:title="@string/my_orders" />
+    </group>
+    <group android:id="@+id/contactmenu">
+        <item
+            android:id="@+id/phonemenu"
+            android:title="Contact us" />
+        <item
+            android:id="@+id/policymenu"
+            android:title="Privacy Policy" />
+    </group>
 </menu>

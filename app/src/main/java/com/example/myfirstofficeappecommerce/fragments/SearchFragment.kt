@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -168,6 +169,11 @@ open class SearchFragment() : Fragment() {
 
 
 
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition= inflater.inflateTransition(R.transition.fragment_fade_trans)
+        super.onCreate(savedInstanceState)
+    }
 
 }

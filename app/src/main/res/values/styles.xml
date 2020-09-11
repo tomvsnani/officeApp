@@ -10,4 +10,7 @@
 
     </style>
 
+    <style name="NavigationView"  parent="Base.Theme.AppCompat">
+        <item name="android:listDivider">@color/navdivcolor</item>
+    </style>
 </resources>

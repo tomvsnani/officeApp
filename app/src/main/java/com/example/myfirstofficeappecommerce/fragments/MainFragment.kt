@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.widget.EditText
@@ -15,13 +16,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myfirstofficeappecommerce.*
-import com.example.myfirstofficeappecommerce.Adapters.MainRecyclerAdapter
-import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
+import com.example.myfirstofficeappecommerce.Adapters.MainRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.R
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.shopify.buy3.*
+import com.shopify.buy3.Storefront.*
 
 
 class MainFragment : Fragment() {
@@ -39,8 +45,65 @@ class MainFragment : Fragment() {
     private var actionBarToggle: ActionBarDrawerToggle? = null
     var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
     var navigationView: NavigationView? = null
+    var graphh:GraphClient?=null
 
     private val SCROLL_TIMEOUT = 4000L
+
+
+    override fun onStart() {
+        graphh=GraphClient.builder(context)
+            .accessToken(getString(R.string.storefront_api_key))
+            .shopDomain(getString(R.string.shopify_domain))
+            .build()
+
+
+        val query = query { rootQuery: QueryRootQuery ->
+            rootQuery
+                .shop { shopQuery: ShopQuery ->
+                    shopQuery
+                        .collections({ args: ShopQuery.CollectionsArguments? -> args!!.first(4) },
+                            { _queryBuilder ->
+                                _queryBuilder.edges { _queryBuilder: CollectionEdgeQuery? ->
+                                    _queryBuilder!!.node { _queryBuilder: CollectionQuery? ->
+                                        _queryBuilder!!.title()
+                                        _queryBuilder!!.image{_queryBuilder ->_queryBuilder.src()  }
+                                    }
+                                }
+                            }
+                        )
+                }
+        }
+
+        var s:Storefront.CustomerResetInput
+
+        val call: QueryGraphCall = graphh!!.queryGraph(query)
+
+
+        call.enqueue(object : GraphCall.Callback<QueryRoot> {
+            override fun onResponse(response: GraphResponse<QueryRoot>) {
+
+                val collections: MutableList<Storefront.Collection> = ArrayList()
+                for (collectionEdge in response.data()!!.shop.collections.edges) {
+                    collections.add(collectionEdge.node)
+
+/*                    List<Storefront.Product> products = new ArrayList<>();
+                    for (Storefront.ProductEdge productEdge : collectionEdge.getNode().getProducts().getEdges()) {
+                        products.add(productEdge.getNode());
+                    }
+                    */
+                }
+                var jsonArr:JsonArray=JsonArray()
+                jsonArr.add(Gson().toJson(collections))
+                for(i in 0 until jsonArr.size())
+                    Log.i("milla_c",jsonArr[i].asString )
+            }
+
+            override fun onFailure(error: GraphError) {
+                Log.e("graphvalueerror", error.toString())
+            }
+        })
+        super.onStart()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -123,15 +186,15 @@ class MainFragment : Fragment() {
 
         navigationView?.setNavigationItemSelectedListener { menuItem ->
             if (menuItem.itemId == R.id.ordersmenu)
-            activity!!.supportFragmentManager
-                .beginTransaction()
-                .replace(
-                    R.id.container,
-                    OrdersFragment(ApplicationClass.selectedItemsList!!.filter {
-                        it.isOrdered
-                    })
-                ).addToBackStack(null)
-                .commit()
+                activity!!.supportFragmentManager
+                    .beginTransaction()
+                    .replace(
+                        R.id.container,
+                        OrdersFragment(ApplicationClass.selectedItemsList!!.filter {
+                            it.isOrdered
+                        })
+                    ).addToBackStack(null)
+                    .commit()
             return@setNavigationItemSelectedListener true
         }
 
@@ -201,5 +264,12 @@ class MainFragment : Fragment() {
         }
 
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition= inflater.inflateTransition(R.transition.fragment_fade_trans)
+        super.onCreate(savedInstanceState)
     }
 }

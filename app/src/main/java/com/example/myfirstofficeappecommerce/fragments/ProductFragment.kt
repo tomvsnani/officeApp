@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
@@ -38,6 +39,9 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+
         super.onCreate(savedInstanceState)
 
     }
@@ -47,6 +51,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view: View = inflater.inflate(R.layout.fragment_product, container, false)
+
         toolbar = view.findViewById(R.id.productToolbar)
 
         setHasOptionsMenu(true)
@@ -204,5 +209,11 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             if(menu.getItem(i).itemId!=R.id.cartmenu)
                 menu.getItem(i).isVisible = false
         super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onDestroyView() {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        super.onDestroyView()
     }
 }

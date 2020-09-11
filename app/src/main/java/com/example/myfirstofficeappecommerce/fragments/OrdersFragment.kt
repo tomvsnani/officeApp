@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -48,5 +49,12 @@ class OrdersFragment(var orderList:List<CategoriesModelClass>) : Fragment() {
             menu.getItem(i).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition= inflater.inflateTransition(R.transition.fragment_fade_trans)
+        super.onCreate(savedInstanceState)
     }
 }

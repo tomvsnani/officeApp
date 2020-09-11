@@ -1,12 +1,15 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.CartItemRecommendedAdapter
@@ -15,6 +18,7 @@ import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
+import kotlinx.android.synthetic.main.fragment_cart.*
 
 
 class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragment() {
@@ -28,12 +32,18 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
     var recommendedAdapter: CartItemRecommendedAdapter? = null
     var proceedTextViewCart: TextView? = null
     var list: MutableList<CategoriesModelClass> = ArrayList()
+    var emptycartlayout: ConstraintLayout? = null
+    var cartNestedScroll: NestedScrollView? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        selectedItemsList=ApplicationClass.selectedItemsList
-        var view: View = inflater.inflate(R.layout.fragment_cart, container, false)
+        selectedItemsList = ApplicationClass.selectedItemsList
+        var view: View = inflater.inflate(
+            R.layout.fragment_cart,
+            container,
+            false
+        )
         totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
         toolbar = view.findViewById(R.id.cartToolbar)
         setHasOptionsMenu(true)
@@ -42,14 +52,23 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
 
 
-
+        emptycartlayout = view.findViewById(R.id.emptycartlayout)
         slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
         recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
         proceedTextViewCart = view.findViewById(R.id.proceedTextViewCart)
+        cartNestedScroll = view.findViewById(R.id.include2)
+
         itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this) {
             this.list.clear()
             this.list = it as MutableList<CategoriesModelClass>
 
+        }
+        if (selectedItemsList!!.isEmpty()) {
+            emptycartlayout!!.visibility = View.VISIBLE
+            cartNestedScroll!!.visibility = View.GONE
+        } else {
+            emptycartlayout!!.visibility = View.GONE
+            cartNestedScroll!!.visibility = View.VISIBLE
         }
         slecetdItemsRecycler!!.itemAnimator = null
         slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
@@ -78,7 +97,6 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
             itemsSelectedAdapter!!.submitList(list)
 
 
-
         }
 
         recommendedItemsRecycler!!.adapter = recommendedAdapter
@@ -90,8 +108,10 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
             activity!!.supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.container, OrdersFragment(
-                        ApplicationClass.selectedItemsList!!.map { it.isOrdered=true
-                        return@map it}
+                        ApplicationClass.selectedItemsList!!.map {
+                            it.isOrdered = true
+                            return@map it
+                        }
                     )
                 )
                 .addToBackStack(null).commit()
@@ -113,5 +133,11 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
             menu.getItem(i).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition= inflater.inflateTransition(R.transition.fragment_fade_trans)
+        super.onCreate(savedInstanceState)
     }
 }

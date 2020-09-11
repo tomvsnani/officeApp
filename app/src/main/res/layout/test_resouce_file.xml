@@ -1,148 +1,52 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="8dp"
-    app:cardCornerRadius="20dp"
-    android:layout_margin="8dp"
-    android:background="#fff"
-    android:layout_height="match_parent">
+    android:id="@+id/cartnestedscroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/productItemNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Makeup Brush set"
-        android:textColor="#090909"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/productPagePriceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Price : 200"
-        android:textColor="#E62121"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/productItemNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/productItemNameTextView" />
-
-    <ImageView
-        android:id="@+id/productPageMessagesImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_baseline_message_24"
-        app:layout_constraintEnd_toStartOf="@+id/productPageShareTImageView"
-        app:layout_constraintTop_toTopOf="@+id/productPageShareTImageView" />
-
-    <ImageView
-        android:id="@+id/productPageShareTImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:src="@drawable/ic_baseline_share_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view2"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="#6b6b6b"
-        app:layout_constraintTop_toBottomOf="@+id/productPagePriceTextView"
-        tools:layout_editor_absoluteX="-40dp" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="18dp"
-        android:layout_weight="1"
-        android:text="Quantity"
-        android:textColor="#292727"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        android:background="#fff">
 
-    <LinearLayout
-        android:id="@+id/addorremoveitemslinearlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartSelecetedRecyclerview"
 
-        <ImageButton
-            android:id="@+id/productremoveitemsImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#fbe9e7"
-            android:padding="8dp"
-            android:src="@drawable/ic_baseline_remove_24"
-            android:textColor="@color/red"
-            android:textStyle="bold" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/productitemquantitiytextview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="19dp"
+            android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:padding="8dp"
-            android:text="2"
-            android:textColor="#6b6b6b"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:text="Yay! You have unlocked exclusive offers!"
+            android:textColor="#000"
+            app:layout_constraintBottom_toTopOf="@+id/cartRecyclerviewRecommondedItems"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cartSelecetedRecyclerview"
+            app:layout_constraintVertical_bias="1.0" />
 
-        <ImageButton
-            android:id="@+id/productadditemsImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#fbe9e7"
-            android:padding="8dp"
-            android:src="@drawable/ic_baseline_add_24"
-            android:textColor="@color/red"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/view3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="#6b6b6b"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <TextView
-        android:id="@+id/productpageDescriptionTextView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartRecyclerviewRecommondedItems"
+            android:layout_width="match_parent"
+            android:layout_height="194dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cartSelecetedRecyclerview" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
