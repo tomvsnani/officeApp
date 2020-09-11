@@ -7,7 +7,14 @@ import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
 class CategoriesDataProvider {
     fun                                                                          getMapDataForCategories():LinkedHashMap<String,List<CategoriesModelClass>>?{
         var map:LinkedHashMap<String,List<CategoriesModelClass>> = LinkedHashMap()
-        map.put("Phones" , listOf(CategoriesModelClass("Phones","Samsung phone","too hot" ,
+        map.put("Phones" , listOf(CategoriesModelClass("Phones","Samsung phone","Brezzycloud Multi-function Travel Cosmetic Make Up Bag With Small Mirror Adjustable Dividers for Cosmetics Makeup Brushes (Multi color)\n" +
+                "\n" +
+                "Waterproof and easy to clean.\n" +
+                "easy to carry whether in home or going out.\n" +
+                "Built-in mirror is very convenient for you to makeup at any time\n" +
+                "Inner slip pockets are great for holding small necessaries\n" +
+                "deal for home,travel,business trip or whenever you need to carry it with you\n" +
+                "This cosmetic case is perfect for keeping all of your favorite makeup and toiletries organized and fashionable." ,
             "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=1,groupId = 1,dateOrdered = "07-09-2020",location = "Bodupppal Hyderabad"),
             CategoriesModelClass("Phones","Samsung phone","too hot" ,
                 "Gross Wt. 840gms","Net Wt.450gms","220","500","2","1",id=2,groupId = 1,dateOrdered = "07-09-2020",location = "Bodupppal Hyderabad"),

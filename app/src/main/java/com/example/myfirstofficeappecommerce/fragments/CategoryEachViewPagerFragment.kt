@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.CategoriesEachRecyclerAdapter
@@ -13,7 +14,7 @@ import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 
 
-class CategoryEachViewPagerFragment(var get: List<CategoriesModelClass>?,var callback:(Pair<String,CategoriesModelClass>)->Unit) : Fragment() {
+class CategoryEachViewPagerFragment(var get: List<CategoriesModelClass>?,var callback:(Pair<String,CategoriesModelClass>,Int)->Unit) : Fragment() {
     var recyclerView: RecyclerView? = null
     var adapterr: CategoriesEachRecyclerAdapter? = null
     override fun onCreateView(
@@ -28,7 +29,7 @@ class CategoryEachViewPagerFragment(var get: List<CategoriesModelClass>?,var cal
         recyclerView = view.findViewById(R.id.categoriesRecyclerview)
         adapterr = CategoriesEachRecyclerAdapter(callback,this )
         (recyclerView as RecyclerView).layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+           GridLayoutManager(context,2, RecyclerView.VERTICAL, false)
         (recyclerView as RecyclerView).adapter = adapterr
         recyclerView!!.itemAnimator=null
         (adapterr as CategoriesEachRecyclerAdapter).submitList(get as MutableList<CategoriesModelClass>?)

@@ -80,7 +80,7 @@ class CategoriesEachRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.categories_each_viewpager_row_layout, parent, false)
+            .inflate(R.layout.categories_each_viewpager_grid_rowlayout, parent, false)
         return CategoryViewHolder(view)
     }
 

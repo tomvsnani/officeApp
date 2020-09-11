@@ -13,8 +13,8 @@ import com.example.myfirstofficeappecommerce.fragments.OrdersFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
+    
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
-
     private var navigationView: NavigationView? = null
     var drawerLayout: DrawerLayout? = null
     var actionBarToggle: ActionBarDrawerToggle? = null

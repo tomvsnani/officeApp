@@ -3,8 +3,10 @@ package com.example.myfirstofficeappecommerce.fragments
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.*
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -36,6 +38,8 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
     var itemAddImageView: ImageView? = null
     var itemremoveImageView: ImageView? = null
     var menu: Menu? = null
+    var addTocartButton: Button? = null
+    var addOrRemoveItemsLinear: LinearLayout? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,20 +90,35 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         itemremoveImageView = view.findViewById(R.id.productremoveitemsImageButton)
 
+        addTocartButton = view.findViewById(R.id.productaddToCartButton)
+
+        addOrRemoveItemsLinear = view.findViewById(R.id.productaddorremoveitemslinearlayout)
+
 
 
         itemAddImageView!!.setOnClickListener {
             modelClass.quantityOfItem++
             itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
 
-            if (ApplicationClass.selectedItemsList!!.contains(modelClass))
+
 
                 ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
 
                     modelClass.quantityOfItem
 
-            else (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+            showOrHideItemCountIndicator()
+        }
 
+        addTocartButton!!.setOnClickListener {
+            var modelClassTemp =
+                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }
+            if (modelClassTemp == null) {
+                modelClass.quantityOfItem++
+                (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+                addTocartButton!!.visibility = View.GONE
+                addOrRemoveItemsLinear!!.visibility=View.VISIBLE
+            }
+          itemQuantitiyTextView!!.text=modelClass.quantityOfItem.toString()
             showOrHideItemCountIndicator()
         }
 
@@ -117,9 +136,12 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             if (modelClass.quantityOfItem == 0 && ApplicationClass.selectedItemsList?.contains(
                     modelClass
                 )!!
-            )
+            ) {
+                addTocartButton!!.visibility = View.VISIBLE
+                addOrRemoveItemsLinear!!.visibility = View.GONE
 
                 (ApplicationClass.selectedItemsList as MutableList).remove(modelClass)
+            }
 
             showOrHideItemCountIndicator()
 
@@ -205,8 +227,8 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        for(i in 0 until menu.size())
-            if(menu.getItem(i).itemId!=R.id.cartmenu)
+        for (i in 0 until menu.size())
+            if (menu.getItem(i).itemId != R.id.cartmenu)
                 menu.getItem(i).isVisible = false
         super.onPrepareOptionsMenu(menu)
     }

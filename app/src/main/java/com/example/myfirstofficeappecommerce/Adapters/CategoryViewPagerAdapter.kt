@@ -10,7 +10,7 @@ import com.example.myfirstofficeappecommerce.fragments.CategoryEachViewPagerFrag
 class CategoryViewPagerAdapter(
     fragment: CategoriesFragment,
     var map: LinkedHashMap<String, List<CategoriesModelClass>>,
-    var callback: (Pair<String,CategoriesModelClass>) -> Unit
+    var callback: (Pair<String,CategoriesModelClass>,Int) -> Unit
 ) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
 
