@@ -15,7 +15,7 @@ object CategoriesDataProvider {
         MutableLiveData()
     var mutableCollectionList: MutableLiveData<MutableList<CategoriesModelClass>> =
         MutableLiveData()
-    var hashMap:LinkedHashMap<String,List<CategoriesModelClass>> =LinkedHashMap()
+    var hashMap: LinkedHashMap<String, List<CategoriesModelClass>> = LinkedHashMap()
 
     fun getMapDataForCategories(): LinkedHashMap<String, List<CategoriesModelClass>>? {
         var map: LinkedHashMap<String, List<CategoriesModelClass>> = LinkedHashMap()
@@ -597,6 +597,31 @@ object CategoriesDataProvider {
 
                                                 .description()
 
+                                                .images( {args: Storefront.ProductQuery.ImagesArguments? ->args!!.first(100)  },{ _queryBuilder ->
+                                                    _queryBuilder.edges { _queryBuilder ->_queryBuilder.node { _queryBuilder ->_queryBuilder.src().id().altText()  }  }
+                                                })
+
+
+
+
+                                                .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
+                                                    args!!.first(
+                                                        100
+                                                    )
+                                                },
+                                                    { _queryBuilder ->
+                                                        _queryBuilder.edges { _queryBuilder ->
+                                                            _queryBuilder.node { _queryBuilder ->
+                                                                _queryBuilder.price()
+
+
+                                                                    .image { _queryBuilder: Storefront.ImageQuery? -> _queryBuilder!!.src()
+                                                                        }
+
+                                                            }
+                                                        }
+                                                    })
+
 
                                         }
                                     }
@@ -619,7 +644,9 @@ object CategoriesDataProvider {
                 for (collectionEdge in response.data()!!.shop.collections.edges) {
                     var collectionModelClass = CategoriesModelClass(
                         itemName = collectionEdge.node.title,
-                        id = collectionEdge.node.id.toString()
+                        id = collectionEdge.node.id.toString(),
+                        imageSrc = collectionEdge.node.image.src
+
                     )
                     var productList: MutableList<CategoriesModelClass> = ArrayList()
                     collectionList.add(collectionModelClass)
@@ -627,7 +654,11 @@ object CategoriesDataProvider {
                         var productmodelclass = CategoriesModelClass(
                             id = productEdge.node.id.toString(),
                             itemName = productEdge.node.title,
-                            itemDescriptionText = productEdge.node.description
+                            itemDescriptionText = productEdge.node.descriptionHtml,
+                            imageSrc = productEdge.node.variants.edges[0].node.image.src,
+                            realTimeMrp = productEdge.node.variants.edges[0].node.price.precision()
+
+
                         )
                         productList.add(productmodelclass)
 

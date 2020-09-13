@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
@@ -130,6 +131,7 @@ class CategoriesEachRecyclerAdapter(
         holder.itemGrossweight.text = modelClass.itemGrossWeight
         holder.itemName.text = modelClass.itemName
         holder.itemNetWeight.text = modelClass.itemNetWeight
+        Glide.with(categoryEachViewPagerFragment).load(modelClass.imageSrc).into(holder.itemImage)
     }
 
 

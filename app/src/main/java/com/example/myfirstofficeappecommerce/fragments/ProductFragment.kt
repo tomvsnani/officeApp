@@ -39,6 +39,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
     var addOrRemoveItemsLinear: LinearLayout? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
