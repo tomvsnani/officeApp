@@ -11,19 +11,16 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.MainRecyclerAdapter
+import com.example.myfirstofficeappecommerce.Adapters.searchfragmentRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import java.util.*
 
 
 open class SearchFragment() : Fragment() {
@@ -31,7 +28,7 @@ open class SearchFragment() : Fragment() {
     var actionbar: Toolbar? = null
     var searchEditText: EditText? = null
     var recyclr: RecyclerView? = null
-    var mainRecyclerAdapter: MainRecyclerAdapter? = null
+    var searchfragmentRecyclerAdapter: searchfragmentRecyclerAdapter? = null
 
     var menu: Menu? = null
     override fun onCreateView(
@@ -45,15 +42,19 @@ open class SearchFragment() : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         searchEditText = actionbar!!.getChildAt(0) as EditText?
         recyclr = view.findViewById(R.id.searchviewrecycler)
-        mainRecyclerAdapter = MainRecyclerAdapter(
-            (this),
-            CategoriesDataProvider().getMapDataForCategories(),
-            Constants.SCROLL_TYPE
-        )
 
-        recyclr!!.layoutManager = GridLayoutManager(context, 4, RecyclerView.VERTICAL, false)
-        recyclr!!.adapter = mainRecyclerAdapter
-        recyclr!!.itemAnimator = null
+        CategoriesDataProvider.mutablehashmap.observeForever {
+            searchfragmentRecyclerAdapter = searchfragmentRecyclerAdapter(
+                (this),
+               it,
+                Constants.SCROLL_TYPE
+            )
+
+            recyclr!!.layoutManager = GridLayoutManager(context, 4, RecyclerView.VERTICAL, false)
+            recyclr!!.adapter = searchfragmentRecyclerAdapter
+            recyclr!!.itemAnimator = null
+        }
+
 
 
 
@@ -70,17 +71,17 @@ open class SearchFragment() : Fragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (p0.toString().isNotEmpty()) {
                     recyclr!!.adapter = null
-                    mainRecyclerAdapter = MainRecyclerAdapter(
+                    searchfragmentRecyclerAdapter = searchfragmentRecyclerAdapter(
                         (this@SearchFragment),
-                        CategoriesDataProvider().getMapDataForCategories(),
+                        CategoriesDataProvider.getMapDataForCategories(),
                         Constants.SEARCH_TYPE
                     )
 
                     recyclr!!.layoutManager =
                         LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                    recyclr!!.adapter = mainRecyclerAdapter
-                    mainRecyclerAdapter!!.submitList(
-                        CategoriesDataProvider().getSearhItemsData().filter {
+                    recyclr!!.adapter = searchfragmentRecyclerAdapter
+                    searchfragmentRecyclerAdapter!!.submitList(
+                        CategoriesDataProvider.getSearhItemsData().filter {
                             it.itemName.contains(
                                 p0.toString(), true
                             )

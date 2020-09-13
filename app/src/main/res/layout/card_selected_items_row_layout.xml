@@ -36,14 +36,18 @@
 
             <TextView
                 android:id="@+id/cartSelectedItemName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_weight="0.7"
+                android:gravity="clip_vertical"
                 android:text="Samsung"
                 android:textColor="#000000"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cartItemCloseImageButton"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/queuqnumberofselecteditemtextview"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.3"
                 android:background="@android:color/transparent"
@@ -61,8 +64,6 @@
                 android:src="@drawable/ic_baseline_close_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/cartSelectedItemName"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

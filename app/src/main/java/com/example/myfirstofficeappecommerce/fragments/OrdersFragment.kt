@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.OrdersAdaptes
+import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 
@@ -25,6 +26,8 @@ class OrdersFragment(var orderList:List<CategoriesModelClass>) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view: View? = inflater.inflate(R.layout.fragment_orders, container, false)
+        (activity as MainActivity).lockDrawer()
+
         toolbar=view?.findViewById(R.id.ordersToolbar)
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)

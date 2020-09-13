@@ -14,7 +14,7 @@ import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 
 
-class CategoryEachViewPagerFragment(var get: List<CategoriesModelClass>?,var callback:(Pair<String,CategoriesModelClass>,Int)->Unit) : Fragment() {
+class CategoryEachViewPagerFragment(var get: List<CategoriesModelClass>?,var callback:()->Unit) : Fragment() {
     var recyclerView: RecyclerView? = null
     var adapterr: CategoriesEachRecyclerAdapter? = null
     override fun onCreateView(

@@ -16,6 +16,7 @@ import com.example.myfirstofficeappecommerce.Adapters.CartItemRecommendedAdapter
 import com.example.myfirstofficeappecommerce.Adapters.CartItemsSelectedRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
+import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 import kotlinx.android.synthetic.main.fragment_cart.*
@@ -38,12 +39,15 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (activity as MainActivity).lockDrawer()
+
         selectedItemsList = ApplicationClass.selectedItemsList
         var view: View = inflater.inflate(
             R.layout.fragment_cart,
             container,
             false
         )
+        (activity as MainActivity).lockDrawer()
         totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
         toolbar = view.findViewById(R.id.cartToolbar)
         setHasOptionsMenu(true)
@@ -101,7 +105,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
 
         recommendedItemsRecycler!!.adapter = recommendedAdapter
         recommendedAdapter!!.submitList(
-            CategoriesDataProvider().getRecommendedData() as MutableList<CategoriesModelClass>
+            CategoriesDataProvider.getRecommendedData() as MutableList<CategoriesModelClass>
         )
 
         proceedTextViewCart!!.setOnClickListener {
@@ -134,10 +138,11 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         }
         super.onPrepareOptionsMenu(menu)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
-        exitTransition= inflater.inflateTransition(R.transition.fragment_fade_trans)
+        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
         super.onCreate(savedInstanceState)
     }
 }

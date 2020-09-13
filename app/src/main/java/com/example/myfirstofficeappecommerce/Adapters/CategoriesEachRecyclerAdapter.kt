@@ -16,31 +16,14 @@ import com.example.myfirstofficeappecommerce.fragments.CategoryEachViewPagerFrag
 import com.example.myfirstofficeappecommerce.fragments.ProductFragment
 
 class CategoriesEachRecyclerAdapter(
-    callback: (Pair<String, CategoriesModelClass>) -> Unit,
-    var categoryEachViewPagerFragment: CategoryEachViewPagerFragment
+    var callback: () ->Unit,
+    var categoryEachViewPagerFragment: CategoryEachViewPagerFragment,
+    var displayType: String="grid"
 ) :
     ListAdapter<CategoriesModelClass, CategoriesEachRecyclerAdapter.CategoryViewHolder>(
         CategoriesModelClass.diffUtil
     ) {
-    var mutableselectedItemsList: MutableLiveData<Pair<String,CategoriesModelClass>> = MutableLiveData()
 
-    init {
-        mutableselectedItemsList.observeForever(Observer {
-
-
-
-           if(it.first=="add") {
-               it.second.quantityOfItem++
-
-           }
-            else
-               it.second.quantityOfItem--
-
-            Log.d("modelclass",it.second.quantityOfItem.toString())
-            notifyItemChanged(currentList.indexOf(it.second))
-            callback(it)
-        })
-    }
 
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -61,20 +44,56 @@ class CategoriesEachRecyclerAdapter(
 
         init {
             addToCart.setOnClickListener {
-                mutableselectedItemsList.value = Pair("add",currentList[adapterPosition])
+                var modelClass = currentList[adapterPosition]
+                var modelClassTemp =
+                    ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }
+                if (modelClassTemp == null) {
+                    modelClass.quantityOfItem++
+                    (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+                    notifyItemChanged(adapterPosition)
+                    callback()
+                }
 
             }
 
             removeItemsImageButton.setOnClickListener {
-                mutableselectedItemsList.value = Pair("remove",currentList[adapterPosition])
+                var modelClass = currentList[adapterPosition]
+                if (modelClass.quantityOfItem > 0) {
+                    modelClass.quantityOfItem--
+                    ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
+                        modelClass.quantityOfItem
+                }
+
+
+                if (modelClass.quantityOfItem == 0 && ApplicationClass.selectedItemsList?.contains(
+                        modelClass
+                    )!!
+                ) {
+
+                    (ApplicationClass.selectedItemsList as MutableList).remove(modelClass)
+                }
+
+                notifyItemChanged(adapterPosition)
+                callback()
             }
 
             addItemsImageButton.setOnClickListener {
-                mutableselectedItemsList.value = Pair("add",currentList[adapterPosition])
+                var modelClass = currentList[adapterPosition]
+                modelClass.quantityOfItem++
+
+                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
+                    modelClass.quantityOfItem
+
+                notifyItemChanged(adapterPosition)
+                callback()
             }
 
-            itemImage.setOnClickListener{categoryEachViewPagerFragment.activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.container,ProductFragment(currentList[adapterPosition])).addToBackStack(null).commit()}
+            itemImage.setOnClickListener {
+                categoryEachViewPagerFragment.activity!!.supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, ProductFragment(currentList[adapterPosition]))
+                    .addToBackStack(null).commit()
+             
+            }
         }
     }
 
@@ -88,20 +107,26 @@ class CategoriesEachRecyclerAdapter(
     override fun submitList(list: MutableList<CategoriesModelClass>?) {
         super.submitList(list?.toList())
     }
+
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
 
         var modelClass = currentList[position]
-        Log.d("finding",modelClass.itemName+" "+modelClass.quantityOfItem)
+        Log.d("finding", modelClass.itemName + " " + modelClass.quantityOfItem)
         if (modelClass.quantityOfItem > 0) {
-            holder.addToCart.visibility = View.GONE
-            holder.addOrRemoveItemLinearLayout.visibility = View.VISIBLE
+           if(displayType!="grid"){
+               holder.addToCart.visibility = View.GONE
+               holder.addOrRemoveItemLinearLayout.visibility = View.VISIBLE
+           }
             holder.quantityOfItemAddaedToCartTextView.text = modelClass.quantityOfItem.toString()
         } else {
-            holder.addToCart.visibility = View.VISIBLE
-            holder.addOrRemoveItemLinearLayout.visibility = View.GONE
+            if(displayType!="grid") {
+                holder.addToCart.visibility = View.VISIBLE
+                holder.addOrRemoveItemLinearLayout.visibility = View.GONE
+            }
         }
         holder.itemDescription.text = modelClass.itemDescriptionText
-        holder.realmrp.text ="${categoryEachViewPagerFragment.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
+        holder.realmrp.text =
+            "${categoryEachViewPagerFragment.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
         holder.itemGrossweight.text = modelClass.itemGrossWeight
         holder.itemName.text = modelClass.itemName
         holder.itemNetWeight.text = modelClass.itemNetWeight

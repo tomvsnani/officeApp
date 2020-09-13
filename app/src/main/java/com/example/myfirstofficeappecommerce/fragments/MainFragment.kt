@@ -24,8 +24,6 @@ import com.example.myfirstofficeappecommerce.R
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 
@@ -43,72 +41,22 @@ class MainFragment : Fragment() {
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
     var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
     var navigationView: NavigationView? = null
-    var graphh: GraphClient? = null
+    var a: MutableList<CategoriesModelClass> = ArrayList()
+
+
 
     private val SCROLL_TIMEOUT = 4000L
 
-
-    override fun onStart() {
-        graphh = GraphClient.builder(context)
-            .accessToken(getString(R.string.storefront_api_key))
-            .shopDomain(getString(R.string.shopify_domain))
-            .build()
-
-
-        val query = query { rootQuery: QueryRootQuery ->
-            rootQuery
-                .shop { shopQuery: ShopQuery ->
-                    shopQuery
-                        .collections({ args: ShopQuery.CollectionsArguments? -> args!!.first(4) },
-                            { _queryBuilder ->
-                                _queryBuilder.edges { _queryBuilder: CollectionEdgeQuery? ->
-                                    _queryBuilder!!.node { _queryBuilder: CollectionQuery? ->
-                                        _queryBuilder!!.title()
-                                        _queryBuilder!!.image { _queryBuilder -> _queryBuilder.src() }
-                                    }
-                                }
-                            }
-                        )
-                }
-        }
-
-        var s: Storefront.CustomerResetInput
-
-        val call: QueryGraphCall = graphh!!.queryGraph(query)
-
-
-        call.enqueue(object : GraphCall.Callback<QueryRoot> {
-            override fun onResponse(response: GraphResponse<QueryRoot>) {
-
-                val collections: MutableList<Storefront.Collection> = ArrayList()
-                for (collectionEdge in response.data()!!.shop.collections.edges) {
-                    collections.add(collectionEdge.node)
-
-/*                    List<Storefront.Product> products = new ArrayList<>();
-                    for (Storefront.ProductEdge productEdge : collectionEdge.getNode().getProducts().getEdges()) {
-                        products.add(productEdge.getNode());
-                    }
-                    */
-                }
-                var jsonArr: JsonArray = JsonArray()
-                jsonArr.add(Gson().toJson(collections))
-                for (i in 0 until jsonArr.size())
-                    Log.i("milla_c", jsonArr[i].asString)
-            }
-
-            override fun onFailure(error: GraphError) {
-                Log.e("graphvalueerror", error.toString())
-            }
-        })
-        super.onStart()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
+        (activity as MainActivity).unlockDrawer()
+
         setHasOptionsMenu(true)
+
         toolbar = view.findViewById(R.id.maintoolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.title = null
@@ -137,7 +85,7 @@ class MainFragment : Fragment() {
         (viewPager2 as ViewPager2).adapter =
             HorizontalScrollViewPagerAdapter(
                 this,
-                CategoriesDataProvider().getListDataForHorizontalScroll()
+                CategoriesDataProvider.getListDataForHorizontalScroll()
             )
         tablayout = view.findViewById(R.id.tablayout)
 
@@ -147,11 +95,6 @@ class MainFragment : Fragment() {
         ) { tab: TabLayout.Tab, i: Int ->
 
         }.attach()
-
-
-
-
-
 
 
         (viewPager2 as ViewPager2).registerOnPageChangeCallback(object :
@@ -184,23 +127,26 @@ class MainFragment : Fragment() {
             }
         })
 
-
-
-
         return view
     }
 
 
     private fun firstLayoutHoriZontalScrollItemNames(view: View) {
         categoryMap =
-            CategoriesDataProvider().getMapDataForCategories()
+            CategoriesDataProvider.getMapDataForCategories()
         recyclerView = view.findViewById(R.id.mainfragmentrecyclerhorizontalscrollitemnames)
-        adapterr =
-            MainRecyclerAdapter(this, categoryMap, Constants.SCROLL_TYPE)
+        CategoriesDataProvider.mutablehashmap.observeForever { t: HashMap<String, List<CategoriesModelClass>>? ->
+            adapterr =
+                MainRecyclerAdapter(
+                    this,
+                    t as LinkedHashMap<String, List<CategoriesModelClass>>?
+                )
 
-        (recyclerView as RecyclerView).adapter = adapterr
-        (recyclerView as RecyclerView).layoutManager =
-            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+            (recyclerView as RecyclerView).adapter = adapterr
+            (recyclerView as RecyclerView).layoutManager =
+                LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        }
+
 
     }
 
@@ -249,7 +195,6 @@ class MainFragment : Fragment() {
                     visibility = View.VISIBLE
                     text = Utils.getItemCount()
                 }
-
         }
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -260,5 +205,11 @@ class MainFragment : Fragment() {
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
         super.onCreate(savedInstanceState)
+    }
+
+
+    override fun onStart() {
+
+        super.onStart()
     }
 }

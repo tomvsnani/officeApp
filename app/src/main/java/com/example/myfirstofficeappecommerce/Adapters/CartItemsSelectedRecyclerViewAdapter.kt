@@ -135,7 +135,7 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var ca
         var modelclass = currentList[position]
         Log.d("sssss", modelclass.quantityOfItem.toString())
         holder.carItemQuantityTextView?.text = modelclass.quantityOfItem.toString()
-        holder.cartItemPriceTextView?.text = modelclass.realTimeMrp
+        holder.cartItemPriceTextView?.text = modelclass.realTimeMrp.toString()
         holder.cartItemWeightTextView?.text = modelclass.itemNetWeight
         holder.cartItemnameTextView?.text = modelclass.itemName
         holder.cartQuequeNumberTextView?.text = modelclass.itemQueueNumber.toString()

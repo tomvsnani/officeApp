@@ -12,12 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
+import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
-import com.example.myfirstofficeappecommerce.ApplicationClass
-import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.R
-import com.example.myfirstofficeappecommerce.Utils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.test_resouce_file.*
@@ -55,6 +52,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view: View = inflater.inflate(R.layout.fragment_product, container, false)
+        (activity as MainActivity).lockDrawer()
 
         toolbar = view.findViewById(R.id.productToolbar)
 
@@ -70,7 +68,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
             HorizontalScrollViewPagerAdapter(
                 this,
-                CategoriesDataProvider().getListDataForHorizontalScroll()
+                CategoriesDataProvider.getListDataForHorizontalScroll()
             )
         tablayout = view.findViewById(R.id.producttablayout)
 
@@ -94,6 +92,11 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         addOrRemoveItemsLinear = view.findViewById(R.id.productaddorremoveitemslinearlayout)
 
+        if (modelClass.quantityOfItem > 0) {
+            addTocartButton!!.visibility = View.GONE
+            addOrRemoveItemsLinear!!.visibility = View.VISIBLE
+        }
+
 
 
         itemAddImageView!!.setOnClickListener {
@@ -102,9 +105,9 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
 
 
-                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
+            ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
 
-                    modelClass.quantityOfItem
+                modelClass.quantityOfItem
 
             showOrHideItemCountIndicator()
         }
@@ -116,9 +119,9 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
                 modelClass.quantityOfItem++
                 (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
                 addTocartButton!!.visibility = View.GONE
-                addOrRemoveItemsLinear!!.visibility=View.VISIBLE
+                addOrRemoveItemsLinear!!.visibility = View.VISIBLE
             }
-          itemQuantitiyTextView!!.text=modelClass.quantityOfItem.toString()
+            itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
             showOrHideItemCountIndicator()
         }
 

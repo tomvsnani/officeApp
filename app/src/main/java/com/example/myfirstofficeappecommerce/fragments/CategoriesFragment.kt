@@ -26,7 +26,10 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelClass>>?,var tabType:Int) :
+class CategoriesFragment(
+    var list: LinkedHashMap<String, List<CategoriesModelClass>>?,
+    var tabType: Int
+) :
     Fragment() {
 
 
@@ -41,58 +44,31 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
     var itemSelectedCountTextView: TextView? = null
     var checkoutButton: Button? = null
     var menu: Menu? = null
-    var indexOfItemInList:Int=-1
+    var indexOfItemInList: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        Log.d("liscount", selectedItemsList.size.toString())
+        (activity as MainActivity).lockDrawer()
+
+        Log.d("liscount", list!!.size.toString())
         var view: View = inflater.inflate(R.layout.fragment_categories, container, false)
         categoryNames = list?.keys?.toList()
-        toolbar = view.findViewById(R.id.categoriesFragmenttoolbar)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = null
-        (activity as AppCompatActivity).supportActionBar!!.setHomeButtonEnabled(true)
-        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        (activity as MainActivity).actionBarToggle = ActionBarDrawerToggle(
-            activity, (activity as MainActivity).drawerLayout, R.string.openDrawerLayout,
-            R.string.closeDrawerLayout
-        )
 
-        ((activity as MainActivity).drawerLayout as DrawerLayout).addDrawerListener((activity as MainActivity).actionBarToggle!!)
-        ((activity as MainActivity).actionBarToggle as ActionBarDrawerToggle).syncState()
-        viewPager2 = view.findViewById(R.id.viewpagerincategory)
-        selectedItemDisplayCardView = view.findViewById(R.id.itemsselectedindicatorcardview)
-        itemSelectedCountTextView = view.findViewById(R.id.numberOfItemSelectedTextView)
-        checkoutButton = view.findViewById(R.id.checkoutButton)
+        initializeViews(view)
+
         checkoutButton!!.setOnClickListener {
             openCartFragment()
         }
-           (viewPager2 as ViewPager2).adapter =
+        (viewPager2 as ViewPager2).adapter =
             CategoryViewPagerAdapter(
                 this, list!!
-            ) { categoriesModelClass ->
-                indexOfItemInList = -1
-                if (selectedItemsList.size == 0)
-                    selectedItemsList.add(categoriesModelClass.second)
-                selectedItemsList.filter { a ->
+            ) {
 
-                     if (a.id == categoriesModelClass.second.id && a.groupId == categoriesModelClass.second.groupId) {
-                        indexOfItemInList = selectedItemsList.indexOf(categoriesModelClass.second)
-                        return@filter true
-                    }
-                    return@filter false
-                }
-
-                   if (indexOfItemInList != -1)
-                    selectedItemsList[indexOfItemInList] = categoriesModelClass.second
-                else
-                    selectedItemsList.add(categoriesModelClass.second)
-                if(categoriesModelClass.second.quantityOfItem==0)
-                    selectedItemsList.removeAt(indexOfItemInList)
-                ApplicationClass.selectedItemsList=selectedItemsList
+                selectedItemsList =
+                    ApplicationClass.selectedItemsList as MutableList<CategoriesModelClass>
                 showOrHideItemCountIndicator()
             }
 
@@ -111,8 +87,35 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
         return view
     }
 
+
+
+
+
+    private fun initializeViews(view: View) {
+        toolbar = view.findViewById(R.id.categoriesFragmenttoolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.title = null
+        (activity as AppCompatActivity).supportActionBar!!.setHomeButtonEnabled(true)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity).actionBarToggle = ActionBarDrawerToggle(
+            activity, (activity as MainActivity).drawerLayout, R.string.openDrawerLayout,
+            R.string.closeDrawerLayout
+        )
+
+        ((activity as MainActivity).drawerLayout as DrawerLayout).addDrawerListener((activity as MainActivity).actionBarToggle!!)
+        ((activity as MainActivity).actionBarToggle as ActionBarDrawerToggle).syncState()
+        viewPager2 = view.findViewById(R.id.viewpagerincategory)
+        selectedItemDisplayCardView = view.findViewById(R.id.itemsselectedindicatorcardview)
+        itemSelectedCountTextView = view.findViewById(R.id.numberOfItemSelectedTextView)
+        checkoutButton = view.findViewById(R.id.checkoutButton)
+    }
+
+
+
+
+
     private fun openCartFragment() {
-           activity!!.supportFragmentManager.beginTransaction()
+        activity!!.supportFragmentManager.beginTransaction()
             .replace(
                 R.id.container,
                 CartFragment(
@@ -122,20 +125,12 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
     }
 
 
+
+
+
     private fun showOrHideItemCountIndicator() {
-        if(ApplicationClass.selectedItemsList!!.isNotEmpty()){
-            Log.d(
-                "comparesize",
-                (ApplicationClass.selectedItemsList!!).toString()
-            )
 
-            Log.d(
-                "comparesize",
-                (ApplicationClass.selectedItemsList!!.size).toString()
-            )
-        }
-
-        var itemCount= Utils.getItemCount()
+        var itemCount = Utils.getItemCount()
         itemSelectedCountTextView!!.text = itemCount.toString()
         if (itemCount.toInt() > 0) {
             selectedItemDisplayCardView!!.visibility = View.VISIBLE
@@ -154,16 +149,24 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
     }
 
 
+
+
+
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.fragmentmenu, menu)
         this.menu = menu
         var item: MenuItem = menu.findItem(R.id.cartmenu)
         item.actionView.findViewById<ImageView>(R.id.cartmenuitem).setOnClickListener {
-          openCartFragment()
+            openCartFragment()
         }
         showOrHideItemCountIndicator()
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+
+
+
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -186,10 +189,14 @@ class CategoriesFragment(var list: LinkedHashMap<String, List<CategoriesModelCla
         return super.onOptionsItemSelected(item)
     }
 
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
-        exitTransition= inflater.inflateTransition(R.transition.fragment_fade_trans)
+        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
         super.onCreate(savedInstanceState)
     }
 }

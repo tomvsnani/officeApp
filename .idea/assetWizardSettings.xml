@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/shopping_cart/baseline_shopping_cart_24.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/favorite_border/baseline_favorite_border_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -29,7 +29,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="b42128" />
-                            <entry key="outputName" value="ic_baseline_shopping_cart_24" />
+                            <entry key="outputName" value="ic_baseline_favorite_border_24" />
                             <entry key="sourceFile" value="C:\Users\Analog\Desktop\officeApp-addingsearchview" />
                           </map>
                         </option>
