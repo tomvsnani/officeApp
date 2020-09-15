@@ -14,7 +14,7 @@ import com.example.myfirstofficeappecommerce.R
 
 class HorizontalImageScrollFragment(
     var mainFragment: Fragment,
-    var listDataForHorizontalScroll: List<ModelClass>
+    var listDataForHorizontalScroll:ModelClass
 
 ) : Fragment() {
     var imageView: ImageView? = null
@@ -29,7 +29,7 @@ class HorizontalImageScrollFragment(
         } else {
             view = inflater.inflate(R.layout.product_fragment_imagescroll_layout, container, false)
             imageView = view.findViewById(R.id.productpageImageView)
-            Glide.with(requireActivity()).load("").into(imageView!!)
+            Glide.with(requireActivity()).load(listDataForHorizontalScroll.imageUrl).into(imageView!!)
         }
         return view
     }

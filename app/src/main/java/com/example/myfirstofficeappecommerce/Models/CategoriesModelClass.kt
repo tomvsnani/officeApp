@@ -14,11 +14,13 @@ data class CategoriesModelClass(
     var quantityOfItem: Int = 0,
     var itemQueueNumber: Int = 0,
     var id: String = "",
-    var groupId: Int = -1,
+    var groupId: String = "",
     var dateOrdered: String = "",
     var location: String = "",
     var isOrdered: Boolean = false,
-    var imageSrc: String = ""
+    var imageSrc: List<ModelClass> = ArrayList(),
+    var isFav: Boolean = false,
+    var variantsList: MutableList<VariantsModelClass>? = ArrayList()
 ) {
     companion object {
         val diffUtil: DiffUtil.ItemCallback<CategoriesModelClass> = object :

@@ -1,5 +1,6 @@
 package com.example.myfirstofficeappecommerce.Adapters
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,8 @@ class CategoriesEachRecyclerAdapter(
         val addItemsImageButton: ImageButton = itemView.findViewById(R.id.additemsImageButton)
         val quantityOfItemAddaedToCartTextView: TextView =
             itemView.findViewById(R.id.cartitemquantitiytextview)
+        val shareImageView:ImageView=itemView.findViewById(R.id.categories_row_share_imageview)
+        val favouritesImageView=itemView.findViewById<ImageView>(R.id.categories_row_favouritesImageView)
 
 
         init {
@@ -95,6 +98,27 @@ class CategoriesEachRecyclerAdapter(
                     .addToBackStack(null).commit()
              
             }
+
+            shareImageView.setOnClickListener {
+                var s=currentList[adapterPosition].itemName
+                var intent:Intent=Intent(Intent.ACTION_SEND)
+                intent.type = "text/html";
+                intent.putExtra(Intent.EXTRA_TEXT,s)
+                categoryEachViewPagerFragment.startActivity(intent)
+            }
+
+            favouritesImageView.setOnClickListener {
+              if(currentList[adapterPosition].isFav){
+
+                  currentList[adapterPosition].isFav=false
+
+                  notifyItemChanged(adapterPosition)
+              }else{
+                  currentList[adapterPosition].isFav=true
+
+                  notifyItemChanged(adapterPosition)
+              }
+            }
         }
     }
 
@@ -127,11 +151,16 @@ class CategoriesEachRecyclerAdapter(
         }
         holder.itemDescription.text = modelClass.itemDescriptionText
         holder.realmrp.text =
-            "${categoryEachViewPagerFragment.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
+            " MRP : ${categoryEachViewPagerFragment.getString(R.string.Rs)} ${modelClass.variantsList?.get(0)?.price}"
         holder.itemGrossweight.text = modelClass.itemGrossWeight
         holder.itemName.text = modelClass.itemName
         holder.itemNetWeight.text = modelClass.itemNetWeight
-        Glide.with(categoryEachViewPagerFragment).load(modelClass.imageSrc).into(holder.itemImage)
+        Glide.with(categoryEachViewPagerFragment).load(modelClass.imageSrc[0].imageUrl).into(holder.itemImage)
+
+        if(modelClass.isFav)
+            Glide.with(categoryEachViewPagerFragment.context!!).load(R.drawable.ic_baseline_favorite_24).into(holder.favouritesImageView)
+        else
+            Glide.with(categoryEachViewPagerFragment.context!!).load(R.drawable.ic_baseline_favorite_border_24).into(holder.favouritesImageView)
     }
 
 

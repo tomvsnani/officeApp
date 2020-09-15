@@ -82,11 +82,58 @@
                 android:orientation="vertical">
 
 
-                <include
-
-                    layout="@layout/test_resouce_file"
+                <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cartnestedscroll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:fitsSystemWindows="true">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#fff">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/cartSelecetedRecyclerview"
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="19dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:gravity="center"
+                            android:text="Yay! You have unlocked exclusive offers!"
+                            android:textColor="#000"
+                            app:layout_constraintBottom_toTopOf="@+id/cartRecyclerviewRecommondedItems"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cartSelecetedRecyclerview"
+                            app:layout_constraintVertical_bias="1.0" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/cartRecyclerviewRecommondedItems"
+                            android:layout_width="match_parent"
+                            android:layout_height="194dp"
+                            android:layout_marginTop="32dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cartSelecetedRecyclerview" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.core.widget.NestedScrollView>
 
 
                 <LinearLayout

@@ -66,7 +66,7 @@ class MainFragment : Fragment() {
             activity, (activity as MainActivity).drawerLayout, R.string.openDrawerLayout,
             R.string.closeDrawerLayout
         )
-
+//activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,testfrag()).commit()
         ((activity as MainActivity).drawerLayout as DrawerLayout).addDrawerListener((activity as MainActivity).actionBarToggle!!)
         ((activity as MainActivity).actionBarToggle as ActionBarDrawerToggle).syncState()
         searchEditText = view.findViewById(R.id.mainfragmentsearchedittext)

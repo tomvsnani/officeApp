@@ -1,7 +1,9 @@
 package com.example.myfirstofficeappecommerce.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
@@ -10,11 +12,19 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
+import com.example.myfirstofficeappecommerce.Adapters.ProductColorRecyclerViewAdapter
+import com.example.myfirstofficeappecommerce.Adapters.ProductSizeRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.example.myfirstofficeappecommerce.Models.ProductColorModelClass
+import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.test_resouce_file.*
@@ -37,7 +47,13 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
     var menu: Menu? = null
     var addTocartButton: Button? = null
     var addOrRemoveItemsLinear: LinearLayout? = null
-
+    var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>? = null
+    var colorRecyclerView: RecyclerView? = null
+    var sizeRecyclerView: RecyclerView? = null
+    var colorRecyclerAdapter: ProductColorRecyclerViewAdapter? = null
+    var sizeRecyclerViewAdapter: ProductSizeRecyclerViewAdapter? = null
+    var selectedVariant: VariantsModelClass? = null
+    var variantList:List<VariantsModelClass>?=modelClass.variantsList!!.toList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +68,11 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view: View = inflater.inflate(R.layout.fragment_product, container, false)
+
+        selectedVariant=modelClass.variantsList?.get(0)!!.copy()
+
+        var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
+
         (activity as MainActivity).lockDrawer()
 
         toolbar = view.findViewById(R.id.productToolbar)
@@ -69,8 +89,29 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
             HorizontalScrollViewPagerAdapter(
                 this,
-                CategoriesDataProvider.getListDataForHorizontalScroll()
+                modelClass.imageSrc
             )
+
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottomsheet))
+
+        bottomSheetBehavior!!.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset >= 0.9f) {
+                    toolbar!!.visibility = View.INVISIBLE
+                } else
+                    toolbar!!.visibility = View.VISIBLE
+            }
+        })
+
+        colorRecyclerView = view.findViewById(R.id.productcolorRecyclerView)
+
+        sizeRecyclerView = view.findViewById(R.id.productsizeRecyclerview)
+
         tablayout = view.findViewById(R.id.producttablayout)
 
         itemNameTextView = view.findViewById(R.id.productItemNameTextView)
@@ -93,6 +134,64 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         addOrRemoveItemsLinear = view.findViewById(R.id.productaddorremoveitemslinearlayout)
 
+      for( i in    variantList!!) {
+          Log.d("selecteddpage", "${i.color} ${i.size} ${i.id}")
+      }
+
+        colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
+
+            selectedVariant!!.color = colorr
+
+
+            selectedVariant!!.id=
+                variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
+
+            Log.d(
+                "selecteddcolor",
+                "${selectedVariant?.color}    ${selectedVariant?.id}    ${selectedVariant?.size}"
+            )
+        }
+
+        colorRecyclerView!!.layoutManager =
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        colorRecyclerView!!.adapter = colorRecyclerAdapter
+
+        sizeRecyclerViewAdapter =
+            ProductSizeRecyclerViewAdapter { sizee ->
+
+                selectedVariant!!.size = sizee
+
+                selectedVariant!!.id =
+
+                      variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
+
+                Log.d(
+                    "selecteddsize",
+                    "${selectedVariant!!.color}    ${selectedVariant!!.id}   ${selectedVariant!!.size}"
+                )
+            }
+        sizeRecyclerView!!.layoutManager =
+
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+
+        sizeRecyclerView!!.adapter = sizeRecyclerViewAdapter
+
+        colorRecyclerAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.color }
+            .apply { find { it.id==selectedVariant!!.id }?.isSelected=true })
+
+        sizeRecyclerViewAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.size }
+            .apply { find { it.id==selectedVariant!!.id }?.isSelected=true }
+            .asReversed().sortedBy { it.size })
+
+
+        itemShareImageView!!.setOnClickListener {
+            var s = modelClass.itemName
+            var intent: Intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/html";
+            intent.putExtra(Intent.EXTRA_TEXT, s)
+            activity!!.startActivity(intent)
+        }
+
         if (modelClass.quantityOfItem > 0) {
             addTocartButton!!.visibility = View.GONE
             addOrRemoveItemsLinear!!.visibility = View.VISIBLE
@@ -114,6 +213,14 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         }
 
         addTocartButton!!.setOnClickListener {
+            selectedVariant =
+                modelClass.variantsList!!.filter { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }[0]
+            Log.d(
+                "selecteddcolor",
+                "${selectedVariant?.color}    ${selectedVariant?.id}    ${selectedVariant?.size}"
+            )
+            modelClass.id = selectedVariant!!.id!!
+            modelClass.groupId = selectedVariant!!.parentProductId!!
             var modelClassTemp =
                 ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }
             if (modelClassTemp == null) {
@@ -157,7 +264,8 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
 
-        itemPriceTextView!!.text = "${activity!!.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
+        itemPriceTextView!!.text =
+            "MRP : ${activity!!.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
 
         TabLayoutMediator(
             (tablayout as TabLayout),

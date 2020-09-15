@@ -5,8 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.ModelClass
-import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
-import com.example.myfirstofficeappecommerce.fragments.MainFragment
+import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.shopify.buy3.*
 
 object CategoriesDataProvider {
@@ -40,7 +39,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "dt",
-                    groupId = 1,
+                    groupId = "a",
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -55,7 +54,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "df",
-                    groupId = 1,
+                    groupId = "b",
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -70,7 +69,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "de",
-                    groupId = 1,
+                    groupId = "c",
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -85,7 +84,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "dd",
-                    groupId = 1,
+                    groupId = 1.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -100,7 +99,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "dc",
-                    groupId = 1,
+                    groupId = 1.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -115,7 +114,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "db",
-                    groupId = 1,
+                    groupId = 1.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -130,7 +129,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "da",
-                    groupId = 1,
+                    groupId = 1.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 )
@@ -151,7 +150,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "cg",
-                    groupId = 2,
+                    groupId = 2.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -166,7 +165,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "cf",
-                    groupId = 2,
+                    groupId = 2.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -181,7 +180,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "ce",
-                    groupId = 2,
+                    groupId = 2.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -195,7 +194,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "cd",
-                    groupId = 2,
+                    groupId = 2.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -210,7 +209,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "cc",
-                    groupId = 2,
+                    groupId = 2.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -225,7 +224,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "cb",
-                    groupId = 2,
+                    groupId = 2.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -240,7 +239,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "ca",
-                    groupId = 2,
+                    groupId = 2.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 )
@@ -261,7 +260,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "bg",
-                    groupId = 3,
+                    groupId = 3.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -276,7 +275,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "bf",
-                    groupId = 3,
+                    groupId = 3.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -291,7 +290,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "be",
-                    groupId = 3,
+                    groupId = 3.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -306,7 +305,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "bd",
-                    groupId = 3,
+                    groupId = 3.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -321,7 +320,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "bc",
-                    groupId = 3,
+                    groupId = 3.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -336,7 +335,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "bb",
-                    groupId = 3,
+                    groupId = 3.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 ),
@@ -351,7 +350,7 @@ object CategoriesDataProvider {
                     "2",
                     "1",
                     id = "ba",
-                    groupId = 3,
+                    groupId = 3.toString(),
                     dateOrdered = "07-09-2020",
                     location = "Bodupppal Hyderabad"
                 )
@@ -531,31 +530,31 @@ object CategoriesDataProvider {
         return listOf(
             CategoriesModelClass(
                 "Phones", "Samsung phone", "too hot",
-                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "a", groupId = 8
+                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "a", groupId = 8.toString()
             ),
             CategoriesModelClass(
                 "Phones", "Samsung phone", "too hot",
-                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "b", groupId = 9
+                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "b", groupId = 9.toString()
             ),
             CategoriesModelClass(
                 "Phones", "Samsung", "too hot",
-                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "c", groupId = 10
+                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "c", groupId = 10.toString()
             ),
             CategoriesModelClass(
                 "Phones", "Samsung", "too hot",
-                "Gross Wt. 840gms", "Net Wt.450gms", "220", 50, "2", "1", id = "d", groupId = 11
+                "Gross Wt. 840gms", "Net Wt.450gms", "220", 50, "2", "1", id = "d", groupId = 11.toString()
             ),
             CategoriesModelClass(
                 "Phones", "Samsung", "too hot",
-                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "e", groupId = 12
+                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "e", groupId = 12.toString()
             ),
             CategoriesModelClass(
                 "Phones", "Samsung", "too hot",
-                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "f", groupId = 13
+                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "f", groupId = 13.toString()
             ),
             CategoriesModelClass(
                 "Phones", "Samsung", "too hot",
-                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "g", groupId = 14
+                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "g", groupId = 14.toString()
             )
 
         )
@@ -597,11 +596,17 @@ object CategoriesDataProvider {
 
                                                 .description()
 
-                                                .images( {args: Storefront.ProductQuery.ImagesArguments? ->args!!.first(100)  },{ _queryBuilder ->
-                                                    _queryBuilder.edges { _queryBuilder ->_queryBuilder.node { _queryBuilder ->_queryBuilder.src().id().altText()  }  }
+                                                .images({ args: Storefront.ProductQuery.ImagesArguments? ->
+                                                    args!!.first(
+                                                        100
+                                                    )
+                                                }, { _queryBuilder ->
+                                                    _queryBuilder.edges { _queryBuilder ->
+                                                        _queryBuilder.node { _queryBuilder ->
+                                                            _queryBuilder.src().id()
+                                                        }
+                                                    }
                                                 })
-
-
 
 
                                                 .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
@@ -613,10 +618,11 @@ object CategoriesDataProvider {
                                                         _queryBuilder.edges { _queryBuilder ->
                                                             _queryBuilder.node { _queryBuilder ->
                                                                 _queryBuilder.price()
+                                                                    .selectedOptions { _queryBuilder ->
+                                                                        _queryBuilder.name().value()
+                                                                    }
 
 
-                                                                    .image { _queryBuilder: Storefront.ImageQuery? -> _queryBuilder!!.src()
-                                                                        }
 
                                                             }
                                                         }
@@ -644,22 +650,48 @@ object CategoriesDataProvider {
                 for (collectionEdge in response.data()!!.shop.collections.edges) {
                     var collectionModelClass = CategoriesModelClass(
                         itemName = collectionEdge.node.title,
-                        id = collectionEdge.node.id.toString(),
-                        imageSrc = collectionEdge.node.image.src
+                        id = collectionEdge.node.id.toString()
+
 
                     )
                     var productList: MutableList<CategoriesModelClass> = ArrayList()
                     collectionList.add(collectionModelClass)
                     for (productEdge in collectionEdge.node.products.edges) {
+                        var productImageSrcList: MutableList<ModelClass> = ArrayList()
+
+                        // adding aa images to product imagelist
+                        for (imageedge in productEdge.node.images.edges)
+                            productImageSrcList.add(ModelClass(imageUrl = imageedge.node.src))
+
+                        var variantList: MutableList<VariantsModelClass> = ArrayList()
+
+                        //adding all variant data to product variant list
+                        for (variantEdge in productEdge.node.variants.edges) {
+                            var sizeIndex=2;
+                            if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name=="Size" )
+                                sizeIndex=1
+                            variantList.add(
+                                VariantsModelClass(
+                                    variantEdge.node.id.toString(),
+                                    productEdge.node.id.toString(),
+                                    if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
+                                    if (variantEdge.node.selectedOptions.size > 1 && sizeIndex<variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
+                                    variantEdge.node.price.toFloat()
+
+
+                                )
+                            )
+                        }
+
                         var productmodelclass = CategoriesModelClass(
                             id = productEdge.node.id.toString(),
                             itemName = productEdge.node.title,
                             itemDescriptionText = productEdge.node.descriptionHtml,
-                            imageSrc = productEdge.node.variants.edges[0].node.image.src,
-                            realTimeMrp = productEdge.node.variants.edges[0].node.price.precision()
-
-
+                            imageSrc = productImageSrcList,
+                            realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
+                            variantsList = variantList
                         )
+
                         productList.add(productmodelclass)
 
                     }

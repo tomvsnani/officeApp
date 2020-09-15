@@ -14,6 +14,6 @@ class HorizontalScrollViewPagerAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return HorizontalImageScrollFragment( mainFragment,listDataForHorizontalScroll)
+        return HorizontalImageScrollFragment( mainFragment,listDataForHorizontalScroll[position])
     }
 }
