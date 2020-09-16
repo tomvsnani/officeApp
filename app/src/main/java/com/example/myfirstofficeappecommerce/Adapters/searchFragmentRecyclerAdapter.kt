@@ -30,8 +30,13 @@ class searchfragmentRecyclerAdapter(
     init {
         var list: LinkedList<CategoriesModelClass> = LinkedList()
         map!!.keys.toList().forEach { list.add(CategoriesModelClass(itemName = it)) }
-        Log.d("remotead", "before")
-        CategoriesDataProvider.mutableCollectionList.observeForever { submitList(it) }
+
+        CategoriesDataProvider.mutableCollectionList.observeForever {
+            Log.d("remoteaddd", "hello")
+            Log.d("remoteaddd", it.toString())
+            submitList(it)
+           }
+
 
     }
 

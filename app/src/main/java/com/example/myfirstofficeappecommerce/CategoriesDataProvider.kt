@@ -7,6 +7,7 @@ import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.shopify.buy3.*
+import com.shopify.graphql.support.ID
 
 object CategoriesDataProvider {
     var graphh: GraphClient? = null
@@ -689,7 +690,8 @@ object CategoriesDataProvider {
                             itemDescriptionText = productEdge.node.descriptionHtml,
                             imageSrc = productImageSrcList,
                             realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
-                            variantsList = variantList
+                            variantsList = variantList,
+                            groupId = collectionEdge.node.id.toString()
                         )
 
                         productList.add(productmodelclass)
@@ -703,6 +705,44 @@ object CategoriesDataProvider {
 
 
                 mutableCollectionList.postValue(collectionList)
+
+            }
+
+
+            override fun onFailure(error: GraphError) {
+                Log.e("graphvalueerror", error.toString())
+            }
+        })
+
+
+    }
+
+
+    fun getProductDataBasedOnCollectionId(colllectionId:String){
+
+        val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
+            rootQuery.node(ID(colllectionId)) { _queryBuilderr ->
+                _queryBuilderr.onCollection { _queryBuilder -> _queryBuilder.title()
+
+
+                }
+            }
+        }
+
+
+        val calldata: QueryGraphCall = graphh!!.queryGraph(query1)
+
+        calldata.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
+            override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
+
+                var storefront: Storefront.Collection = response.data()!!.node as Storefront.Collection
+                Log.d("responsedata","${storefront.title} ${storefront.description}")
+
+
+
+
+
+
 
             }
 
