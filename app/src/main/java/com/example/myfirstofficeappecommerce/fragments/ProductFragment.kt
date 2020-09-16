@@ -69,7 +69,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        selectedVariant=modelClass.variantsList?.get(0)!!.copy()
+        selectedVariant=modelClass.variantsList?.getOrNull(0)!!.copy()
 
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
 
@@ -108,48 +108,14 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             }
         })
 
-        colorRecyclerView = view.findViewById(R.id.productcolorRecyclerView)
+        initializeViews(view)
 
-        sizeRecyclerView = view.findViewById(R.id.productsizeRecyclerview)
-
-        tablayout = view.findViewById(R.id.producttablayout)
-
-        itemNameTextView = view.findViewById(R.id.productItemNameTextView)
-
-        itemPriceTextView = view.findViewById(R.id.productPagePriceTextView)
-
-        itemQuantitiyTextView = view.findViewById(R.id.productitemquantitiytextview)
-
-        itemTotalDescriptionTextView = view.findViewById(R.id.productpageDescriptionTextView)
-
-        itemMessagesImageView = view.findViewById(R.id.productPageMessagesImageView)
-
-        itemShareImageView = view.findViewById(R.id.productPageShareTImageView)
-
-        itemAddImageView = view.findViewById(R.id.productadditemsImageButton)
-
-        itemremoveImageView = view.findViewById(R.id.productremoveitemsImageButton)
-
-        addTocartButton = view.findViewById(R.id.productaddToCartButton)
-
-        addOrRemoveItemsLinear = view.findViewById(R.id.productaddorremoveitemslinearlayout)
-
-      for( i in    variantList!!) {
-          Log.d("selecteddpage", "${i.color} ${i.size} ${i.id}")
-      }
 
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
-
             selectedVariant!!.color = colorr
-
-
             selectedVariant!!.id=
                 variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
 
-            Log.d(
-                "selecteddcolor",
-                "${selectedVariant?.color}    ${selectedVariant?.id}    ${selectedVariant?.size}"
-            )
         }
 
         colorRecyclerView!!.layoutManager =
@@ -158,22 +124,15 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         sizeRecyclerViewAdapter =
             ProductSizeRecyclerViewAdapter { sizee ->
-
                 selectedVariant!!.size = sizee
-
                 selectedVariant!!.id =
+                    variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
 
-                      variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
-
-                Log.d(
-                    "selecteddsize",
-                    "${selectedVariant!!.color}    ${selectedVariant!!.id}   ${selectedVariant!!.size}"
-                )
             }
+
+
         sizeRecyclerView!!.layoutManager =
-
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-
         sizeRecyclerView!!.adapter = sizeRecyclerViewAdapter
 
         colorRecyclerAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.color }
@@ -192,11 +151,12 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             activity!!.startActivity(intent)
         }
 
-        if (modelClass.quantityOfItem > 0) {
-            addTocartButton!!.visibility = View.GONE
-            addOrRemoveItemsLinear!!.visibility = View.VISIBLE
-        }
-
+      for(variant in modelClass.variantsList!!){
+       if(  ApplicationClass.selectedItemsList!!.find { it.id==variant.id && it.groupId==variant.parentProductId }!=null) {
+           addTocartButton!!.visibility = View.GONE
+           addOrRemoveItemsLinear!!.visibility = View.VISIBLE
+       }
+      }
 
 
         itemAddImageView!!.setOnClickListener {
@@ -209,16 +169,15 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
                 modelClass.quantityOfItem
 
+            Log.d("responsee",ApplicationClass.selectedItemsList.toString())
+
             showOrHideItemCountIndicator()
         }
 
         addTocartButton!!.setOnClickListener {
             selectedVariant =
                 modelClass.variantsList!!.filter { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }[0]
-            Log.d(
-                "selecteddcolor",
-                "${selectedVariant?.color}    ${selectedVariant?.id}    ${selectedVariant?.size}"
-            )
+
             modelClass.id = selectedVariant!!.id!!
             modelClass.groupId = selectedVariant!!.parentProductId!!
             var modelClassTemp =
@@ -231,6 +190,8 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             }
             itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
             showOrHideItemCountIndicator()
+
+            Log.d("responsee",ApplicationClass.selectedItemsList.toString())
         }
 
 
@@ -274,6 +235,34 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         }.attach()
         return view
+    }
+
+    private fun initializeViews(view: View) {
+        colorRecyclerView = view.findViewById(R.id.productcolorRecyclerView)
+
+        sizeRecyclerView = view.findViewById(R.id.productsizeRecyclerview)
+
+        tablayout = view.findViewById(R.id.producttablayout)
+
+        itemNameTextView = view.findViewById(R.id.productItemNameTextView)
+
+        itemPriceTextView = view.findViewById(R.id.productPagePriceTextView)
+
+        itemQuantitiyTextView = view.findViewById(R.id.productitemquantitiytextview)
+
+        itemTotalDescriptionTextView = view.findViewById(R.id.productpageDescriptionTextView)
+
+        itemMessagesImageView = view.findViewById(R.id.productPageMessagesImageView)
+
+        itemShareImageView = view.findViewById(R.id.productPageShareTImageView)
+
+        itemAddImageView = view.findViewById(R.id.productadditemsImageButton)
+
+        itemremoveImageView = view.findViewById(R.id.productremoveitemsImageButton)
+
+        addTocartButton = view.findViewById(R.id.productaddToCartButton)
+
+        addOrRemoveItemsLinear = view.findViewById(R.id.productaddorremoveitemslinearlayout)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -21,24 +21,12 @@ import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class searchfragmentRecyclerAdapter(
-    var mainActivity: Fragment, var map: LinkedHashMap<String,
-            List<CategoriesModelClass>>?, var viewType: String
+    var mainActivity: Fragment, var viewType: String
 ) :
     ListAdapter<CategoriesModelClass, searchfragmentRecyclerAdapter.MainVieModel>(
         CategoriesModelClass.diffUtil
     ) {
-    init {
-        var list: LinkedList<CategoriesModelClass> = LinkedList()
-        map!!.keys.toList().forEach { list.add(CategoriesModelClass(itemName = it)) }
 
-        CategoriesDataProvider.mutableCollectionList.observeForever {
-            Log.d("remoteaddd", "hello")
-            Log.d("remoteaddd", it.toString())
-            submitList(it)
-           }
-
-
-    }
 
     override fun submitList(list: MutableList<CategoriesModelClass>?) {
         super.submitList(list?.toList())
@@ -137,7 +125,7 @@ class searchfragmentRecyclerAdapter(
 
                     mainActivity.activity!!.supportFragmentManager.beginTransaction()
 
-                        .replace(R.id.container, CategoriesFragment(map, adapterPosition))
+                        .replace(R.id.container, CategoriesFragment(currentList, adapterPosition))
                         .addToBackStack(null)
 
                         .commit()

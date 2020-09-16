@@ -5,11 +5,12 @@ import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.CartItemRecommendedAdapter
@@ -19,7 +20,14 @@ import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
-import kotlinx.android.synthetic.main.fragment_cart.*
+import com.shopify.buy3.*
+import com.shopify.buy3.CreditCard
+import com.shopify.buy3.CreditCardVaultCall.Callback
+import com.shopify.buy3.Storefront.*
+import com.shopify.graphql.support.ID
+import com.shopify.graphql.support.Input
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 
 class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragment() {
@@ -109,16 +117,108 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         )
 
         proceedTextViewCart!!.setOnClickListener {
-            activity!!.supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.container, OrdersFragment(
-                        ApplicationClass.selectedItemsList!!.map {
-                            it.isOrdered = true
-                            return@map it
-                        }
+//            activity!!.supportFragmentManager.beginTransaction()
+//                .replace(
+//                    R.id.container, OrdersFragment(
+//                        ApplicationClass.selectedItemsList!!.map {
+//                            it.isOrdered = true
+//                            return@map it
+//                        }
+//                    )
+//                )
+//                .addToBackStack(null).commit()
+            var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = null
+            for (i in ApplicationClass.selectedItemsList!!) {
+                checkoutLineItemInput?.add(CheckoutLineItemInput(i.quantityOfItem, ID(i.id)))
+            }
+            val input = CheckoutCreateInput()
+                .setLineItemsInput(
+                    Input.value(
+                        checkoutLineItemInput
                     )
                 )
-                .addToBackStack(null).commit()
+
+            val query = mutation { mutationQuery: MutationQuery ->
+                mutationQuery
+                    .checkoutCreate(
+                        input
+                    ) { createPayloadQuery: CheckoutCreatePayloadQuery ->
+                        createPayloadQuery
+                            .checkout { checkoutQuery: CheckoutQuery ->
+                                checkoutQuery
+                                    .webUrl()
+                            }
+                            .userErrors { userErrorQuery: UserErrorQuery ->
+                                userErrorQuery
+                                    .field()
+                                    .message()
+                            }
+                    }
+            }
+
+            CategoriesDataProvider.graphh!!.mutateGraph(query).enqueue(object :
+                GraphCall.Callback<Mutation> {
+                override fun onResponse(response: GraphResponse<Mutation>) {
+                    if (response.data()!!.checkoutCreate.userErrors.isNotEmpty()) {
+                        // handle user friendly errors
+                    } else {
+                        val checkoutId = response.data()!!.checkoutCreate.checkout.id.toString()
+                        val checkoutWebUrl = response.data()!!.checkoutCreate.checkout.webUrl
+
+                        val queryy = query { rootQuery: QueryRootQuery ->
+                            rootQuery
+                                .node(
+                                    ID(checkoutId)
+                                ) { nodeQuery: NodeQuery ->
+                                    nodeQuery
+                                        .onCheckout { checkoutQuery: CheckoutQuery ->
+                                            checkoutQuery
+                                                .availableShippingRates { availableShippingRatesQuery: AvailableShippingRatesQuery ->
+                                                    availableShippingRatesQuery
+                                                        .ready()
+                                                        .shippingRates { shippingRateQuery: ShippingRateQuery ->
+                                                            shippingRateQuery
+                                                                .handle()
+                                                                .price()
+                                                                .title()
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+
+
+                        CategoriesDataProvider.graphh!!.queryGraph(queryy).enqueue(
+                            object : GraphCall.Callback<QueryRoot> {
+                                override fun onResponse(response: GraphResponse<QueryRoot>) {
+                                    val checkout = response.data()!!.node as Checkout
+                                    val shippingRates =
+                                        checkout.availableShippingRates.shippingRates
+                                }
+
+                                override fun onFailure(error: GraphError) {}
+                            },
+                            null,
+                            RetryHandler.exponentialBackoff(800, TimeUnit.MILLISECONDS, 1.2f)
+                                .build()
+
+                        )
+
+//                        var checkout = Checkout(ID(checkoutId))
+//                        Log.d("checkout",checkout.webUrl)
+
+
+
+
+                        Log.d("checkoutsuccess", "$checkoutId $checkoutWebUrl")
+                    }
+                }
+
+
+                override fun onFailure(error: GraphError) {
+                    Log.d("checkouterror", error.message.toString())
+                }
+            })
         }
 
 

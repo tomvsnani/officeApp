@@ -28,7 +28,7 @@ import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 
 
-class MainFragment : Fragment() {
+class MainFragment() : Fragment() {
 
     var recyclerView: RecyclerView? = null;
     var adapterr: MainRecyclerAdapter? = null;
@@ -132,21 +132,21 @@ class MainFragment : Fragment() {
 
 
     private fun firstLayoutHoriZontalScrollItemNames(view: View) {
-        categoryMap =
-            CategoriesDataProvider.getMapDataForCategories()
+
         recyclerView = view.findViewById(R.id.mainfragmentrecyclerhorizontalscrollitemnames)
-        CategoriesDataProvider.mutablehashmap.observeForever { t: HashMap<String, List<CategoriesModelClass>>? ->
+
             adapterr =
                 MainRecyclerAdapter(
-                    this,
-                    t as LinkedHashMap<String, List<CategoriesModelClass>>?
+                    this
                 )
 
             (recyclerView as RecyclerView).adapter = adapterr
             (recyclerView as RecyclerView).layoutManager =
                 LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        }
 
+        CategoriesDataProvider.mutableCollectionList.observeForever{t: MutableList<CategoriesModelClass>? ->
+            adapterr!!.submitList(t)
+        }
 
     }
 
@@ -200,8 +200,10 @@ class MainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        val inflater = TransitionInflater.from(requireContext())
+        val inflater = TransitionInflater.from(context)
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
         super.onCreate(savedInstanceState)

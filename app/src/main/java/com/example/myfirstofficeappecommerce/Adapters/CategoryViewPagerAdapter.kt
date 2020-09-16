@@ -9,7 +9,7 @@ import com.example.myfirstofficeappecommerce.fragments.CategoryEachViewPagerFrag
 
 class CategoryViewPagerAdapter(
     fragment: CategoriesFragment,
-    var map: LinkedHashMap<String, List<CategoriesModelClass>>,
+    var map: List<CategoriesModelClass>,
     var callback: () -> Unit
 ) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
@@ -18,23 +18,7 @@ class CategoryViewPagerAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        var list = map.values.toList()[position].filter { categoriesModelClass ->
-            ApplicationClass.selectedItemsList?.filter {
-                if (it.id == categoriesModelClass.id && it.groupId==categoriesModelClass.groupId) {
-                    categoriesModelClass.quantityOfItem = it.quantityOfItem
-                    categoriesModelClass.itemQueueNumber = it.itemQueueNumber
-                    return@filter true
-                }
-                return@filter true
-            }
-            return@filter true
-        }
-        return CategoryEachViewPagerFragment(
-            if (
-
-                ApplicationClass.selectedItemsList?.isNotEmpty()!!)
-                list
-            else map.values.toList()[position], callback
-        )
+        return CategoryEachViewPagerFragment(map[position],callback)
+        
     }
 }

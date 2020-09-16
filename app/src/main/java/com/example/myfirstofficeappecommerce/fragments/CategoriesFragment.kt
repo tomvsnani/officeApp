@@ -27,15 +27,23 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 
 class CategoriesFragment(
-    var list: LinkedHashMap<String, List<CategoriesModelClass>>?,
-    var tabType: Int
+
 ) :
     Fragment() {
+    var list: List<CategoriesModelClass>? = null
+    var tabType: Int? = null
 
+    constructor(
+        list: List<CategoriesModelClass>?,
+        tabType: Int
+    ) : this() {
+        this.list = list
+        this.tabType = tabType
+    }
 
     var viewPager2: ViewPager2? = null
     var tablayout: TabLayout? = null;
-    var categoryNames: List<String>? = null
+
     var toolbar: Toolbar? = null
     var selectedItemsList: MutableList<CategoriesModelClass> =
         ApplicationClass.selectedItemsList as MutableList<CategoriesModelClass>
@@ -55,7 +63,7 @@ class CategoriesFragment(
 
         Log.d("liscount", list!!.size.toString())
         var view: View = inflater.inflate(R.layout.fragment_categories, container, false)
-        categoryNames = list?.keys?.toList()
+
 
         initializeViews(view)
 
@@ -81,14 +89,32 @@ class CategoriesFragment(
             (viewPager2 as ViewPager2)
         ) { tab: TabLayout.Tab, i: Int ->
 
-            tab.text = (categoryNames as List<String>)[i]
+            tab.text = list!![i].itemName
+            tab.tag = list!![i].id
+
         }.attach()
-        viewPager2!!.currentItem = tabType
+        viewPager2!!.currentItem = tabType!!
+        ApplicationClass.selectedTab= tablayout!!.getTabAt(tablayout!!.selectedTabPosition)
+        Log.d("tabnameee", tablayout!!.getTabAt(tablayout!!.selectedTabPosition)!!.tag.toString())
+
+        tablayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                ApplicationClass.selectedTab = tab
+                Log.d("tabname", tab!!.text.toString())
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
+
         return view
     }
-
-
-
 
 
     private fun initializeViews(view: View) {
@@ -111,9 +137,6 @@ class CategoriesFragment(
     }
 
 
-
-
-
     private fun openCartFragment() {
         activity!!.supportFragmentManager.beginTransaction()
             .replace(
@@ -123,9 +146,6 @@ class CategoriesFragment(
             ).addToBackStack(null)
             .commit()
     }
-
-
-
 
 
     private fun showOrHideItemCountIndicator() {
@@ -149,10 +169,6 @@ class CategoriesFragment(
     }
 
 
-
-
-
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.fragmentmenu, menu)
         this.menu = menu
@@ -163,10 +179,6 @@ class CategoriesFragment(
         showOrHideItemCountIndicator()
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-
-
-
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -188,9 +200,6 @@ class CategoriesFragment(
 
         return super.onOptionsItemSelected(item)
     }
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

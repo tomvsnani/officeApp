@@ -43,16 +43,17 @@ open class SearchFragment() : Fragment() {
         searchEditText = actionbar!!.getChildAt(0) as EditText?
         recyclr = view.findViewById(R.id.searchviewrecycler)
 
-        CategoriesDataProvider.mutablehashmap.observeForever {
+        CategoriesDataProvider.mutableCollectionList.observeForever {
             searchfragmentRecyclerAdapter = searchfragmentRecyclerAdapter(
                 (this),
-               it,
+
                 Constants.SCROLL_TYPE
             )
 
             recyclr!!.layoutManager = GridLayoutManager(context, 4, RecyclerView.VERTICAL, false)
             recyclr!!.adapter = searchfragmentRecyclerAdapter
             recyclr!!.itemAnimator = null
+            searchfragmentRecyclerAdapter!!.submitList(it)
         }
 
 
@@ -73,20 +74,24 @@ open class SearchFragment() : Fragment() {
                     recyclr!!.adapter = null
                     searchfragmentRecyclerAdapter = searchfragmentRecyclerAdapter(
                         (this@SearchFragment),
-                        CategoriesDataProvider.getMapDataForCategories(),
                         Constants.SEARCH_TYPE
                     )
 
                     recyclr!!.layoutManager =
                         LinearLayoutManager(context, RecyclerView.VERTICAL, false)
                     recyclr!!.adapter = searchfragmentRecyclerAdapter
-                    searchfragmentRecyclerAdapter!!.submitList(
-                        CategoriesDataProvider.getSearhItemsData().filter {
-                            it.itemName.contains(
-                                p0.toString(), true
-                            )
-                        } as MutableList<CategoriesModelClass>
-                    )
+
+                    CategoriesDataProvider.mutableCollectionList.observeForever { mutableList ->
+
+                        searchfragmentRecyclerAdapter!!.submitList(
+                            mutableList.filter {
+                                it.itemName.contains(
+                                    p0.toString(), true
+                                )
+                            } as MutableList<CategoriesModelClass>
+                        )
+                    }
+
                 }
             }
         })

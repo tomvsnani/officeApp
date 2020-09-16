@@ -9,25 +9,32 @@ data class VariantsModelClass(
     var size: String? = "",
     var price: Float? = -1f,
     var imgSrc: String? = "",
-var isSelected:Boolean=false
-){
-    companion object{
-        var diffUtil:DiffUtil.ItemCallback<VariantsModelClass> = object :DiffUtil.ItemCallback<VariantsModelClass>(){
-            override fun areItemsTheSame(
-                oldItem: VariantsModelClass,
-                newItem: VariantsModelClass
-            ): Boolean {
-               return oldItem.id==newItem.id
-            }
+    var isSelected: Boolean = false,
+    var isfav: Boolean = false,
+    var quantityOfItem: Int = 0,
+    var itemQueueNumber: Int = 0,
+    var dateOrdered: String = "",
+    var location: String = "",
+    var isOrdered: Boolean = false
+) {
+    companion object {
+        var diffUtil: DiffUtil.ItemCallback<VariantsModelClass> =
+            object : DiffUtil.ItemCallback<VariantsModelClass>() {
+                override fun areItemsTheSame(
+                    oldItem: VariantsModelClass,
+                    newItem: VariantsModelClass
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-            override fun areContentsTheSame(
-                oldItem: VariantsModelClass,
-                newItem: VariantsModelClass
-            ): Boolean {
-                return oldItem.color==newItem.color && oldItem.size==newItem.size && oldItem.imgSrc==newItem.imgSrc
-                        && oldItem.price==newItem.price && oldItem.isSelected==newItem.isSelected
-            }
+                override fun areContentsTheSame(
+                    oldItem: VariantsModelClass,
+                    newItem: VariantsModelClass
+                ): Boolean {
+                    return oldItem.color == newItem.color && oldItem.size == newItem.size && oldItem.imgSrc == newItem.imgSrc
+                            && oldItem.price == newItem.price && oldItem.isSelected == newItem.isSelected
+                }
 
-        }
+            }
     }
 }

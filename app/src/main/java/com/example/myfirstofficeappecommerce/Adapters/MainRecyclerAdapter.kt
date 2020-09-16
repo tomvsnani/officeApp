@@ -21,22 +21,12 @@ import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class MainRecyclerAdapter(
-    var mainActivity: MainFragment, var map: LinkedHashMap<String,
-            List<CategoriesModelClass>>?
+    var mainActivity: MainFragment
 ) :
     ListAdapter<CategoriesModelClass, MainRecyclerAdapter.MainVieModel>(
         CategoriesModelClass.diffUtil
     ) {
-    init {
-        var list: LinkedList<CategoriesModelClass> = LinkedList()
-        map!!.keys.toList().forEach { list.add(CategoriesModelClass(itemName = it)) }
-        Log.d("remotead","before")
 
-        CategoriesDataProvider.mutableCollectionList.observeForever{t: MutableList<CategoriesModelClass>? ->
-            submitList(t)
-        }
-
-    }
 
     override fun submitList(list: MutableList<CategoriesModelClass>?) {
         super.submitList(list?.toList())
@@ -94,7 +84,7 @@ class MainRecyclerAdapter(
 
                 mainActivity.activity!!.supportFragmentManager.beginTransaction()
 
-                    .replace(R.id.container, CategoriesFragment(map,adapterPosition)).addToBackStack(null)
+                    .replace(R.id.container, CategoriesFragment(currentList,adapterPosition)).addToBackStack(null)
 
                     .commit()
             }

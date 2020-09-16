@@ -151,11 +151,11 @@ class CategoriesEachRecyclerAdapter(
         }
         holder.itemDescription.text = modelClass.itemDescriptionText
         holder.realmrp.text =
-            " MRP : ${categoryEachViewPagerFragment.getString(R.string.Rs)} ${modelClass.variantsList?.get(0)?.price}"
+            " MRP : ${categoryEachViewPagerFragment.getString(R.string.Rs)} ${modelClass.variantsList?.getOrNull(0)?.price}"
         holder.itemGrossweight.text = modelClass.itemGrossWeight
         holder.itemName.text = modelClass.itemName
         holder.itemNetWeight.text = modelClass.itemNetWeight
-        Glide.with(categoryEachViewPagerFragment).load(modelClass.imageSrc[0].imageUrl).into(holder.itemImage)
+        Glide.with(categoryEachViewPagerFragment).load(modelClass.imageSrc.getOrNull(0)?.imageUrl).into(holder.itemImage)
 
         if(modelClass.isFav)
             Glide.with(categoryEachViewPagerFragment.context!!).load(R.drawable.ic_baseline_favorite_24).into(holder.favouritesImageView)
