@@ -578,7 +578,7 @@ object CategoriesDataProvider {
             rootQuery.shop { shopQuery: Storefront.ShopQuery ->
                 shopQuery.collections({ args: Storefront.ShopQuery.CollectionsArguments? ->
                     args!!.first(
-                        100
+                        4
                     )
                 },
                     { _queryBuilder ->
@@ -588,7 +588,7 @@ object CategoriesDataProvider {
                                 _queryBuilder.image { _queryBuilder -> _queryBuilder.src() }
                                 _queryBuilder.products({ args: Storefront.CollectionQuery.ProductsArguments? ->
                                     args!!.first(
-                                        50
+                                        100
                                     )
                                 }, { _queryBuilder ->
                                     _queryBuilder.edges { _queryBuilder ->
@@ -599,7 +599,7 @@ object CategoriesDataProvider {
 
                                                 .images({ args: Storefront.ProductQuery.ImagesArguments? ->
                                                     args!!.first(
-                                                        100
+                                                        5
                                                     )
                                                 }, { _queryBuilder ->
                                                     _queryBuilder.edges { _queryBuilder ->
@@ -612,7 +612,7 @@ object CategoriesDataProvider {
 
                                                 .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
                                                     args!!.first(
-                                                        100
+                                                        10
                                                     )
                                                 },
                                                     { _queryBuilder ->
