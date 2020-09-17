@@ -19,7 +19,7 @@ object CategoriesDataProvider {
 
     var mutableproductList: MutableLiveData<List<CategoriesModelClass>>? = MutableLiveData()
 
-//    fun getMapDataForCategories(): LinkedHashMap<String, List<CategoriesModelClass>>? {
+    //    fun getMapDataForCategories(): LinkedHashMap<String, List<CategoriesModelClass>>? {
 //        var map: LinkedHashMap<String, List<CategoriesModelClass>> = LinkedHashMap()
 //
 //        map.put(
@@ -816,7 +816,7 @@ object CategoriesDataProvider {
                 for (collectionEdge in response.data()!!.shop.collections.edges) {
                     var collectionModelClass = CategoriesModelClass(
                         itemName = collectionEdge.node.title,
-                        id = collectionEdge.node.id.toString()
+                        id = collectionEdge.node.id.toString(), itemCategory = "collection"
                     )
 
                     collectionList.add(collectionModelClass)
@@ -838,7 +838,7 @@ object CategoriesDataProvider {
 
 
     fun getProductDataBasedOnCollectionId(colllectionId: String) {
-Log.d("calledd",colllectionId)
+        Log.d("calledd", colllectionId)
 
 
         val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->

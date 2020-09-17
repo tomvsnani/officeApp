@@ -92,6 +92,8 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         recommendedItemsRecycler!!.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         list = selectedItemsList!!.toMutableList()
+
+
         recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
             modelClass.quantityOfItem++
 

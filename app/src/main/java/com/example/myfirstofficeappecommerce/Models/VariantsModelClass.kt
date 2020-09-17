@@ -16,6 +16,7 @@ data class VariantsModelClass(
     var dateOrdered: String = "",
     var location: String = "",
     var isOrdered: Boolean = false
+
 ) {
     companion object {
         var diffUtil: DiffUtil.ItemCallback<VariantsModelClass> =

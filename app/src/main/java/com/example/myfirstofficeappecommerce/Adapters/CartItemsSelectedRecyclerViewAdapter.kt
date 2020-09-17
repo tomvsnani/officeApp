@@ -92,6 +92,7 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var ca
                     (ApplicationClass.selectedItemsList!!).toString()
                 )
                 currentList[adapterPosition].quantityOfItem++
+
                 Log.d(
                     "comparesizeokk",
                     (ApplicationClass.selectedItemsList!!).toString()

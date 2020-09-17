@@ -114,7 +114,9 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
                     var productList: MutableList<CategoriesModelClass> = ArrayList()
                     var storefront: Storefront.Collection =
                         response.data()!!.node as Storefront.Collection
+
                     for (productEdge in storefront.products.edges) {
+
                         var productImageSrcList: MutableList<ModelClass> = ArrayList()
 
                         // adding aa images to product imagelist
@@ -153,10 +155,12 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
 
                         productList.add(productmodelclass)
 
+
+
                     }
                     // CategoriesDataProvider.mutableproductList!!.postValue(productList)
                     // CategoriesDataProvider.mutableproductList!!.removeObserver(this)
-                   activity!!.runOnUiThread {
+                    activity?.runOnUiThread {
 
 //                        var list = productList.filter { categoriesModelClass ->
 //                            Log.d("responsedataa","${categoriesModelClass.id} ${categoriesModelClass.groupId}")
@@ -173,9 +177,14 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
 
                         (adapterr as CategoriesEachRecyclerAdapter)
                             .submitList(
-                                productList)
-                   }
-                    Log.d("responsedata","${ ApplicationClass.selectedItemsList?.getOrNull(0)?.id}  ${ ApplicationClass.selectedItemsList?.getOrNull(0)?.groupId}")
+                                productList
+                            )
+                    }
+                    Log.d(
+                        "responsedata",
+
+                        ""
+                    )
 
                 }
 

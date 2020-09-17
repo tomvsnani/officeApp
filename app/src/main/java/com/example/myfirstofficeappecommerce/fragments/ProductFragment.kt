@@ -53,7 +53,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
     var colorRecyclerAdapter: ProductColorRecyclerViewAdapter? = null
     var sizeRecyclerViewAdapter: ProductSizeRecyclerViewAdapter? = null
     var selectedVariant: VariantsModelClass? = null
-    var variantList:List<VariantsModelClass>?=modelClass.variantsList!!.toList()
+    var variantList: List<VariantsModelClass>? = modelClass.variantsList!!.toList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        selectedVariant=modelClass.variantsList?.getOrNull(0)!!.copy()
+        selectedVariant = modelClass.variantsList?.getOrNull(0)!!.copy()
 
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
 
@@ -113,7 +113,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
             selectedVariant!!.color = colorr
-            selectedVariant!!.id=
+            selectedVariant!!.id =
                 variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
 
         }
@@ -136,10 +136,10 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         sizeRecyclerView!!.adapter = sizeRecyclerViewAdapter
 
         colorRecyclerAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.color }
-            .apply { find { it.id==selectedVariant!!.id }?.isSelected=true })
+            .apply { find { it.id == selectedVariant!!.id }?.isSelected = true })
 
         sizeRecyclerViewAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.size }
-            .apply { find { it.id==selectedVariant!!.id }?.isSelected=true }
+            .apply { find { it.id == selectedVariant!!.id }?.isSelected = true }
             .asReversed().sortedBy { it.size })
 
 
@@ -151,47 +151,69 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             activity!!.startActivity(intent)
         }
 
-      for(variant in modelClass.variantsList!!){
-       if(  ApplicationClass.selectedItemsList!!.find { it.id==variant.id && it.groupId==variant.parentProductId }!=null) {
-           addTocartButton!!.visibility = View.GONE
-           addOrRemoveItemsLinear!!.visibility = View.VISIBLE
-       }
-      }
 
+
+        ApplicationClass.selectedItemsList!!.filter {
+            if (it.id == modelClass.id && it.groupId == modelClass.groupId) {
+                addTocartButton!!.visibility = View.GONE
+                addOrRemoveItemsLinear!!.visibility = View.VISIBLE
+                itemQuantitiyTextView!!.text = it.quantityOfItem.toString()
+            }
+            return@filter true
+        }
 
         itemAddImageView!!.setOnClickListener {
             modelClass.quantityOfItem++
+            selectedVariant!!.quantityOfItem++
             itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
-
-
-
             ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
-
                 modelClass.quantityOfItem
 
-            Log.d("responsee",ApplicationClass.selectedItemsList.toString())
+            ApplicationClass.selectedVariantList?.find {
+                it.id == selectedVariant!!.id
+                        && it.parentProductId == selectedVariant!!.parentProductId
+            }!!.quantityOfItem =
+                selectedVariant!!.quantityOfItem
+
+            Log.d("responseesuper", ApplicationClass.selectedItemsList.toString())
+
+            Log.d("responseevariant", ApplicationClass.selectedVariantList.toString())
 
             showOrHideItemCountIndicator()
         }
 
+
+
+
         addTocartButton!!.setOnClickListener {
             selectedVariant =
-                modelClass.variantsList!!.filter { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }[0]
+                variantList!!.filter { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }[0]
+            selectedVariant!!.quantityOfItem++
 
-            modelClass.id = selectedVariant!!.id!!
-            modelClass.groupId = selectedVariant!!.parentProductId!!
-            var modelClassTemp =
-                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }
-            if (modelClassTemp == null) {
+//            modelClass.id = selectedVariant!!.id!!
+//            modelClass.groupId = selectedVariant!!.parentProductId!!
+//            var modelClassTemp =
+//                ApplicationClass.selectedItemsList?.apply {
+//                    filter { categoriesModelClass ->
+//                        categoriesModelClass.variantsList!!.find { it.id == modelClass.id && it.parentProductId == modelClass.groupId }
+//                        return@filter true
+//                    }
+//                }
+
+
+            //adding product model to selected items
+            if (ApplicationClass.selectedItemsList!!.find { it.id == modelClass.id } == null) {
+                ApplicationClass.selectedVariantList!!.add(selectedVariant!!)
                 modelClass.quantityOfItem++
                 (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
                 addTocartButton!!.visibility = View.GONE
                 addOrRemoveItemsLinear!!.visibility = View.VISIBLE
             }
+
             itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
             showOrHideItemCountIndicator()
 
-            Log.d("responsee",ApplicationClass.selectedItemsList.toString())
+            Log.d("responsee", ApplicationClass.selectedItemsList.toString())
         }
 
 
@@ -200,9 +222,18 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         itemremoveImageView!!.setOnClickListener {
             if (modelClass.quantityOfItem > 0) {
                 modelClass.quantityOfItem--
+                selectedVariant!!.quantityOfItem--
                 ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
                     modelClass.quantityOfItem
+                ApplicationClass.selectedVariantList?.find {
+                    it.id == selectedVariant!!.id
+                            && it.parentProductId == selectedVariant!!.parentProductId
+                }!!.quantityOfItem =
+                    selectedVariant!!.quantityOfItem
+
             }
+
+
             itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
 
             if (modelClass.quantityOfItem == 0 && ApplicationClass.selectedItemsList?.contains(
@@ -213,6 +244,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
                 addOrRemoveItemsLinear!!.visibility = View.GONE
 
                 (ApplicationClass.selectedItemsList as MutableList).remove(modelClass)
+                (ApplicationClass.selectedVariantList)!!.remove(selectedVariant!!)
             }
 
             showOrHideItemCountIndicator()
@@ -223,7 +255,6 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         itemTotalDescriptionTextView!!.text = modelClass.itemDescriptionText
 
-        itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
 
         itemPriceTextView!!.text =
             "MRP : ${activity!!.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
