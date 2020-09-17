@@ -19,6 +19,7 @@ import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.shopify.buy3.*
 import com.shopify.buy3.CreditCard
@@ -30,7 +31,7 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 
-class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragment() {
+class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {
 
     var toolbar: Toolbar? = null
     var slecetdItemsRecycler: RecyclerView? = null
@@ -40,7 +41,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
     var count = 0
     var recommendedAdapter: CartItemRecommendedAdapter? = null
     var proceedTextViewCart: TextView? = null
-    var list: MutableList<CategoriesModelClass> = ArrayList()
+    var list: MutableList<VariantsModelClass> = ArrayList()
     var emptycartlayout: ConstraintLayout? = null
     var cartNestedScroll: NestedScrollView? = null
     override fun onCreateView(
@@ -49,7 +50,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
     ): View? {
         (activity as MainActivity).lockDrawer()
 
-        selectedItemsList = ApplicationClass.selectedItemsList
+        selectedItemsList = ApplicationClass.selectedVariantList
         var view: View = inflater.inflate(
             R.layout.fragment_cart,
             container,
@@ -72,7 +73,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
 
         itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this) {
             this.list.clear()
-            this.list = it as MutableList<CategoriesModelClass>
+            this.list = it as MutableList<VariantsModelClass>
 
         }
         if (selectedItemsList!!.isEmpty()) {
@@ -86,7 +87,8 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
         slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
         slecetdItemsRecycler!!.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        itemsSelectedAdapter!!.submitList(selectedItemsList as MutableList<CategoriesModelClass>?)
+
+        itemsSelectedAdapter!!.submitList(ApplicationClass.selectedVariantList!!.filter { it.quantityOfItem > 0 } as MutableList<VariantsModelClass> )
 
 
         recommendedItemsRecycler!!.layoutManager =
@@ -95,27 +97,34 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
 
 
         recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
+         //   Log.d("recommendedqu",modelClass.quantityOfItem.toString())
             modelClass.quantityOfItem++
+          //  Log.d("recommendedqu",modelClass.quantityOfItem.toString())
 
-            var count = list.filter { it.id == modelClass.id && it.groupId == modelClass.groupId }
+            var count = list.filter { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }
             if (count.isNotEmpty()) {
-                list[list.indexOf(modelClass)] = modelClass
+                list.find { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }!!.quantityOfItem= modelClass.quantityOfItem
 
-                (ApplicationClass.selectedItemsList as MutableList)[list.indexOf(modelClass)] =
-                    modelClass
+                (ApplicationClass.selectedVariantList as MutableList).find { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }!!.quantityOfItem= modelClass.quantityOfItem
+
+//                (ApplicationClass.selectedItemsList as MutableList).find { it.id==modelClass.parentProductId }!!.quantityOfItem++
             } else {
+                Log.d("recommendedqu",modelClass.quantityOfItem.toString())
                 list.add(modelClass)
-                (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
-            }
+                (ApplicationClass.selectedVariantList as MutableList).add(modelClass)
 
-            itemsSelectedAdapter!!.submitList(list)
+//                (ApplicationClass.selectedItemsList as MutableList).add( CategoriesModelClass(id=modelClass.parentProductId!!,quantityOfItem = modelClass.quantityOfItem))
+//
+        }
+
+            itemsSelectedAdapter!!.submitList(list.filter { it.quantityOfItem>0 } as MutableList<VariantsModelClass>)
 
 
         }
 
         recommendedItemsRecycler!!.adapter = recommendedAdapter
         recommendedAdapter!!.submitList(
-            CategoriesDataProvider.getRecommendedData() as MutableList<CategoriesModelClass>
+            CategoriesDataProvider.getRecommendedData() as MutableList<VariantsModelClass>
         )
 
         proceedTextViewCart!!.setOnClickListener {
@@ -130,7 +139,7 @@ class CartFragment(var selectedItemsList: List<CategoriesModelClass>?) : Fragmen
 //                )
 //                .addToBackStack(null).commit()
             var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = null
-            for (i in ApplicationClass.selectedItemsList!!) {
+            for (i in ApplicationClass.selectedVariantList!!) {
                 checkoutLineItemInput?.add(CheckoutLineItemInput(i.quantityOfItem, ID(i.id)))
             }
             val input = CheckoutCreateInput()

@@ -119,7 +119,7 @@ open class SearchFragment() : Fragment() {
                 .replace(
                     R.id.container,
                     CartFragment(
-                        ApplicationClass.selectedItemsList
+                        ApplicationClass.selectedVariantList
                     )
                 )
                 .addToBackStack(null)
@@ -152,7 +152,7 @@ open class SearchFragment() : Fragment() {
                 }
 
         } else {
-            menu!!.findItem(R.id.cartmenu).actionView.findViewById<TextView>(R.id.cartitemNumberIndicatormenu).visibility =
+            menu?.findItem(R.id.cartmenu)?.actionView?.findViewById<TextView>(R.id.cartitemNumberIndicatormenu)?.visibility =
                 View.INVISIBLE
 
 

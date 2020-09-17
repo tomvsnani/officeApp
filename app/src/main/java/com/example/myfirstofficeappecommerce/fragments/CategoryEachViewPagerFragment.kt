@@ -80,7 +80,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
 
                                             .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
                                                 args!!.first(
-                                                    1
+                                                    100
                                                 )
                                             },
                                                 { _queryBuilder ->
@@ -136,7 +136,8 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
                                     productEdge.node.id.toString(),
                                     if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
                                     if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
-                                    variantEdge.node.price.toFloat()
+                                    variantEdge.node.price.toFloat(),
+                                    name = productEdge.node.title
 
 
                                 )

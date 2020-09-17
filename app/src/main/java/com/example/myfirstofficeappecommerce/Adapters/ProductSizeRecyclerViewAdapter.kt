@@ -16,17 +16,24 @@ import com.example.myfirstofficeappecommerce.R
 class ProductSizeRecyclerViewAdapter(var callback:(size:String)->Unit):ListAdapter<VariantsModelClass,ProductSizeRecyclerViewAdapter.ProductSizeViewHolder>(VariantsModelClass.diffUtil){
 
     inner class ProductSizeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         var textView:TextView=itemView.findViewById(R.id.productsizerowTextview)
         var cardView:CardView=itemView.findViewById(R.id.cardviewsize)
         init {
             textView.setOnClickListener {
 
                 callback(currentList[adapterPosition].size!!)
-                currentList.apply { find { it.isSelected }?.isSelected=false }
+             currentList.filter { it.isSelected=false
+               return@filter true} as MutableList<VariantsModelClass>
                 currentList[adapterPosition].isSelected=true
                 notifyDataSetChanged()
+
         }
         }
+    }
+
+    override fun submitList(list: MutableList<VariantsModelClass>?) {
+        super.submitList(list?.toList())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductSizeViewHolder {

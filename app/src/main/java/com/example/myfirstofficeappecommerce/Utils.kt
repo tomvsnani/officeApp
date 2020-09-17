@@ -4,7 +4,7 @@ class Utils {
     companion object{
         fun getItemCount():String{
             var itemCount = 0
-            ApplicationClass.selectedItemsList?.filter {
+            ApplicationClass.selectedVariantList?.filter {
                 itemCount += it.quantityOfItem
                 return@filter true
             }

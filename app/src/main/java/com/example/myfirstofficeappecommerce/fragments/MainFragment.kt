@@ -164,7 +164,7 @@ class MainFragment() : Fragment() {
                 .replace(
                     R.id.container,
                     CartFragment(
-                        ApplicationClass.selectedItemsList
+                        ApplicationClass.selectedVariantList
                     )
                 )
                 .addToBackStack(null)
@@ -181,7 +181,7 @@ class MainFragment() : Fragment() {
                     .replace(
                         R.id.container,
                         CartFragment(
-                            ApplicationClass.selectedItemsList
+                            ApplicationClass.selectedVariantList
                         )
                     )
                     .addToBackStack(null)

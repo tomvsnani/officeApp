@@ -529,98 +529,93 @@ object CategoriesDataProvider {
 //        )
 //    }
 
-    fun getRecommendedData(): List<CategoriesModelClass> {
+    fun getRecommendedData(): List<VariantsModelClass> {
         return listOf(
-            CategoriesModelClass(
-                "Phones",
+            VariantsModelClass(
+                "Phonesg",
                 "Samsung phone",
                 "too hot",
                 "Gross Wt. 840gms",
-                "Net Wt.450gms",
+                400f,
                 "220",
-                500,
-                "2",
-                "1",
-                id = "a",
-                groupId = 8.toString()
+                isSelected = false,
+                isfav = false,
+                quantityOfItem = 1,
+                name =   "Phonesg"
+
+
             ),
-            CategoriesModelClass(
-                "Phones",
+            VariantsModelClass(
+                "Phonesf",
                 "Samsung phone",
                 "too hot",
                 "Gross Wt. 840gms",
-                "Net Wt.450gms",
+                400f,
                 "220",
-                500,
-                "2",
-                "1",
-                id = "b",
-                groupId = 9.toString()
+                isSelected = false,
+                isfav = false,
+                quantityOfItem = 1,
+                name =   "Phonesg"
             ),
-            CategoriesModelClass(
-                "Phones",
-                "Samsung",
+            VariantsModelClass(
+                "Phonese",
+                "Samsung phone",
                 "too hot",
                 "Gross Wt. 840gms",
-                "Net Wt.450gms",
+                400f,
                 "220",
-                500,
-                "2",
-                "1",
-                id = "c",
-                groupId = 10.toString()
+                isSelected = false,
+                isfav = false,
+                quantityOfItem = 1,
+                name =   "Phonesg"
             ),
-            CategoriesModelClass(
-                "Phones",
-                "Samsung",
+            VariantsModelClass(
+                "Phonesd",
+                "Samsung phone",
                 "too hot",
                 "Gross Wt. 840gms",
-                "Net Wt.450gms",
+                400f,
                 "220",
-                50,
-                "2",
-                "1",
-                id = "d",
-                groupId = 11.toString()
+                isSelected = false,
+                isfav = false,
+                quantityOfItem = 1,
+                name =   "Phonesg"
             ),
-            CategoriesModelClass(
-                "Phones",
-                "Samsung",
+            VariantsModelClass(
+                "Phonesc",
+                "Samsung phone",
                 "too hot",
                 "Gross Wt. 840gms",
-                "Net Wt.450gms",
+                400f,
                 "220",
-                500,
-                "2",
-                "1",
-                id = "e",
-                groupId = 12.toString()
+                isSelected = false,
+                isfav = false,
+                quantityOfItem = 1,
+                name =   "Phonesg"
             ),
-            CategoriesModelClass(
-                "Phones",
-                "Samsung",
+            VariantsModelClass(
+                "Phonesb",
+                "Samsung phone",
                 "too hot",
                 "Gross Wt. 840gms",
-                "Net Wt.450gms",
+                400f,
                 "220",
-                500,
-                "2",
-                "1",
-                id = "f",
-                groupId = 13.toString()
+                isSelected = false,
+                isfav = false,
+                quantityOfItem = 1,
+                name =   "Phonesg"
             ),
-            CategoriesModelClass(
-                "Phones",
-                "Samsung",
+            VariantsModelClass(
+                "Phonesa",
+                "Samsung phone",
                 "too hot",
                 "Gross Wt. 840gms",
-                "Net Wt.450gms",
+                400f,
                 "220",
-                500,
-                "2",
-                "1",
-                id = "g",
-                groupId = 14.toString()
+                isSelected = false,
+                isfav = false,
+                quantityOfItem = 1,
+                name =   "Phonesg"
             )
 
         )

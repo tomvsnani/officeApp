@@ -31,13 +31,22 @@ class ProductColorRecyclerViewAdapter(
 
         init {
             cardView.setOnClickListener  {
+                if(adapterPosition>=0)
+                    callback(currentList[adapterPosition].color.toString())
 
-                currentList.apply { find { it.isSelected }?.isSelected=false }
+                currentList.filter { it.isSelected=false
+                    return@filter true} as MutableList<VariantsModelClass>
                 currentList[adapterPosition].isSelected=true
                 notifyDataSetChanged()
+
+
            }
         }
 
+    }
+
+    override fun submitList(list: MutableList<VariantsModelClass>?) {
+        super.submitList(list?.toList())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductColorViewHolder {

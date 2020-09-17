@@ -8,15 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.fragments.CartFragment
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 
-class CartItemRecommendedAdapter(var cartFragment: CartFragment, var callback:(CategoriesModelClass)->Unit) :
-    androidx.recyclerview.widget.ListAdapter<CategoriesModelClass, CartItemRecommendedAdapter.CardItemsRecommendedViewHolder>(
-        CategoriesModelClass.diffUtil
+class CartItemRecommendedAdapter(var cartFragment: CartFragment, var callback:(VariantsModelClass)->Unit) :
+    androidx.recyclerview.widget.ListAdapter<VariantsModelClass, CartItemRecommendedAdapter.CardItemsRecommendedViewHolder>(
+       VariantsModelClass.diffUtil
     ) {
 
 
-    override fun submitList(list: MutableList<CategoriesModelClass>?) {
+    override fun submitList(list: MutableList<VariantsModelClass>?) {
         super.submitList(list?.toList())
     }
 
@@ -59,10 +60,10 @@ class CartItemRecommendedAdapter(var cartFragment: CartFragment, var callback:(C
 
     override fun onBindViewHolder(holder: CardItemsRecommendedViewHolder, position: Int) {
         var modelclass = currentList[position]
-        holder.cartItemOfferPriceTextView?.text = modelclass.offerMrp.toString()
-        holder.cartItemRealPriceTextView?.text = modelclass.realTimeMrp.toString()
-        holder.cartItemWeightTextView?.text = modelclass.itemNetWeight
-        holder.cartItemnameTextView?.text = modelclass.itemName
+        //holder.cartItemOfferPriceTextView?.text = modelclass.pr.toString()
+        holder.cartItemRealPriceTextView?.text = modelclass.price.toString()
+//        holder.cartItemWeightTextView?.text = modelclass.itemNetWeight
+        holder.cartItemnameTextView?.text = modelclass.name
 
     }
 }

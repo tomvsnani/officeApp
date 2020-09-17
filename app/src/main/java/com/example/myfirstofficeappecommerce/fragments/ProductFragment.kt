@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
-import android.widget.Button
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -69,31 +66,26 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        selectedVariant = modelClass.variantsList?.getOrNull(0)!!.copy()
-
+        selectedVariant = ApplicationClass.selectedVariantList?.find { it.isSelected }?.copy() ?: modelClass.variantsList!![0].copy()
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
-
+        initializeViews(view)
         (activity as MainActivity).lockDrawer()
-
         toolbar = view.findViewById(R.id.productToolbar)
-
         setHasOptionsMenu(true)
-
+        for (selectedVariant in variantList!!)
+            Log.d(
+                "selecteddcolorr",
+                "${selectedVariant!!.color} ${selectedVariant!!.size} ${selectedVariant!!.id}"
+            )
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
         viewPager2 = view.findViewById(R.id.productviewpager)
-
         (viewPager2 as ViewPager2).adapter =
-
             HorizontalScrollViewPagerAdapter(
                 this,
                 modelClass.imageSrc
             )
-
         bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottomsheet))
-
         bottomSheetBehavior!!.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -108,14 +100,42 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             }
         })
 
-        initializeViews(view)
+
 
 
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
-            selectedVariant!!.color = colorr
-            selectedVariant!!.id =
-                variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
 
+            val isVariantAvailable=variantList!!.find { it.color == colorr && it.size == selectedVariant!!.size }
+
+            if(isVariantAvailable!=null) {
+                val isVariantavailableInApplicationClass=ApplicationClass.selectedVariantList!!.find { it.id == isVariantAvailable.id }
+
+
+
+                if (isVariantavailableInApplicationClass == null) {
+                    selectedVariant = isVariantAvailable.copy(quantityOfItem = 0)
+                    addTocartButton!!.visibility = View.VISIBLE
+                    addOrRemoveItemsLinear!!.visibility = View.GONE
+                }
+                else{
+                    selectedVariant = isVariantavailableInApplicationClass.copy()
+                    addTocartButton!!.visibility = View.GONE
+                    addOrRemoveItemsLinear!!.visibility = View.VISIBLE
+                }
+            }
+            else
+                Toast.makeText(context,"selected color or size is not available",Toast.LENGTH_SHORT).show()
+
+            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
+
+            itemPriceTextView!!.text =
+                "MRP : ${activity!!.getString(R.string.Rs)} ${selectedVariant!!.price}"
+
+
+            Log.d(
+                "selecteddcolor",
+                "${selectedVariant!!.color} ${selectedVariant!!.size} ${selectedVariant!!.id}"
+            )
         }
 
         colorRecyclerView!!.layoutManager =
@@ -124,10 +144,42 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         sizeRecyclerViewAdapter =
             ProductSizeRecyclerViewAdapter { sizee ->
-                selectedVariant!!.size = sizee
-                selectedVariant!!.id =
-                    variantList!!.find { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }?.id
 
+                val isVariantAvailable=variantList!!.find { it.color == selectedVariant!!.color && it.size == sizee }
+
+
+                if(isVariantAvailable!=null) {
+
+                    val isVariantavailableInApplicationClass=ApplicationClass.selectedVariantList!!.find { it.id == isVariantAvailable.id }
+
+                    if (isVariantavailableInApplicationClass== null) {
+
+                        selectedVariant = isVariantAvailable.copy( quantityOfItem = 0)
+
+                        addTocartButton!!.visibility = View.VISIBLE
+                        addOrRemoveItemsLinear!!.visibility = View.GONE
+                    }
+                    else {
+                        selectedVariant=isVariantavailableInApplicationClass.copy()
+                        addTocartButton!!.visibility = View.GONE
+                        addOrRemoveItemsLinear!!.visibility = View.VISIBLE
+                    }
+                }
+                else
+                    Toast.makeText(context,"selected color or size is not available",Toast.LENGTH_SHORT).show()
+
+
+                itemPriceTextView!!.text =
+                    "MRP : ${activity!!.getString(R.string.Rs)} ${selectedVariant!!.price}"
+
+                itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
+
+                Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
+
+                Log.d(
+                    "selecteddsize",
+                    "${selectedVariant!!.color} ${selectedVariant!!.size} ${selectedVariant!!.id}"
+                )
             }
 
 
@@ -136,11 +188,11 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         sizeRecyclerView!!.adapter = sizeRecyclerViewAdapter
 
         colorRecyclerAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.color }
-            .apply { find { it.id == selectedVariant!!.id }?.isSelected = true })
+            .apply { find { it.id == selectedVariant!!.id }?.isSelected = true } as MutableList<VariantsModelClass>)
 
         sizeRecyclerViewAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.size }
             .apply { find { it.id == selectedVariant!!.id }?.isSelected = true }
-            .asReversed().sortedBy { it.size })
+            .asReversed().sortedBy { it.size } as MutableList<VariantsModelClass>)
 
 
         itemShareImageView!!.setOnClickListener {
@@ -153,21 +205,19 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
 
 
-        ApplicationClass.selectedItemsList!!.filter {
-            if (it.id == modelClass.id && it.groupId == modelClass.groupId) {
-                addTocartButton!!.visibility = View.GONE
-                addOrRemoveItemsLinear!!.visibility = View.VISIBLE
-                itemQuantitiyTextView!!.text = it.quantityOfItem.toString()
-            }
-            return@filter true
+        if (selectedVariant!!.quantityOfItem > 0) {
+            addTocartButton!!.visibility = View.GONE
+            addOrRemoveItemsLinear!!.visibility = View.VISIBLE
+            itemQuantitiyTextView!!.text = Utils.getItemCount()
         }
 
         itemAddImageView!!.setOnClickListener {
-            modelClass.quantityOfItem++
+//            modelClass.quantityOfItem++
             selectedVariant!!.quantityOfItem++
-            itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
-            ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
-                modelClass.quantityOfItem
+            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
+            selectedVariant!!.isSelected=true
+//            ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
+//                modelClass.quantityOfItem
 
             ApplicationClass.selectedVariantList?.find {
                 it.id == selectedVariant!!.id
@@ -175,10 +225,8 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             }!!.quantityOfItem =
                 selectedVariant!!.quantityOfItem
 
-            Log.d("responseesuper", ApplicationClass.selectedItemsList.toString())
 
-            Log.d("responseevariant", ApplicationClass.selectedVariantList.toString())
-
+            Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
             showOrHideItemCountIndicator()
         }
 
@@ -186,9 +234,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
 
         addTocartButton!!.setOnClickListener {
-            selectedVariant =
-                variantList!!.filter { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }[0]
-            selectedVariant!!.quantityOfItem++
+
 
 //            modelClass.id = selectedVariant!!.id!!
 //            modelClass.groupId = selectedVariant!!.parentProductId!!
@@ -202,48 +248,51 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
 
             //adding product model to selected items
-            if (ApplicationClass.selectedItemsList!!.find { it.id == modelClass.id } == null) {
+            if (ApplicationClass.selectedVariantList!!.find { it.id == selectedVariant!!.id } == null) {
+//                selectedVariant =
+//                    variantList!!.filter { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }[0]
+                selectedVariant!!.quantityOfItem++
+                selectedVariant!!.isSelected=true
                 ApplicationClass.selectedVariantList!!.add(selectedVariant!!)
-                modelClass.quantityOfItem++
-                (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+//                modelClass.quantityOfItem++
+//                (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+
                 addTocartButton!!.visibility = View.GONE
                 addOrRemoveItemsLinear!!.visibility = View.VISIBLE
             }
+            Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
 
-            itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
+            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
             showOrHideItemCountIndicator()
 
-            Log.d("responsee", ApplicationClass.selectedItemsList.toString())
+
         }
 
 
 
 
         itemremoveImageView!!.setOnClickListener {
-            if (modelClass.quantityOfItem > 0) {
-                modelClass.quantityOfItem--
+            if (selectedVariant!!.quantityOfItem > 0) {
+                //   modelClass.quantityOfItem--
                 selectedVariant!!.quantityOfItem--
-                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
-                    modelClass.quantityOfItem
+//                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
+//                    modelClass.quantityOfItem
                 ApplicationClass.selectedVariantList?.find {
                     it.id == selectedVariant!!.id
-                            && it.parentProductId == selectedVariant!!.parentProductId
+
                 }!!.quantityOfItem =
                     selectedVariant!!.quantityOfItem
-
+                Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
             }
 
 
-            itemQuantitiyTextView!!.text = modelClass.quantityOfItem.toString()
+            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
-            if (modelClass.quantityOfItem == 0 && ApplicationClass.selectedItemsList?.contains(
-                    modelClass
-                )!!
-            ) {
+            if (selectedVariant!!.quantityOfItem == 0 && ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } != null) {
                 addTocartButton!!.visibility = View.VISIBLE
                 addOrRemoveItemsLinear!!.visibility = View.GONE
 
-                (ApplicationClass.selectedItemsList as MutableList).remove(modelClass)
+//                (ApplicationClass.selectedItemsList as MutableList).remove(modelClass)
                 (ApplicationClass.selectedVariantList)!!.remove(selectedVariant!!)
             }
 
@@ -257,7 +306,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
 
         itemPriceTextView!!.text =
-            "MRP : ${activity!!.getString(R.string.Rs)} ${modelClass.realTimeMrp}"
+            "MRP : ${activity!!.getString(R.string.Rs)} ${selectedVariant!!.price}"
 
         TabLayoutMediator(
             (tablayout as TabLayout),
@@ -305,7 +354,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
                 .replace(
                     R.id.container,
                     CartFragment(
-                        ApplicationClass.selectedItemsList
+                        ApplicationClass.selectedVariantList
                     )
                 )
                 .addToBackStack(null)

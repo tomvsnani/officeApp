@@ -15,7 +15,8 @@ data class VariantsModelClass(
     var itemQueueNumber: Int = 0,
     var dateOrdered: String = "",
     var location: String = "",
-    var isOrdered: Boolean = false
+    var isOrdered: Boolean = false,
+    var name:String=""
 
 ) {
     companion object {
@@ -33,7 +34,7 @@ data class VariantsModelClass(
                     newItem: VariantsModelClass
                 ): Boolean {
                     return oldItem.color == newItem.color && oldItem.size == newItem.size && oldItem.imgSrc == newItem.imgSrc
-                            && oldItem.price == newItem.price && oldItem.isSelected == newItem.isSelected
+                            && oldItem.price == newItem.price && oldItem.isSelected == newItem.isSelected && oldItem.name==newItem.name
                 }
 
             }

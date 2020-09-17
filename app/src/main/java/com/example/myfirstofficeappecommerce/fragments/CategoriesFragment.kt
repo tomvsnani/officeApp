@@ -142,7 +142,7 @@ class CategoriesFragment(
             .replace(
                 R.id.container,
                 CartFragment(
-                    ApplicationClass.selectedItemsList?.filter { it.quantityOfItem > 0 })
+                    ApplicationClass.selectedVariantList?.filter { it.quantityOfItem > 0 })
             ).addToBackStack(null)
             .commit()
     }
