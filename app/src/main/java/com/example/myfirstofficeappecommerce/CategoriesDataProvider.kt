@@ -363,84 +363,84 @@ object CategoriesDataProvider {
 //        return map
 //    }
 //
-//    fun getListDataForHorizontalScroll(): List<ModelClass> {
-//        return listOf(
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Laptop",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Phone",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Light",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Toys",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Mugs",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Phone",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Light",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Toys",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            ),
-//            ModelClass(
-//                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-//                "Mugs",
-//                "ok",
-//                "null",
-//                "null",
-//                id = 1
-//            )
-//
-//        )
-//    }
-//
+    fun getListDataForHorizontalScroll(): List<ModelClass> {
+        return listOf(
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Laptop",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Phone",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Light",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Toys",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Mugs",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Phone",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Light",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Toys",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            ),
+            ModelClass(
+                Constants.HORIZONTAL_LIST_ITEM_NAMES,
+                "Mugs",
+                "ok",
+                "null",
+                "null",
+                id = 1
+            )
+
+        )
+    }
+
 //    fun getSearhItemsData(): List<CategoriesModelClass> {
 //        return listOf(
 //            CategoriesModelClass(
