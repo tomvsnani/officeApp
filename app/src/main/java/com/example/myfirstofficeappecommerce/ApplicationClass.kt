@@ -1,6 +1,6 @@
 package com.example.myfirstofficeappecommerce
 
-import Database.MyDatabase
+import com.example.myfirstofficeappecommerce.Database.MyDatabase
 import android.app.Application
 import android.util.Log
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass

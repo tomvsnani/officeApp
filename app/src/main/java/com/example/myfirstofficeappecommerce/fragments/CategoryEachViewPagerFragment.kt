@@ -10,12 +10,14 @@ import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.CategoriesEachRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModel
 import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactory
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
+import kotlinx.android.synthetic.main.fragment_cart.view.*
 
 
 class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback: () -> Unit) :
@@ -48,14 +50,33 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
 
         Log.d("valueoncreateview", value)
 
-//      if(!isRemoteRequestMade)
         var categoriesModelClass: CategoriesViewModel =
             ViewModelProvider(this, CategoriesViewModelFactory(get!!.id))
-                .get( CategoriesViewModel::class.java)
+                .get(CategoriesViewModel::class.java)
         categoriesModelClass.getData()
         categoriesModelClass.mutableLiveData?.observe(viewLifecycleOwner, Observer {
+            Log.d("loadmore", "observer")
+
             adapterr!!.submitList(it)
         })
+
+        recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+               if( (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == adapterr!!.itemCount - 1)
+                categoriesModelClass.loadmore(adapterr!!.currentList[adapterr!!.currentList.size - 1])
+                Log.d(
+                    "loadmore",
+                    ((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == adapterr!!.itemCount - 1).toString()
+                )
+
+            }
+        })
+
+//      if(!isRemoteRequestMade)
+
+
         return view
     }
 

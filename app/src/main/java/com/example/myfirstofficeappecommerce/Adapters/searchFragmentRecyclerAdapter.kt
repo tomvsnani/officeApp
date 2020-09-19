@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
@@ -21,7 +22,7 @@ import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class searchfragmentRecyclerAdapter(
-    var mainActivity: Fragment, var viewType: String
+    var mainActivity: SearchFragment, var viewType: String
 ) :
     ListAdapter<CategoriesModelClass, searchfragmentRecyclerAdapter.MainVieModel>(
         CategoriesModelClass.diffUtil
@@ -77,6 +78,10 @@ class searchfragmentRecyclerAdapter(
                 "${mainActivity.getString(R.string.Rs)} ${model.realTimeMrp}"
 
             holder.searchQuantityTextView?.text = model.quantityOfItem.toString()
+
+            Glide.with(mainActivity.context!!)
+
+                .load(model!!.imageSrc[0].imageUrl).into(holder.searchFragImageView!!)
 
         }
 

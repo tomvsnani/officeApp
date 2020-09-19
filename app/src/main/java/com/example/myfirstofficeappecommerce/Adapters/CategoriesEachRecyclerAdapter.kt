@@ -1,6 +1,6 @@
 package com.example.myfirstofficeappecommerce.Adapters
 
-import Database.MyDatabase
+import com.example.myfirstofficeappecommerce.Database.MyDatabase
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.paging.PagingSource
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -203,15 +202,4 @@ class CategoriesEachRecyclerAdapter(
     }
 
 
-//    inner class PagingSource: androidx.paging.PagingSource<Int, VariantsModelClass>() {
-//        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, VariantsModelClass> {
-//
-//            var prevkey:Int=
-//
-//            return LoadResult.Page(categoryEachViewPagerFragment.getData(categoryEachViewPagerFragment.get!!.id),)
-//        }
-//    }
-    }
-
-
-
+}
