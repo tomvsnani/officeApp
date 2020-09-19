@@ -6,9 +6,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import com.example.myfirstofficeappecommerce.fragments.MainFragment
 import com.example.myfirstofficeappecommerce.fragments.OrdersFragment
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,16 +51,34 @@ class MainActivity : AppCompatActivity() {
                 drawerLayout?.openDrawer(GravityCompat.START)
             }
 
-            if (menuItem.itemId == R.id.ordersmenu)
+            if (menuItem.itemId == R.id.ordersmenu) {
                 supportFragmentManager
                     .beginTransaction()
                     .replace(
                         R.id.container,
-                        OrdersFragment(ApplicationClass.selectedItemsList!!.filter {
+                        OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
                             it.isOrdered
                         })
                     ).addToBackStack(null)
                     .commit()
+                return@setNavigationItemSelectedListener true
+            }
+
+            if (menuItem.itemId == R.id.wishlist) {
+
+
+                            supportFragmentManager
+                                .beginTransaction()
+                                .replace(
+                                    R.id.container,
+                                   WishListFragment()
+                                ).addToBackStack(null)
+                                .commit()
+
+
+
+                return@setNavigationItemSelectedListener true
+            }
             return@setNavigationItemSelectedListener true
         }
 

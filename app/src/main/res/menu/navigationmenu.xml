@@ -10,6 +10,10 @@
         <item
             android:id="@+id/ordersmenu"
             android:title="@string/my_orders" />
+
+        <item
+            android:id="@+id/wishlist"
+            android:title="@string/wish_list" />
     </group>
     <group android:id="@+id/contactmenu">
         <item

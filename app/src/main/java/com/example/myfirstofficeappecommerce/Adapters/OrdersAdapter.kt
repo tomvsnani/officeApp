@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 
 class OrdersAdaptes :
-    ListAdapter<CategoriesModelClass, OrdersAdaptes.OrdersViewHolder>(CategoriesModelClass.diffUtil) {
+    ListAdapter<VariantsModelClass, OrdersAdaptes.OrdersViewHolder>(VariantsModelClass.diffUtil) {
     inner class OrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var orderItemNameTextView: TextView? = itemView.findViewById(R.id.itemNameTextView)
         var orderLocationNameTextView: TextView? = itemView.findViewById(R.id.locationTextView)
@@ -35,11 +36,11 @@ class OrdersAdaptes :
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
-        var modelClass: CategoriesModelClass = currentList[position]
+        var modelClass: VariantsModelClass = currentList[position]
         holder.orderDateTextView?.text="Date Ordered: ${modelClass.dateOrdered}"
-        holder.orderItemNameTextView?.text=modelClass.itemName
+        holder.orderItemNameTextView?.text=modelClass.name
         holder.orderItemsQuntityTextView?.text="Order Quantity : ${modelClass.quantityOfItem.toString()}"
         holder.orderLocationNameTextView?.text=modelClass.location
-        holder.orderPriceTextView?.text="Price : ${modelClass.realTimeMrp}"
+        holder.orderPriceTextView?.text="Price : ${modelClass.price}"
     }
 }

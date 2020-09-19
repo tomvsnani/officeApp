@@ -72,7 +72,7 @@ class CategoriesFragment(
         }
         (viewPager2 as ViewPager2).adapter =
             CategoryViewPagerAdapter(
-                this, list!!
+                childFragmentManager, list!!,lifecycle
             ) {
 
                 selectedItemsList =
@@ -93,13 +93,14 @@ class CategoriesFragment(
             tab.tag = list!![i].id
 
         }.attach()
-        viewPager2!!.currentItem = tabType!!
-        ApplicationClass.selectedTab= tablayout!!.getTabAt(tablayout!!.selectedTabPosition)
+        viewPager2!!.currentItem = ApplicationClass.selectedTab?:tabType!!
+        ApplicationClass.selectedTab= (tablayout!!.selectedTabPosition)
+
         Log.d("tabnameee", tablayout!!.getTabAt(tablayout!!.selectedTabPosition)!!.tag.toString())
 
         tablayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                ApplicationClass.selectedTab = tab
+                ApplicationClass.selectedTab = tab?.position
                 Log.d("tabname", tab!!.text.toString())
             }
 

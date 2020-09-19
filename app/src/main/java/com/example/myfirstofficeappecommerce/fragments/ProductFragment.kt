@@ -27,56 +27,64 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.test_resouce_file.*
 
 
-class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
+class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment() {
 
 
-    var viewPager2: ViewPager2? = null
-    var tablayout: TabLayout? = null;
+    private var viewPager2: ViewPager2? = null
+    private var tablayout: TabLayout? = null;
     var toolbar: Toolbar? = null
-    var itemNameTextView: TextView? = null
-    var itemPriceTextView: TextView? = null
-    var itemTotalDescriptionTextView: TextView? = null
-    var itemQuantitiyTextView: TextView? = null
-    var itemMessagesImageView: ImageView? = null
-    var itemShareImageView: ImageView? = null
-    var itemAddImageView: ImageView? = null
-    var itemremoveImageView: ImageView? = null
+    private var itemNameTextView: TextView? = null
+    private var itemPriceTextView: TextView? = null
+    private var itemTotalDescriptionTextView: TextView? = null
+    private var itemQuantitiyTextView: TextView? = null
+    private var itemMessagesImageView: ImageView? = null
+    private var itemShareImageView: ImageView? = null
+    private var itemAddImageView: ImageView? = null
+    private var itemremoveImageView: ImageView? = null
     var menu: Menu? = null
-    var addTocartButton: Button? = null
-    var addOrRemoveItemsLinear: LinearLayout? = null
-    var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>? = null
-    var colorRecyclerView: RecyclerView? = null
-    var sizeRecyclerView: RecyclerView? = null
-    var colorRecyclerAdapter: ProductColorRecyclerViewAdapter? = null
-    var sizeRecyclerViewAdapter: ProductSizeRecyclerViewAdapter? = null
-    var selectedVariant: VariantsModelClass? = null
-    var variantList: List<VariantsModelClass>? = modelClass.variantsList!!.toList()
+    private var addTocartButton: Button? = null
+    private var addOrRemoveItemsLinear: LinearLayout? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>? = null
+    private var colorRecyclerView: RecyclerView? = null
+    private var sizeRecyclerView: RecyclerView? = null
+    private var colorRecyclerAdapter: ProductColorRecyclerViewAdapter? = null
+    private var sizeRecyclerViewAdapter: ProductSizeRecyclerViewAdapter? = null
+    private var selectedVariant: VariantsModelClass? = null
+    private var variantList: List<VariantsModelClass>? = modelClass.variantsList!!.toList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
-
         super.onCreate(savedInstanceState)
 
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        selectedVariant = ApplicationClass.selectedVariantList?.find { it.isSelected }?.copy() ?: modelClass.variantsList!![0].copy()
+        if (ApplicationClass.selectedVariantList?.find { it.isSelected } != null) {
+            selectedVariant = ApplicationClass.selectedVariantList?.find { it.isSelected }?.copy()
+            Log.d(
+                "selecteddcolorinapp",
+                selectedVariant!!.color.toString() + " " + selectedVariant!!.id
+            )
+        } else {
+            selectedVariant = modelClass.variantsList!![0].copy()
+            Log.d("selecteddcolorinmod", selectedVariant!!.color.toString())
+        }
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
         initializeViews(view)
         (activity as MainActivity).lockDrawer()
         toolbar = view.findViewById(R.id.productToolbar)
         setHasOptionsMenu(true)
-        for (selectedVariant in variantList!!)
-            Log.d(
-                "selecteddcolorr",
-                "${selectedVariant!!.color} ${selectedVariant!!.size} ${selectedVariant!!.id}"
-            )
+//        for (selectedVariant in variantList!!)
+//            Log.d(
+//                "selecteddcolorr",
+//                "${selectedVariant!!.color} ${selectedVariant!!.size} ${selectedVariant!!.id}"
+//            )
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         viewPager2 = view.findViewById(R.id.productviewpager)
@@ -105,26 +113,28 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
 
-            val isVariantAvailable=variantList!!.find { it.color == colorr && it.size == selectedVariant!!.size }
+            val isVariantAvailable =
+                variantList!!.find { it.color == colorr && it.size == selectedVariant!!.size }
 
-            if(isVariantAvailable!=null) {
-                val isVariantavailableInApplicationClass=ApplicationClass.selectedVariantList!!.find { it.id == isVariantAvailable.id }
-
-
+            if (isVariantAvailable != null) {
+                val isVariantavailableInApplicationClass =
+                    ApplicationClass.selectedVariantList!!.find { it.id == isVariantAvailable.id }
 
                 if (isVariantavailableInApplicationClass == null) {
                     selectedVariant = isVariantAvailable.copy(quantityOfItem = 0)
                     addTocartButton!!.visibility = View.VISIBLE
                     addOrRemoveItemsLinear!!.visibility = View.GONE
-                }
-                else{
+                } else {
                     selectedVariant = isVariantavailableInApplicationClass.copy()
                     addTocartButton!!.visibility = View.GONE
                     addOrRemoveItemsLinear!!.visibility = View.VISIBLE
                 }
-            }
-            else
-                Toast.makeText(context,"selected color or size is not available",Toast.LENGTH_SHORT).show()
+            } else
+                Toast.makeText(
+                    context,
+                    "selected color or size is not available",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
@@ -145,28 +155,32 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         sizeRecyclerViewAdapter =
             ProductSizeRecyclerViewAdapter { sizee ->
 
-                val isVariantAvailable=variantList!!.find { it.color == selectedVariant!!.color && it.size == sizee }
+                val isVariantAvailable =
+                    variantList!!.find { it.color == selectedVariant!!.color && it.size == sizee }
 
 
-                if(isVariantAvailable!=null) {
+                if (isVariantAvailable != null) {
 
-                    val isVariantavailableInApplicationClass=ApplicationClass.selectedVariantList!!.find { it.id == isVariantAvailable.id }
+                    val isVariantavailableInApplicationClass =
+                        ApplicationClass.selectedVariantList!!.find { it.id == isVariantAvailable.id }
 
-                    if (isVariantavailableInApplicationClass== null) {
+                    if (isVariantavailableInApplicationClass == null) {
 
-                        selectedVariant = isVariantAvailable.copy( quantityOfItem = 0)
+                        selectedVariant = isVariantAvailable.copy(quantityOfItem = 0)
 
                         addTocartButton!!.visibility = View.VISIBLE
                         addOrRemoveItemsLinear!!.visibility = View.GONE
-                    }
-                    else {
-                        selectedVariant=isVariantavailableInApplicationClass.copy()
+                    } else {
+                        selectedVariant = isVariantavailableInApplicationClass.copy()
                         addTocartButton!!.visibility = View.GONE
                         addOrRemoveItemsLinear!!.visibility = View.VISIBLE
                     }
-                }
-                else
-                    Toast.makeText(context,"selected color or size is not available",Toast.LENGTH_SHORT).show()
+                } else
+                    Toast.makeText(
+                        context,
+                        "selected color or size is not available",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
 
                 itemPriceTextView!!.text =
@@ -174,7 +188,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
                 itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
-                Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
+                Log.d("selecteditems", ApplicationClass.selectedVariantList.toString())
 
                 Log.d(
                     "selecteddsize",
@@ -187,12 +201,25 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         sizeRecyclerView!!.adapter = sizeRecyclerViewAdapter
 
-        colorRecyclerAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.color }
-            .apply { find { it.id == selectedVariant!!.id }?.isSelected = true } as MutableList<VariantsModelClass>)
+        val a: MutableList<VariantsModelClass> = ArrayList()
+        for (i in variantList!!) {
+            Log.d("hello", i.color + "  " + (i.id == selectedVariant!!.id))
+            a.add(i.copy())
+        }
 
-        sizeRecyclerViewAdapter!!.submitList(modelClass.variantsList!!.distinctBy { it.size }
-            .apply { find { it.id == selectedVariant!!.id }?.isSelected = true }
-            .asReversed().sortedBy { it.size } as MutableList<VariantsModelClass>)
+        colorRecyclerAdapter!!.submitList(a.filter {
+            it.isSelected = it.color == selectedVariant!!.color
+            Log.d("itselected",it.color+" "+it.isSelected+"  "+it.id)
+            return@filter true
+        }.distinctBy { it.color } as MutableList<VariantsModelClass>
+        )
+
+        sizeRecyclerViewAdapter!!.submitList(
+           a
+            . filter {  it.isSelected = it.size == selectedVariant!!.size
+                return@filter true }
+         .sortedBy { it.size }.distinctBy { it.size }.toMutableList())
+
 
 
         itemShareImageView!!.setOnClickListener {
@@ -208,16 +235,13 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
         if (selectedVariant!!.quantityOfItem > 0) {
             addTocartButton!!.visibility = View.GONE
             addOrRemoveItemsLinear!!.visibility = View.VISIBLE
-            itemQuantitiyTextView!!.text = Utils.getItemCount()
+            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
         }
 
         itemAddImageView!!.setOnClickListener {
-//            modelClass.quantityOfItem++
             selectedVariant!!.quantityOfItem++
             itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
-            selectedVariant!!.isSelected=true
-//            ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
-//                modelClass.quantityOfItem
+            selectedVariant!!.isSelected = true
 
             ApplicationClass.selectedVariantList?.find {
                 it.id == selectedVariant!!.id
@@ -225,8 +249,7 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
             }!!.quantityOfItem =
                 selectedVariant!!.quantityOfItem
 
-
-            Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
+            Log.d("selecteditems", ApplicationClass.selectedVariantList.toString())
             showOrHideItemCountIndicator()
         }
 
@@ -234,38 +257,17 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
 
         addTocartButton!!.setOnClickListener {
-
-
-//            modelClass.id = selectedVariant!!.id!!
-//            modelClass.groupId = selectedVariant!!.parentProductId!!
-//            var modelClassTemp =
-//                ApplicationClass.selectedItemsList?.apply {
-//                    filter { categoriesModelClass ->
-//                        categoriesModelClass.variantsList!!.find { it.id == modelClass.id && it.parentProductId == modelClass.groupId }
-//                        return@filter true
-//                    }
-//                }
-
-
             //adding product model to selected items
             if (ApplicationClass.selectedVariantList!!.find { it.id == selectedVariant!!.id } == null) {
-//                selectedVariant =
-//                    variantList!!.filter { it.color == selectedVariant!!.color && it.size == selectedVariant!!.size }[0]
                 selectedVariant!!.quantityOfItem++
-                selectedVariant!!.isSelected=true
-                ApplicationClass.selectedVariantList!!.add(selectedVariant!!)
-//                modelClass.quantityOfItem++
-//                (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
-
+                selectedVariant!!.isSelected = true
+                ApplicationClass.selectedVariantList!!.add(selectedVariant!!.copy())
                 addTocartButton!!.visibility = View.GONE
                 addOrRemoveItemsLinear!!.visibility = View.VISIBLE
             }
-            Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
-
+            Log.d("selecteditems", ApplicationClass.selectedVariantList.toString())
             itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
             showOrHideItemCountIndicator()
-
-
         }
 
 
@@ -273,32 +275,27 @@ class ProductFragment(var modelClass: CategoriesModelClass) : Fragment() {
 
         itemremoveImageView!!.setOnClickListener {
             if (selectedVariant!!.quantityOfItem > 0) {
-                //   modelClass.quantityOfItem--
                 selectedVariant!!.quantityOfItem--
-//                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
-//                    modelClass.quantityOfItem
                 ApplicationClass.selectedVariantList?.find {
                     it.id == selectedVariant!!.id
 
                 }!!.quantityOfItem =
                     selectedVariant!!.quantityOfItem
-                Log.d("selecteditems",ApplicationClass.selectedVariantList.toString())
+                Log.d("selecteditems", ApplicationClass.selectedVariantList.toString())
             }
-
-
-            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
             if (selectedVariant!!.quantityOfItem == 0 && ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } != null) {
                 addTocartButton!!.visibility = View.VISIBLE
                 addOrRemoveItemsLinear!!.visibility = View.GONE
 
-//                (ApplicationClass.selectedItemsList as MutableList).remove(modelClass)
+                selectedVariant!!.isSelected = false
+
                 (ApplicationClass.selectedVariantList)!!.remove(selectedVariant!!)
             }
-
             showOrHideItemCountIndicator()
 
         }
+        itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
         itemNameTextView!!.text = modelClass.itemName
 

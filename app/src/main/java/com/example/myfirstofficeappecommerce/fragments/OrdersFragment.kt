@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.OrdersAdaptes
 import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 
 
-class OrdersFragment(var orderList:List<CategoriesModelClass>) : Fragment() {
+class OrdersFragment(var orderList:List<VariantsModelClass>) : Fragment() {
 
     private var toolbar: Toolbar? = null
     private var recyclerView: RecyclerView? = null

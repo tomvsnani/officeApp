@@ -2,7 +2,7 @@
     <string name="app_name">My First Office App Ecommerce</string>
     <string name="home">Home</string>
     <string name="account">Account</string>
-    <string name="my_orders">My Orders</string>
+    <string name="wish_list"> Wish list</string>
     <string name="openDrawerLayout">open</string>
     <string name="closeDrawerLayout">close</string>
     <string name="Rs">\u20B9</string>
@@ -19,4 +19,6 @@ Built-in mirror is very convenient for you to makeup at any time
 Inner slip pockets are great for holding small necessaries
 deal for home,travel,business trip or whenever you need to carry it with you
 This cosmetic case is perfect for keeping all of your favorite makeup and toiletries organized and fashionable.</string>
+    <string name="my_orders">My Orders</string>
+    <string name="fav_items_added_toast">Added to favourite items</string>
 </resources>

@@ -20,7 +20,8 @@ data class CategoriesModelClass(
     var isOrdered: Boolean = false,
     var imageSrc: List<ModelClass> = ArrayList(),
     var isFav: Boolean = false,
-    var variantsList: MutableList<VariantsModelClass>? = ArrayList()
+    var variantsList: MutableList<VariantsModelClass>? = ArrayList(),
+    var cursor:String=""
 ) {
     companion object {
         val diffUtil: DiffUtil.ItemCallback<CategoriesModelClass> = object :

@@ -33,7 +33,12 @@ class ProductSizeRecyclerViewAdapter(var callback:(size:String)->Unit):ListAdapt
     }
 
     override fun submitList(list: MutableList<VariantsModelClass>?) {
-        super.submitList(list?.toList())
+        val a:MutableList<VariantsModelClass> = ArrayList()
+        for(i in list!!){
+            Log.d("helloheyyy222",i.size+"  "+i.isSelected)
+            a.add(i.copy())
+        }
+        super.submitList(a)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductSizeViewHolder {

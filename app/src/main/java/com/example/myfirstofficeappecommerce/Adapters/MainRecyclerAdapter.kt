@@ -30,14 +30,14 @@ class MainRecyclerAdapter(
 
     override fun submitList(list: MutableList<CategoriesModelClass>?) {
         super.submitList(list?.toList())
-        Log.d("remotead",list.toString())
-        notifyDataSetChanged() }
+        Log.d("remotead", list.toString())
+        notifyDataSetChanged()
+    }
 
 
     var list: List<CategoriesModelClass>? = null;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainVieModel {
-
 
 
         val view: View = LayoutInflater.from(parent.context)
@@ -46,8 +46,6 @@ class MainRecyclerAdapter(
 
         return MainVieModel(view)
     }
-
-
 
 
     override fun onBindViewHolder(holder: MainVieModel, position: Int) {
@@ -70,7 +68,6 @@ class MainRecyclerAdapter(
         var linearLayout: LinearLayout? = null
 
 
-
         init {
             imageView = itemView.findViewById(R.id.HorizontalScrollItemNameImageView)
 
@@ -81,14 +78,14 @@ class MainRecyclerAdapter(
             linearLayout?.setOnClickListener {
 
                 Log.d("clicked", "yess")
-
+                ApplicationClass.selectedTab = adapterPosition
                 mainActivity.activity!!.supportFragmentManager.beginTransaction()
 
-                    .replace(R.id.container, CategoriesFragment(currentList,adapterPosition)).addToBackStack(null)
+                    .replace(R.id.container, CategoriesFragment(currentList, adapterPosition))
+                    .addToBackStack(null)
 
                     .commit()
             }
-
 
 
         }

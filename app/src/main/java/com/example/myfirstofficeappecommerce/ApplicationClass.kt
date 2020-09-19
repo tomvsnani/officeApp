@@ -1,5 +1,6 @@
 package com.example.myfirstofficeappecommerce
 
+import Database.MyDatabase
 import android.app.Application
 import android.util.Log
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
@@ -11,16 +12,19 @@ class ApplicationClass : Application() {
 
     companion object {
         var selectedItemsList: List<CategoriesModelClass>? = ArrayList()
-        var selectedTab:TabLayout.Tab?=null
-        var selectedVariantList:MutableList<VariantsModelClass>?=ArrayList()
-
+        var selectedTab: Int? = null
+        var selectedVariantList: MutableList<VariantsModelClass>? = ArrayList()
+         var mydb: MyDatabase? = null
     }
 
 
     override fun onCreate() {
         super.onCreate()
         CategoriesDataProvider.getAllTheCollections(applicationContext)
+        mydb = MyDatabase.getDbInstance(application = applicationContext)
+
         //CategoriesDataProvider.getRemoteData(applicationContext)
+
     }
 
 

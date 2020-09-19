@@ -1,9 +1,13 @@
 package com.example.myfirstofficeappecommerce.Models
 
 import androidx.recyclerview.widget.DiffUtil
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class VariantsModelClass(
-    var id: String? = "",
+    @PrimaryKey
+    var id: String = "",
     var parentProductId: String? = "",
     var color: String? = "",
     var size: String? = "",
@@ -16,9 +20,11 @@ data class VariantsModelClass(
     var dateOrdered: String = "",
     var location: String = "",
     var isOrdered: Boolean = false,
-    var name:String=""
+    var name: String = "",
+    var curserposition:String =""
 
-) {
+
+    ) {
     companion object {
         var diffUtil: DiffUtil.ItemCallback<VariantsModelClass> =
             object : DiffUtil.ItemCallback<VariantsModelClass>() {
@@ -34,7 +40,7 @@ data class VariantsModelClass(
                     newItem: VariantsModelClass
                 ): Boolean {
                     return oldItem.color == newItem.color && oldItem.size == newItem.size && oldItem.imgSrc == newItem.imgSrc
-                            && oldItem.price == newItem.price && oldItem.isSelected == newItem.isSelected && oldItem.name==newItem.name
+                            && oldItem.price == newItem.price && oldItem.isSelected == newItem.isSelected && oldItem.name == newItem.name
                 }
 
             }

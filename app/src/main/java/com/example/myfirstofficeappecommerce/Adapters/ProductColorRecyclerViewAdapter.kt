@@ -16,6 +16,7 @@ import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.fragments.ProductFragment
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ProductColorRecyclerViewAdapter(
     var fragment: ProductFragment,
@@ -46,7 +47,13 @@ class ProductColorRecyclerViewAdapter(
     }
 
     override fun submitList(list: MutableList<VariantsModelClass>?) {
-        super.submitList(list?.toList())
+        val a:MutableList<VariantsModelClass> = ArrayList()
+        for(i in list!!){
+            Log.d("helloheyyy1111",i.color+"  "+i.isSelected+" "+i.id)
+            a.add(i.copy())
+        }
+        super.submitList(a)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductColorViewHolder {
@@ -60,19 +67,21 @@ class ProductColorRecyclerViewAdapter(
 
         var modelClass: VariantsModelClass = currentList[position]
 
-        if(modelClass.isSelected)
-            holder.cardView.cardElevation=20f
+        if(modelClass.isSelected) {
+            holder.cardView.cardElevation = 20f
+            Log.d("modelclasscolorr",modelClass.color+"  "+modelClass.name+"  "+modelClass.isSelected)
+        }
         else
             holder.cardView.cardElevation=0f
 
-        Log.d("modelclasscolor",modelClass.color.toString())
+        //Log.d("modelclasscolor",modelClass.color.toString())
         when {
             modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
                 holder.imageView.setBackgroundColor(Color.RED)
 
 
             modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "b" -> {
-                Log.d("modelclasscolorr",  modelClass.color!!.toLowerCase(Locale.ROOT))
+                //Log.d("modelclasscolorr",  modelClass.color!!.toLowerCase(Locale.ROOT))
                 if (modelClass.color!!.toLowerCase(Locale.ROOT) == "black")
                     holder.imageView.setBackgroundColor(Color.BLACK)
                 else
