@@ -6,13 +6,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import com.example.myfirstofficeappecommerce.fragments.MainFragment
 import com.example.myfirstofficeappecommerce.fragments.OrdersFragment
+import com.example.myfirstofficeappecommerce.fragments.WishListFragment
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 

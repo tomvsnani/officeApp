@@ -21,7 +21,8 @@ data class CategoriesModelClass(
     var imageSrc: List<ModelClass> = ArrayList(),
     var isFav: Boolean = false,
     var variantsList: MutableList<VariantsModelClass>? = ArrayList(),
-    var cursor:String?=""
+    var cursor:String?="",
+    var hasNextPage:Boolean=false
 ) {
     companion object {
         val diffUtil: DiffUtil.ItemCallback<CategoriesModelClass> = object :

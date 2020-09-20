@@ -1,24 +1,24 @@
-<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomsheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
+    android:background="#fff"
+    app:behavior_peekHeight="120dp"
+    app:layout_behavior="@string/bottom_sheet_behavior"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/view8"
-    android:background="#fff"
-    android:id="@+id/bottomsheet"
-    app:layout_behavior="@string/bottom_sheet_behavior"
-    app:behavior_peekHeight="120dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    app:layout_constraintTop_toBottomOf="@+id/view8">
 
     <View
+        android:id="@+id/oo"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#6b6b6b"
-        android:id="@+id/oo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -138,20 +138,21 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
     <Button
         android:id="@+id/productaddToCartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#c62828"
-        android:text="Add to CArt"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="#c62828"
+        android:text="Add to CArt"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/view3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"
-        android:textSize="12sp" />
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
 
     <View
@@ -162,22 +163,30 @@
         android:background="#6b6b6b"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-    <TextView
-        android:id="@+id/productpageDescriptionTextView"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:id="@+id/htmldescriptionscrollview"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:textColor="#6b6b6b"
-        android:text="description"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3" />
+        app:layout_constraintTop_toBottomOf="@+id/view3">
+
+        <WebView
+            android:id="@+id/productpageDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+android:textColor="#6b6b6b"
+            android:text="description"
+
+            />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

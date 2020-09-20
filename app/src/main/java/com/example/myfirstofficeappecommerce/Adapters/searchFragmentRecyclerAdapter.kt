@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
 import com.example.myfirstofficeappecommerce.fragments.MainFragment
+import com.example.myfirstofficeappecommerce.fragments.ProductFragment
 import com.example.myfirstofficeappecommerce.fragments.SearchFragment
 import kotlinx.coroutines.*
 import java.util.*
@@ -65,8 +67,10 @@ class searchfragmentRecyclerAdapter(
         Log.d("hello", model.itemName)
 
         if (viewType == Constants.SCROLL_TYPE)
-
+        {
             holder.textView?.text = model.itemName
+            Glide.with(mainActivity).load(model.imageUrl).circleCrop().into(holder.imageView!!)
+    }
         else {
 
             holder.searchFragmentitemNameTextView?.text = model.itemName
@@ -82,6 +86,8 @@ class searchfragmentRecyclerAdapter(
             Glide.with(mainActivity.context!!)
 
                 .load(model!!.imageSrc[0].imageUrl).into(holder.searchFragImageView!!)
+
+
 
         }
 
@@ -112,6 +118,8 @@ class searchfragmentRecyclerAdapter(
         var searchQuantityTextView: TextView? = null
 
         var addRemoveLinearLayout: LinearLayout? = null
+
+        var cardview:CardView?=null
 
         init {
             Log.d("clicked", itemViewType.toString())
@@ -145,6 +153,12 @@ class searchfragmentRecyclerAdapter(
 
                 searchFragmentitemNameTextView = itemView.findViewById(R.id.searchitemNametextView)
 
+                cardview=itemView.findViewById(R.id.search_result_rowlayoutcardview)
+
+                cardview!!.setOnClickListener { mainActivity.activity!!.supportFragmentManager.beginTransaction()
+                    .replace(R.id.container,ProductFragment(currentList[absoluteAdapterPosition])).addToBackStack(null)
+                    .commit()}
+
                 addRemoveLinearLayout = itemView.findViewById(R.id.searchaddremovelinear)
 
                 searchFragmentnumberOfPiecesTextView =
@@ -160,7 +174,9 @@ class searchfragmentRecyclerAdapter(
                 searchQuantityTextView = itemView.findViewById(R.id.searchitemquantitiytextview)
 
 
+                searchFragmentAddToCart!!.visibility = View.GONE
 
+                addRemoveLinearLayout!!.visibility = View.GONE
 
                 searchFragmentAddToCart!!.setOnClickListener {
                     currentList[adapterPosition].quantityOfItem++

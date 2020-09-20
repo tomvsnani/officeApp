@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
@@ -55,6 +56,8 @@ class MainRecyclerAdapter(
 
 
         holder.textView?.text = model.itemName
+
+        Glide.with(mainActivity).load(model.imageUrl).circleCrop().into(holder.imageView!!)
 
 
     }

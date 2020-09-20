@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +19,7 @@ import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactor
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 import kotlinx.android.synthetic.main.fragment_cart.view.*
+import kotlinx.coroutines.*
 
 
 class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback: () -> Unit) :
@@ -27,6 +29,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
     var productList: MutableList<CategoriesModelClass> = ArrayList()
     var progressbar: ProgressBar? = null
     var value = get!!.itemName
+    var recyclerviewLastLayout: ConstraintLayout? = null
 
 
     override fun onCreateView(
@@ -40,6 +43,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
         )
 
         recyclerView = view.findViewById(R.id.categoriesRecyclerview)
+        recyclerviewLastLayout = view.findViewById(R.id.loadingconstraint)
         progressbar = view.findViewById(R.id.eachcategoryfragprogressbar)
         progressbar!!.visibility = View.GONE
         adapterr = CategoriesEachRecyclerAdapter(callback, this)
@@ -48,79 +52,39 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
         (recyclerView as RecyclerView).adapter = adapterr
         recyclerView!!.itemAnimator = null
 
-        Log.d("valueoncreateview", value)
 
-        var categoriesModelClass: CategoriesViewModel =
+        val categoriesModelClass: CategoriesViewModel =
             ViewModelProvider(this, CategoriesViewModelFactory(get!!.id))
                 .get(CategoriesViewModel::class.java)
+        progressbar!!.visibility = View.VISIBLE
         categoriesModelClass.getData()
         categoriesModelClass.mutableLiveData?.observe(viewLifecycleOwner, Observer {
-            Log.d("loadmore", "observer")
 
             adapterr!!.submitList(it)
+            CoroutineScope(Dispatchers.Main).launch {
+                recyclerviewLastLayout!!.visibility = View.GONE
+                progressbar!!.visibility = View.GONE
+            }
         })
 
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-               if( (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == adapterr!!.itemCount - 1)
-                categoriesModelClass.loadmore(adapterr!!.currentList[adapterr!!.currentList.size - 1])
-                Log.d(
-                    "loadmore",
-                    ((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == adapterr!!.itemCount - 1).toString()
-                )
+                if ((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == adapterr!!.itemCount - 1 &&
+                    adapterr!!.currentList[adapterr!!.itemCount - 1].hasNextPage
+                ) {
+                    recyclerviewLastLayout!!.visibility = View.VISIBLE
+                    categoriesModelClass.loadmore(adapterr!!.currentList[adapterr!!.currentList.size - 1])
+                }
 
             }
         })
 
-//      if(!isRemoteRequestMade)
+
 
 
         return view
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("valuecrate", value)
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onPause() {
-        Log.d("valuepause", value)
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d("valuestop", value)
-        super.onStop()
-    }
-
-
-    override fun onDestroyView() {
-        Log.d("valuedestroyview", value)
-        super.onDestroyView()
-    }
-
-
-    override fun onDestroy() {
-        Log.d("valuedestroy", value)
-        super.onDestroy()
-    }
-
-    override fun onStart() {
-        Log.d("valuestart", value)
-        super.onStart()
-    }
-
-    override fun onResume() {
-        Log.d("valueresume", value)
-        super.onResume()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("valueviewcreated", value)
-        super.onViewCreated(view, savedInstanceState)
     }
 
 

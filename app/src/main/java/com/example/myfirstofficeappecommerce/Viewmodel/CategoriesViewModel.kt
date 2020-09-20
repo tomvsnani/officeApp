@@ -3,9 +3,6 @@ package com.example.myfirstofficeappecommerce.Viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingSource
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.ModelClass
@@ -31,47 +28,48 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                                 10
                             )
                         }, { _queryBuilder ->
-                            _queryBuilder.edges { _queryBuilder ->
-                                _queryBuilder.cursor()
-                                _queryBuilder.node { _queryBuilder ->
-                                    _queryBuilder.title()
+                            _queryBuilder.pageInfo { _queryBuilder -> _queryBuilder.hasNextPage() }
+                                .edges { _queryBuilder ->
+                                    _queryBuilder.cursor()
+                                    _queryBuilder.node { _queryBuilder ->
+                                        _queryBuilder.title()
 
-                                        .description()
+                                            .descriptionHtml()
 
-                                        .images({ args: Storefront.ProductQuery.ImagesArguments? ->
-                                            args!!.first(
-                                                1
-                                            )
-                                        }, { _queryBuilder ->
-                                            _queryBuilder.edges { _queryBuilder ->
-                                                _queryBuilder.node { _queryBuilder ->
-                                                    _queryBuilder.src().id()
-                                                }
-                                            }
-                                        })
-
-
-                                        .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
-                                            args!!.first(
-                                                100
-                                            )
-                                        },
-                                            { _queryBuilder ->
+                                            .images({ args: Storefront.ProductQuery.ImagesArguments? ->
+                                                args!!.first(
+                                                    1
+                                                )
+                                            }, { _queryBuilder ->
                                                 _queryBuilder.edges { _queryBuilder ->
                                                     _queryBuilder.node { _queryBuilder ->
-                                                        _queryBuilder.price()
-                                                            .selectedOptions { _queryBuilder ->
-                                                                _queryBuilder.name().value()
-                                                            }
-
-
+                                                        _queryBuilder.src().id()
                                                     }
                                                 }
                                             })
 
 
+                                            .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
+                                                args!!.first(
+                                                    100
+                                                )
+                                            },
+                                                { _queryBuilder ->
+                                                    _queryBuilder.edges { _queryBuilder ->
+                                                        _queryBuilder.node { _queryBuilder ->
+                                                            _queryBuilder.price()
+                                                                .selectedOptions { _queryBuilder ->
+                                                                    _queryBuilder.name().value()
+                                                                }
+
+
+                                                        }
+                                                    }
+                                                })
+
+
+                                    }
                                 }
-                            }
                         })
 
 
@@ -92,53 +90,54 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                     _queryBuilder
                         .title()
                         .products({ args: Storefront.CollectionQuery.ProductsArguments? ->
-                            args!!.after(categoriesmodel.cursor).first(
+                            args!!.first(
                                 10
-                            )
+                            ).after(categoriesmodel.cursor)
 
 
-                        }, { _queryBuilder ->
-                            _queryBuilder.edges { _queryBuilder ->
-                                _queryBuilder.cursor()
-                                _queryBuilder.node { _queryBuilder ->
-                                    _queryBuilder.title()
+                        }, {
+                            it.pageInfo { _queryBuilder -> _queryBuilder.hasNextPage() }
+                                .edges { _queryBuilder ->
+                                    _queryBuilder.cursor()
+                                    _queryBuilder.node { _queryBuilder ->
+                                        _queryBuilder.title()
 
-                                        .description()
+                                            .descriptionHtml()
 
-                                        .images({ args: Storefront.ProductQuery.ImagesArguments? ->
-                                            args!!.first(
-                                                1
-                                            )
-                                        }, { _queryBuilder ->
-                                            _queryBuilder.edges { _queryBuilder ->
-                                                _queryBuilder.node { _queryBuilder ->
-                                                    _queryBuilder.src().id()
-                                                }
-                                            }
-                                        })
-
-
-                                        .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
-                                            args!!.first(
-                                                100
-                                            )
-                                        },
-                                            { _queryBuilder ->
+                                            .images({ args: Storefront.ProductQuery.ImagesArguments? ->
+                                                args!!.first(
+                                                    1
+                                                )
+                                            }, fun(_queryBuilder: Storefront.ImageConnectionQuery) {
                                                 _queryBuilder.edges { _queryBuilder ->
                                                     _queryBuilder.node { _queryBuilder ->
-                                                        _queryBuilder.price()
-                                                            .selectedOptions { _queryBuilder ->
-                                                                _queryBuilder.name().value()
-                                                            }
-
-
+                                                        _queryBuilder.src().id()
                                                     }
                                                 }
                                             })
 
 
+                                            .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
+                                                args!!.first(
+                                                    100
+                                                )
+                                            },
+                                                { _queryBuilder ->
+                                                    _queryBuilder.edges { _queryBuilder ->
+                                                        _queryBuilder.node { _queryBuilder ->
+                                                            _queryBuilder.price()
+                                                                .selectedOptions { _queryBuilder ->
+                                                                    _queryBuilder.name().value()
+                                                                }
+
+
+                                                        }
+                                                    }
+                                                })
+
+
+                                    }
                                 }
-                            }
                         })
 
 
@@ -199,14 +198,16 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                         realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
                         variantsList = variantList,
                         groupId = storefront.id.toString(),
-                        cursor = productEdge.cursor ?: null
+                        cursor = productEdge.cursor ?: null,
+                        hasNextPage = if (storefront.products.pageInfo == null) false else storefront.products.pageInfo.hasNextPage
                     )
 
-
+                    Log.d("istrue", productmodelclass.hasNextPage.toString())
                     productList.add(productmodelclass)
                 }
 
-                mutableLiveData!!.postValue(productList)
+
+                mutableLiveData!!.postValue(productList.distinctBy { it.id } as MutableList<CategoriesModelClass>)
 
             }
 

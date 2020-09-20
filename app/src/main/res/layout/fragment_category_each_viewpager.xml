@@ -8,11 +8,19 @@
         android:id="@+id/eachcategoryfragprogressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminateTint="@color/red"
         android:layout_gravity="center" />
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoriesRecyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+    <include layout="@layout/recyclerview_last_row_layout"/>
+</LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

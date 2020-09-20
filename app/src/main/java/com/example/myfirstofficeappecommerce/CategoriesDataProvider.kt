@@ -8,6 +8,8 @@ import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.shopify.buy3.*
 import com.shopify.graphql.support.ID
+import java.io.File
+import java.util.concurrent.TimeUnit
 
 object CategoriesDataProvider {
     var graphh: GraphClient? = null
@@ -541,7 +543,7 @@ object CategoriesDataProvider {
                 isSelected = false,
                 isfav = false,
                 quantityOfItem = 1,
-                name =   "Phonesg"
+                name = "Phonesg"
 
 
             ),
@@ -555,7 +557,7 @@ object CategoriesDataProvider {
                 isSelected = false,
                 isfav = false,
                 quantityOfItem = 1,
-                name =   "Phonesg"
+                name = "Phonesg"
             ),
             VariantsModelClass(
                 "Phonese",
@@ -567,7 +569,7 @@ object CategoriesDataProvider {
                 isSelected = false,
                 isfav = false,
                 quantityOfItem = 1,
-                name =   "Phonesg"
+                name = "Phonesg"
             ),
             VariantsModelClass(
                 "Phonesd",
@@ -579,7 +581,7 @@ object CategoriesDataProvider {
                 isSelected = false,
                 isfav = false,
                 quantityOfItem = 1,
-                name =   "Phonesg"
+                name = "Phonesg"
             ),
             VariantsModelClass(
                 "Phonesc",
@@ -591,7 +593,7 @@ object CategoriesDataProvider {
                 isSelected = false,
                 isfav = false,
                 quantityOfItem = 1,
-                name =   "Phonesg"
+                name = "Phonesg"
             ),
             VariantsModelClass(
                 "Phonesb",
@@ -603,7 +605,7 @@ object CategoriesDataProvider {
                 isSelected = false,
                 isfav = false,
                 quantityOfItem = 1,
-                name =   "Phonesg"
+                name = "Phonesg"
             ),
             VariantsModelClass(
                 "Phonesa",
@@ -615,7 +617,7 @@ object CategoriesDataProvider {
                 isSelected = false,
                 isfav = false,
                 quantityOfItem = 1,
-                name =   "Phonesg"
+                name = "Phonesg"
             )
 
         )
@@ -778,6 +780,8 @@ object CategoriesDataProvider {
         graphh = GraphClient.builder(context)
             .accessToken(context.getString(R.string.storefront_api_key))
             .shopDomain(context.getString(R.string.shopify_domain))
+            .httpCache(File(context.applicationContext.cacheDir, "/http"), 10 * 1024 * 1024)
+            .defaultHttpCachePolicy(HttpCachePolicy.CACHE_FIRST.expireAfter(5, TimeUnit.MINUTES))
             .build()
 
         Log.d("connection", "started")
@@ -811,7 +815,8 @@ object CategoriesDataProvider {
                 for (collectionEdge in response.data()!!.shop.collections.edges) {
                     var collectionModelClass = CategoriesModelClass(
                         itemName = collectionEdge.node.title,
-                        id = collectionEdge.node.id.toString(), itemCategory = "collection"
+                        id = collectionEdge.node.id.toString(), itemCategory = "collection",
+                        imageUrl = collectionEdge.node.image.src
                     )
 
                     collectionList.add(collectionModelClass)

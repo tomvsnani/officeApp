@@ -1,10 +1,14 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +39,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     var toolbar: Toolbar? = null
     private var itemNameTextView: TextView? = null
     private var itemPriceTextView: TextView? = null
-    private var itemTotalDescriptionTextView: TextView? = null
+    private var itemTotalDescriptionTextView: WebView? = null
     private var itemQuantitiyTextView: TextView? = null
     private var itemMessagesImageView: ImageView? = null
     private var itemShareImageView: ImageView? = null
@@ -51,6 +55,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     private var sizeRecyclerViewAdapter: ProductSizeRecyclerViewAdapter? = null
     private var selectedVariant: VariantsModelClass? = null
     private var variantList: List<VariantsModelClass>? = modelClass.variantsList!!.toList()
+    private var htmlDescriptionScroll: ScrollView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +102,11 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         bottomSheetBehavior!!.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    htmlDescriptionScroll!!.viewTreeObserver.addOnScrollChangedListener {
+                        bottomSheetBehavior!!.isDraggable = htmlDescriptionScroll!!.scrollY == 0
+                    }
+                }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -209,16 +218,19 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         colorRecyclerAdapter!!.submitList(a.filter {
             it.isSelected = it.color == selectedVariant!!.color
-            Log.d("itselected",it.color+" "+it.isSelected+"  "+it.id)
+            Log.d("itselected", it.color + " " + it.isSelected + "  " + it.id)
             return@filter true
         }.distinctBy { it.color } as MutableList<VariantsModelClass>
         )
 
         sizeRecyclerViewAdapter!!.submitList(
-           a
-            . filter {  it.isSelected = it.size == selectedVariant!!.size
-                return@filter true }
-         .sortedBy { it.size }.distinctBy { it.size }.toMutableList())
+            a
+                .filter {
+                    it.isSelected = it.size == selectedVariant!!.size
+                    return@filter true
+                }
+                .sortedBy { it.size }.distinctBy { it.size }.toMutableList()
+        )
 
 
 
@@ -299,7 +311,19 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         itemNameTextView!!.text = modelClass.itemName
 
-        itemTotalDescriptionTextView!!.text = modelClass.itemDescriptionText
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            itemTotalDescriptionTextView!!.getSettings().setBuiltInZoomControls(true);
+
+            itemTotalDescriptionTextView!!.getSettings().setJavaScriptEnabled(true);
+            itemTotalDescriptionTextView!!.getSettings().setLoadWithOverviewMode(true);
+
+            itemTotalDescriptionTextView!!.loadDataWithBaseURL(null,modelClass.itemDescriptionText!!,"text/html", "utf-8",null)
+
+
+        } else {
+           //                                                                                                                                                                                                  itemTotalDescriptionTextView!!.text = (Html.fromHtml(modelClass.itemDescriptionText));
+        }
+//        itemTotalDescriptionTextView!!.text = modelClass.itemDescriptionText
 
 
         itemPriceTextView!!.text =
@@ -340,6 +364,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         addTocartButton = view.findViewById(R.id.productaddToCartButton)
 
         addOrRemoveItemsLinear = view.findViewById(R.id.productaddorremoveitemslinearlayout)
+
+        htmlDescriptionScroll = view.findViewById(R.id.htmldescriptionscrollview)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
