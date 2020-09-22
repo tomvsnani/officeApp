@@ -7,7 +7,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.fragments.CartFragment
-import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 
@@ -54,7 +53,7 @@ class CartItemRecommendedAdapter(var cartFragment: CartFragment, var callback:(V
         viewType: Int
     ): CardItemsRecommendedViewHolder {
         var view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.cart_horizontal_scroll_recyclerview, parent, false)
+            .inflate(R.layout.cart_recommendeditems_row_layout, parent, false)
         return CardItemsRecommendedViewHolder(view)
     }
 

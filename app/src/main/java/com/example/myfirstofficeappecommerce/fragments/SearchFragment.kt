@@ -49,13 +49,13 @@ open class SearchFragment() : Fragment() {
         (activity as MainActivity).lockDrawer()
         searchfragmentRecyclerAdapterSearch = searchfragmentRecyclerAdapter(
             (this),
-            Constants.SEARCH_TYPE
+            Constants.SEARCH_FRAG_SEARCH_TYPE
         )
 
         searchfragmentRecyclerAdapter = searchfragmentRecyclerAdapter(
             (this),
 
-            Constants.SCROLL_TYPE
+            Constants.SEARCH_FRAG_SCROLL_TYPE
         )
         CategoriesDataProvider.mutableCollectionList.observeForever {
 
@@ -124,7 +124,7 @@ open class SearchFragment() : Fragment() {
                                     id = productEdge.node.id.toString(),
                                     itemName = productEdge.node.title,
                                     itemDescriptionText = productEdge.node.descriptionHtml,
-                                    imageSrc = productImageSrcList,
+                                    imageSrcOfVariants = productImageSrcList,
                                     realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
                                     variantsList = variantList,
                                     cursor = productEdge.cursor ?: null

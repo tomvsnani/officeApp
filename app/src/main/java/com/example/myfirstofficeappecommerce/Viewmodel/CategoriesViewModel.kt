@@ -15,8 +15,6 @@ class CategoriesViewModel(var id: String) : ViewModel() {
     var productList: MutableList<CategoriesModelClass> = ArrayList()
 
     fun getData() {
-
-
         val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
             rootQuery.node(ID(id)) { _queryBuilderr ->
                 _queryBuilderr.onCollection { _queryBuilder ->
@@ -194,7 +192,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                         id = productEdge.node.id.toString(),
                         itemName = productEdge.node.title,
                         itemDescriptionText = productEdge.node.descriptionHtml,
-                        imageSrc = productImageSrcList,
+                        imageSrcOfVariants = productImageSrcList,
                         realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
                         variantsList = variantList,
                         groupId = storefront.id.toString(),

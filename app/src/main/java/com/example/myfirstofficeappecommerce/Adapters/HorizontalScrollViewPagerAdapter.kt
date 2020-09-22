@@ -7,13 +7,14 @@ import com.example.myfirstofficeappecommerce.fragments.HorizontalImageScrollFrag
 
 class HorizontalScrollViewPagerAdapter(
     var mainFragment: Fragment,
-    var listDataForHorizontalScroll: List<ModelClass>
+    var listDataForHorizontalScroll: List<ModelClass>,
+    var type:String
 ) : FragmentStateAdapter(mainFragment) {
     override fun getItemCount(): Int {
         return listDataForHorizontalScroll.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return HorizontalImageScrollFragment( mainFragment,listDataForHorizontalScroll[position])
+        return HorizontalImageScrollFragment( mainFragment,listDataForHorizontalScroll[position],type)
     }
 }

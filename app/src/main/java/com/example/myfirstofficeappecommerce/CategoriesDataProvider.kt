@@ -406,38 +406,6 @@ object CategoriesDataProvider {
                 "null",
                 "null",
                 id = 1
-            ),
-            ModelClass(
-                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-                "Phone",
-                "ok",
-                "null",
-                "null",
-                id = 1
-            ),
-            ModelClass(
-                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-                "Light",
-                "ok",
-                "null",
-                "null",
-                id = 1
-            ),
-            ModelClass(
-                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-                "Toys",
-                "ok",
-                "null",
-                "null",
-                id = 1
-            ),
-            ModelClass(
-                Constants.HORIZONTAL_LIST_ITEM_NAMES,
-                "Mugs",
-                "ok",
-                "null",
-                "null",
-                id = 1
             )
 
         )
@@ -937,7 +905,7 @@ object CategoriesDataProvider {
                         id = productEdge.node.id.toString(),
                         itemName = productEdge.node.title,
                         itemDescriptionText = productEdge.node.descriptionHtml,
-                        imageSrc = productImageSrcList,
+                        imageSrcOfVariants = productImageSrcList,
                         realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
                         variantsList = variantList,
                         groupId = storefront.id.toString()

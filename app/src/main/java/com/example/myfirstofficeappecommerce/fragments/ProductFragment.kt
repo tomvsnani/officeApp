@@ -3,18 +3,15 @@ package com.example.myfirstofficeappecommerce.fragments
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -23,12 +20,10 @@ import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerA
 import com.example.myfirstofficeappecommerce.Adapters.ProductColorRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Adapters.ProductSizeRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.Models.ProductColorModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.test_resouce_file.*
 
 
 class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment() {
@@ -96,7 +91,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         (viewPager2 as ViewPager2).adapter =
             HorizontalScrollViewPagerAdapter(
                 this,
-                modelClass.imageSrc
+                modelClass.imageSrcOfVariants,
+                Constants.HORIZONTAL_SCROLL_PRODUCT_FRAG
             )
         bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottomsheet))
         bottomSheetBehavior!!.addBottomSheetCallback(object :

@@ -8,18 +8,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
-import com.example.myfirstofficeappecommerce.fragments.MainFragment
 import com.example.myfirstofficeappecommerce.fragments.SearchFragment
-import kotlinx.coroutines.*
-import java.util.*
-import kotlin.collections.LinkedHashMap
 
 class SearchFragmentResultAdapter(
     var mainActivity: SearchFragment, var viewType: String
@@ -42,7 +37,7 @@ class SearchFragmentResultAdapter(
 
         val int: Int =
 
-            if (viewType == 0) R.layout.horizontalscrollitemnamerowlay else R.layout.search_fragment_row_layout
+            if (viewType == 0) R.layout.collections_row_layout else R.layout.search_fragment_row_layout
 
         val view: View = LayoutInflater.from(parent.context)
 
@@ -52,7 +47,7 @@ class SearchFragmentResultAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (viewType == Constants.SCROLL_TYPE)
+        return if (viewType == Constants.SEARCH_FRAG_SCROLL_TYPE)
             0
         else
             1
@@ -64,7 +59,7 @@ class SearchFragmentResultAdapter(
         val model: CategoriesModelClass = currentList[position]
         Log.d("hello", model.itemName)
 
-        if (viewType == Constants.SCROLL_TYPE)
+        if (viewType == Constants.SEARCH_FRAG_SCROLL_TYPE)
 
             holder.textView?.text = model.itemName
         else {
@@ -81,7 +76,7 @@ class SearchFragmentResultAdapter(
 
             Glide.with(mainActivity.context!!)
 
-                .load(model!!.imageSrc[0].imageUrl).into(holder.searchFragImageView!!)
+                .load(model!!.imageSrcOfVariants[0].imageUrl).into(holder.searchFragImageView!!)
 
         }
 
@@ -117,7 +112,7 @@ class SearchFragmentResultAdapter(
         init {
             Log.d("clicked", itemViewType.toString())
 
-            if (viewType == Constants.SCROLL_TYPE) {
+            if (viewType == Constants.SEARCH_FRAG_SCROLL_TYPE) {
 
                 imageView = itemView.findViewById(R.id.HorizontalScrollItemNameImageView)
 
