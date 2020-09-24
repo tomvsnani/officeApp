@@ -10,6 +10,11 @@ package com.example.myfirstofficeappecommerce
        const val HORIZONTAL_SCROLL_TYPE_BANNER1="BANNER1_SCROLL"
        const val HORIZONTAL_SCROLL_TYPE_BANNER2="BANNER2_SCROLL"
        const val HORIZONTAL_SCROLL_PRODUCT_FRAG="PRODUCT_FAG_SCROLL"
+       const val CIRCLE_SLIDER="CIRCLE"
+       const val SQUARE_SLIDER="SQUARE"
+       const val CATEGORY_PRODUCT="PRODUCT"
+       const val CATEGORY_COLLECTION="COLLECTION"
+       const val CATEGORY_CUSTOM="CUSTOM"
    }
 
 }

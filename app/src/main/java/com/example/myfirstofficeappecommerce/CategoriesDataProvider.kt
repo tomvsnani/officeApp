@@ -9,7 +9,11 @@ import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.shopify.buy3.*
 import com.shopify.graphql.support.ID
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
 
 object CategoriesDataProvider {
     var graphh: GraphClient? = null
@@ -18,6 +22,9 @@ object CategoriesDataProvider {
     var mutableCollectionList: MutableLiveData<MutableList<CategoriesModelClass>> =
         MutableLiveData()
     var hashMap: LinkedHashMap<String, List<CategoriesModelClass>> = LinkedHashMap()
+
+    var date1 = "2020:09:24 06:18:00"
+    var date2 = "2020:09:25 08:18:00"
 
     var mutableproductList: MutableLiveData<List<CategoriesModelClass>>? = MutableLiveData()
 
@@ -411,93 +418,40 @@ object CategoriesDataProvider {
         )
     }
 
-//    fun getSearhItemsData(): List<CategoriesModelClass> {
-//        return listOf(
-//            CategoriesModelClass(
-//                "Soap", "Santoor", "too hot Laptop",
-//                "Gross Wt. 840gms", "Net Wt.450gms", "220", 500, "2", "1", id = "ab"
-//            ),
-//            CategoriesModelClass(
-//                "Soap",
-//                "Samsung",
-//                "too hot Laptop",
-//                "Gross Wt. 840gms",
-//                "Net Wt.450gms",
-//                "220",
-//                500,
-//                "2",
-//                "1",
-//                quantityOfItem = 28,
-//                id = "ac"
-//            ),
-//            CategoriesModelClass(
-//                "Soap",
-//                "Samsung",
-//                "too hot Laptop",
-//                "Gross Wt. 840gms",
-//                "Net Wt.450gms",
-//                "220",
-//                500,
-//                "2",
-//                "1",
-//                quantityOfItem = 32,
-//                id = "ad"
-//            ),
-//            CategoriesModelClass(
-//                "Soap",
-//                "Samsung",
-//                "too hot Laptop",
-//                "Gross Wt. 840gms",
-//                "Net Wt.450gms",
-//                "220",
-//                500,
-//                "2",
-//                "1",
-//                quantityOfItem = 25,
-//                id = "ae"
-//            ),
-//            CategoriesModelClass(
-//                "Soap",
-//                "Samsung",
-//                "too hot Laptop",
-//                "Gross Wt. 840gms",
-//                "Net Wt.450gms",
-//                "220",
-//                500,
-//                "2",
-//                "1",
-//                quantityOfItem = 8,
-//                id = "af"
-//            ),
-//            CategoriesModelClass(
-//                "Soap",
-//                "Samsung",
-//                "too hot Laptop",
-//                "Gross Wt. 840gms",
-//                "Net Wt.450gms",
-//                "220",
-//                500,
-//                "2",
-//                "1",
-//                quantityOfItem = 5,
-//                id = "ag"
-//            ),
-//            CategoriesModelClass(
-//                "Soap",
-//                "Samsung",
-//                "too hot Laptop",
-//                "Gross Wt. 840gms",
-//                "Net Wt.450gms",
-//                "220",
-//                500,
-//                "2",
-//                "1",
-//                quantityOfItem = 1,
-//                id = "ah"
-//            )
-//
-//        )
-//    }
+    fun getCategoryData(): List<CategoriesModelClass> {
+        return listOf(
+
+            CategoriesModelClass(
+                Constants.CIRCLE_SLIDER,
+                Constants.CATEGORY_PRODUCT,
+                "Product ",
+                imageUrl =
+                "https://rukminim1.flixcart.com/image/714/857/k65d18w0/shirt/p/4/t/48-bfrybluesht02ab-being-fab-original-imaecvnxndp3zbdn.jpeg?q=50"
+            ),
+            CategoriesModelClass(
+                Constants.CIRCLE_SLIDER,
+                Constants.CATEGORY_COLLECTION,
+                "Collection",
+                imageUrl = "https://kathmandu.imgix.net/catalog/product/1/5/15108_605_federatewomenslsshirt_v2_a.jpg"
+            ),
+            CategoriesModelClass(
+                Constants.CIRCLE_SLIDER,
+                Constants.CATEGORY_CUSTOM,
+                "CustomName1",
+                categoryLink = "https://www.google.com",
+                imageUrl = "https://kathmandu.imgix.net/catalog/product/1/5/15108_605_federatewomenslsshirt_v2_a.jpg"
+            ),
+            CategoriesModelClass(
+                Constants.CIRCLE_SLIDER,
+                Constants.CATEGORY_CUSTOM,
+                "CustomName2",
+                categoryLink = "https://www.facebook.com",
+                imageUrl = "https://5.imimg.com/data5/UC/TY/MY-9601095/100-25-cotton-fancy-casual-shirt-for-men-500x500.jpg"
+
+
+            )
+        )
+    }
 
     fun getRecommendedData(): List<VariantsModelClass> {
         return listOf(
@@ -925,6 +879,34 @@ object CategoriesDataProvider {
             }
         })
 
+    }
+
+    fun getMillies(): Long {
+
+
+        var simpleDateFormatStartDate = SimpleDateFormat("yyyy:mm:dd hh:mm:ss", Locale.getDefault()).parse(date1)
+
+
+        var simpleDateFormatEndDate = SimpleDateFormat("yyyy:mm:dd hh:mm:ss", Locale.getDefault()).parse(date2)
+
+        return simpleDateFormatStartDate.time - simpleDateFormatEndDate.time
+
+
+    }
+
+    private fun getCalender(date1: String): Calendar {
+        var calender1 = Calendar.getInstance()
+        var date = date1.split(" ")[0]
+        var time = date1.split(" ")[1]
+        calender1.set(
+            date.split(":")[0].toInt(),
+            date.split(":")[1].toInt(),
+            date.split(":")[2].toInt(),
+            time.split(":")[0].toInt(),
+            time.split(":")[1].toInt(),
+            time.split(":")[2].toInt()
+        )
+        return calender1
     }
 
 }

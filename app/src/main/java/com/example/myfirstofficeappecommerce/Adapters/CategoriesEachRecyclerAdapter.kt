@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -13,13 +14,13 @@ import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
-import com.example.myfirstofficeappecommerce.fragments.CategoryEachViewPagerFragment
+import com.example.myfirstofficeappecommerce.databinding.CategoriesEachViewpagerGridRowlayoutBinding
 import com.example.myfirstofficeappecommerce.fragments.ProductFragment
 import kotlinx.coroutines.*
 
 class CategoriesEachRecyclerAdapter(
-    var callback: () -> Unit,
-    var categoryEachViewPagerFragment: CategoryEachViewPagerFragment,
+
+    var fragment: Fragment,    //fragments may be main fragment or categoryEachViewPagerFragment
     var displayType: String = "grid"
 ) :
     ListAdapter<CategoriesModelClass, CategoriesEachRecyclerAdapter.CategoryViewHolder>(
@@ -27,7 +28,10 @@ class CategoriesEachRecyclerAdapter(
     ) {
 
 
+
+
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val binding:CategoriesEachViewpagerGridRowlayoutBinding=CategoriesEachViewpagerGridRowlayoutBinding.bind(itemView)
         val itemImage: ImageView = itemView.findViewById(R.id.ItemImageView)
         val itemName: TextView = itemView.findViewById(R.id.ItemNameTextView)
         val itemDescription: TextView = itemView.findViewById(R.id.ItemDescriptionTextView)
@@ -46,6 +50,8 @@ class CategoriesEachRecyclerAdapter(
             itemView.findViewById<ImageView>(R.id.categories_row_favouritesImageView)
 
 
+
+
         init {
             addToCart.setOnClickListener {
                 var modelClass = currentList[adapterPosition]
@@ -55,7 +61,7 @@ class CategoriesEachRecyclerAdapter(
                     modelClass.quantityOfItem++
                     (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
                     notifyItemChanged(adapterPosition)
-                    callback()
+                    //callback()
                 }
 
             }
@@ -78,7 +84,7 @@ class CategoriesEachRecyclerAdapter(
                 }
 
                 notifyItemChanged(adapterPosition)
-                callback()
+              //  callback()
             }
 
             addItemsImageButton.setOnClickListener {
@@ -89,11 +95,11 @@ class CategoriesEachRecyclerAdapter(
                     modelClass.quantityOfItem
 
                 notifyItemChanged(adapterPosition)
-                callback()
+                //callback()
             }
 
             itemImage.setOnClickListener {
-                categoryEachViewPagerFragment.activity!!.supportFragmentManager.beginTransaction()
+                fragment.activity!!.supportFragmentManager.beginTransaction()
                     .replace(R.id.container, ProductFragment(currentList[adapterPosition]))
                     .addToBackStack(null).commit()
 
@@ -104,7 +110,7 @@ class CategoriesEachRecyclerAdapter(
                 var intent: Intent = Intent(Intent.ACTION_SEND)
                 intent.type = "text/html";
                 intent.putExtra(Intent.EXTRA_TEXT, s)
-                categoryEachViewPagerFragment.startActivity(intent)
+                fragment.startActivity(intent)
             }
 
             favouritesImageView.setOnClickListener {
@@ -131,7 +137,7 @@ class CategoriesEachRecyclerAdapter(
                         variant.isfav=true
                         CoroutineScope(Dispatchers.IO).launch {
                             ApplicationClass.mydb!!.dao().insert(variant)
-                            createToastforFavItems(categoryEachViewPagerFragment.getString(R.string.fav_items_added_toast))
+                            createToastforFavItems(fragment.getString(R.string.fav_items_added_toast))
                         }
                     }
                     else throw Throwable("Variant is null")
@@ -144,7 +150,7 @@ class CategoriesEachRecyclerAdapter(
 
         private suspend fun createToastforFavItems(s:String) {
           withContext(Dispatchers.Main){
-              Toast.makeText(categoryEachViewPagerFragment.context,s,Toast.LENGTH_SHORT).show()
+              Toast.makeText(fragment.context,s,Toast.LENGTH_SHORT).show()
           }
         }
     }
@@ -164,21 +170,21 @@ class CategoriesEachRecyclerAdapter(
 
         var modelClass = currentList[position]
         Log.d("finding", modelClass.itemName + " " + modelClass.quantityOfItem)
-        if (modelClass.quantityOfItem > 0) {
-            if (displayType != "grid") {
-                holder.addToCart.visibility = View.GONE
-                holder.addOrRemoveItemLinearLayout.visibility = View.VISIBLE
-            }
-            holder.quantityOfItemAddaedToCartTextView.text = modelClass.quantityOfItem.toString()
-        } else {
-            if (displayType != "grid") {
-                holder.addToCart.visibility = View.VISIBLE
-                holder.addOrRemoveItemLinearLayout.visibility = View.GONE
-            }
-        }
+//        if (modelClass.quantityOfItem > 0) {
+//            if (displayType != "grid") {
+//                holder.addToCart.visibility = View.GONE
+//                holder.addOrRemoveItemLinearLayout.visibility = View.VISIBLE
+//            }
+//            holder.quantityOfItemAddaedToCartTextView.text = modelClass.quantityOfItem.toString()
+//        } else {
+//            if (displayType != "grid") {
+//                holder.addToCart.visibility = View.VISIBLE
+//                holder.addOrRemoveItemLinearLayout.visibility = View.GONE
+//            }
+//        }
         holder.itemDescription.text = modelClass.itemDescriptionText
         holder.realmrp.text =
-            " MRP : ${categoryEachViewPagerFragment.getString(R.string.Rs)} ${
+            " MRP : ${fragment.getString(R.string.Rs)} ${
                 modelClass.variantsList?.getOrNull(
                     0
                 )?.price
@@ -186,14 +192,14 @@ class CategoriesEachRecyclerAdapter(
 
         holder.itemName.text = modelClass.itemName
         holder.itemNetWeight.text = modelClass.itemNetWeight
-        Glide.with(categoryEachViewPagerFragment).load(modelClass.imageSrcOfVariants.getOrNull(0)?.imageUrl)
+        Glide.with(fragment).load(modelClass.imageSrcOfVariants.getOrNull(0)?.imageUrl)
             .into(holder.itemImage)
 
         if (modelClass.isFav)
-            Glide.with(categoryEachViewPagerFragment.context!!)
+            Glide.with(fragment.context!!)
                 .load(R.drawable.ic_baseline_favorite_24).into(holder.favouritesImageView)
         else
-            Glide.with(categoryEachViewPagerFragment.context!!)
+            Glide.with(fragment.context!!)
                 .load(R.drawable.ic_baseline_favorite_border_24).into(holder.favouritesImageView)
     }
 

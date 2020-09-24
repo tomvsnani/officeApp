@@ -34,7 +34,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     var toolbar: Toolbar? = null
     private var itemNameTextView: TextView? = null
     private var itemPriceTextView: TextView? = null
-    private var itemTotalDescriptionTextView: WebView? = null
+    private var webview: WebView? = null
     private var itemQuantitiyTextView: TextView? = null
     private var itemMessagesImageView: ImageView? = null
     private var itemShareImageView: ImageView? = null
@@ -308,12 +308,12 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         itemNameTextView!!.text = modelClass.itemName
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            itemTotalDescriptionTextView!!.getSettings().setBuiltInZoomControls(true);
+            webview!!.getSettings().setBuiltInZoomControls(true);
 
-            itemTotalDescriptionTextView!!.getSettings().setJavaScriptEnabled(true);
-            itemTotalDescriptionTextView!!.getSettings().setLoadWithOverviewMode(true);
+            webview!!.getSettings().setJavaScriptEnabled(true);
+            webview!!.getSettings().setLoadWithOverviewMode(true);
 
-            itemTotalDescriptionTextView!!.loadDataWithBaseURL(null,modelClass.itemDescriptionText!!,"text/html", "utf-8",null)
+            webview!!.loadDataWithBaseURL(null,modelClass.itemDescriptionText!!,"text/html", "utf-8",null)
 
 
         } else {
@@ -347,7 +347,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         itemQuantitiyTextView = view.findViewById(R.id.productitemquantitiytextview)
 
-        itemTotalDescriptionTextView = view.findViewById(R.id.productpageDescriptionTextView)
+        webview = view.findViewById(R.id.productpageDescriptionTextView)
 
         itemMessagesImageView = view.findViewById(R.id.productPageMessagesImageView)
 

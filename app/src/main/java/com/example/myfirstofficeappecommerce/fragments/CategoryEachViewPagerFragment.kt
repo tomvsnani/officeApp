@@ -46,7 +46,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
         recyclerviewLastLayout = view.findViewById(R.id.loadingconstraint)
         progressbar = view.findViewById(R.id.eachcategoryfragprogressbar)
         progressbar!!.visibility = View.GONE
-        adapterr = CategoriesEachRecyclerAdapter(callback, this)
+        adapterr = CategoriesEachRecyclerAdapter( this)
         (recyclerView as RecyclerView).layoutManager =
             GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
         (recyclerView as RecyclerView).adapter = adapterr

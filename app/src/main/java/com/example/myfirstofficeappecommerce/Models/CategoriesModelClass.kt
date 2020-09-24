@@ -3,6 +3,7 @@ package com.example.myfirstofficeappecommerce.Models
 import androidx.recyclerview.widget.DiffUtil
 
 data class CategoriesModelClass(
+    var sliderType:String="",
     var itemCategory: String = "",
     var itemName: String = "",
     var itemDescriptionText: String? = "",
@@ -18,6 +19,7 @@ data class CategoriesModelClass(
     var cursor:String?="",
     var hasNextPage:Boolean=false,
     var categoryLink:String=""
+
 
     ) {
     companion object {

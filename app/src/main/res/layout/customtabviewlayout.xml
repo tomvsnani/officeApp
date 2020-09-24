@@ -5,7 +5,7 @@
     android:clickable="true"
     android:id="@+id/horizontalitemNameLinearLayout"
     android:focusable="true"
-    android:background="@drawable/rippleeffect"
+    android:background="@drawable/ripplecircle"
     android:orientation="vertical"
     android:padding="16dp">
 

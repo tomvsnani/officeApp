@@ -5,4 +5,6 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="red">#d32f2f</color>
     <color name="navdivcolor">#e0e0e0</color>
+    <color name="lightblack">#6b6b6b</color>
+    <color name="yellow">#FFB300</color>
 </resources>

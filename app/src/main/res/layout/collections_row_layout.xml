@@ -1,29 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/horizontalitemNameLinearLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     android:clickable="true"
-    android:id="@+id/horizontalitemNameLinearLayout"
     android:focusable="true"
-    android:background="@drawable/rippleeffect"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/HorizontalScrollItemNameImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:contentDescription="itemName"
-        android:src="@drawable/ic_baseline_search_24" />
+    <LinearLayout
+        android:id="@+id/lnear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripplecircle"
+        android:padding="8dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/HorizontalScrollItemNameImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:contentDescription="itemName"
+            android:padding="8dp"
+
+            android:src="@drawable/ic_baseline_search_24" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/HorizontalScrollItemNameTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:scrollHorizontally="true"
+        android:text="itemName t t t t thdcnjvg"
+        android:textColor="#6b6b6b"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lnear" />
 
-        android:text="itemName"
-        android:textColor="#6b6b6b" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

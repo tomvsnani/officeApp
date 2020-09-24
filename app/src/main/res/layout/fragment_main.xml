@@ -11,14 +11,14 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/main_app_bar_include_layout"
-        />
+        layout="@layout/main_app_bar_include_layout" />
 
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,12 +39,12 @@
                     android:padding="8dp">
 
                     <EditText
+                        android:id="@+id/mainfragmentsearchedittext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
                         android:hint="Search your items"
-                        android:id="@+id/mainfragmentsearchedittext"
                         android:textColor="#6b6b6b"
                         android:textColorHint="#6b6b6b" />
 
@@ -112,7 +112,6 @@
 
                     />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
 
             <LinearLayout
@@ -194,22 +193,81 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="8dp"
                     android:gravity="center"
+                    android:padding="8dp"
                     android:text="@string/enjoy_unlimited_free_delivery_and_perks_crafted_for_true_meat_lovers"
                     android:textColor="#000000" />
 
             </LinearLayout>
+
             <ImageView
+                android:id="@+id/animatedimageview"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-               android:layout_margin="16dp"
-                android:background="@color/red"
-                android:id="@+id/animatedimageview"/>
+                android:layout_margin="16dp"
+                android:background="@color/red" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_margin="16dp"
+                android:background="#e0e0e0"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Featured Products"
+                    android:textColor="#6b6b6b"
+                    android:textSize="18sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/featureditems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:nestedScrollingEnabled="true" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bennerWithDiffProductsCategoriesRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14dp"
+                android:background="#e0e0e0"
+                android:padding="2dp">
+
+                <include layout="@layout/timer_banner_vertical_layout"
+                    android:id="@+id/timerverticalinclude"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14dp"
+                android:background="#e0e0e0"
+                android:padding="2dp">
+
+                <include
+                    android:id="@+id/timerhorizontalinclude"
+                    layout="@layout/timer_banner_horizontal_layout" />
+            </LinearLayout>
+
+
+
         </LinearLayout>
-    
 
 
-</ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

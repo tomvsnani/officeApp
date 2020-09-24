@@ -1,9 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorPrimaryDark">#000</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">#212121</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
@@ -12,5 +12,7 @@
 
     <style name="NavigationView"  parent="Base.Theme.AppCompat">
         <item name="android:listDivider">@color/navdivcolor</item>
+        <item name="android:textColorPrimary">@color/lightblack</item>
+        <item name="android:textColorSecondary">@color/yellow</item>
     </style>
 </resources>
