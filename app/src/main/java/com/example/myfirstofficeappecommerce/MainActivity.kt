@@ -8,10 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
-import com.example.myfirstofficeappecommerce.fragments.MainFragment
-import com.example.myfirstofficeappecommerce.fragments.OrdersFragment
-import com.example.myfirstofficeappecommerce.fragments.WishListFragment
+import com.example.myfirstofficeappecommerce.fragments.*
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -92,7 +89,7 @@ class MainActivity : AppCompatActivity() {
             if (menuItem.groupId == 1) {
                 ApplicationClass.selectedTab = menuItem.itemId
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, CategoriesFragment(list, menuItem.itemId))
+                    .replace(R.id.container,CategoryEachViewPagerFragment(list?.get(menuItem.itemId),{}))
                     .addToBackStack(null)
 
                     .commit()

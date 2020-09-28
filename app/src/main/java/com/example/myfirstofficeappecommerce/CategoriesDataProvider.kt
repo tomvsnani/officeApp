@@ -17,13 +17,12 @@ import kotlin.collections.LinkedHashMap
 
 object CategoriesDataProvider {
     var graphh: GraphClient? = null
-    var mutablehashmap: MutableLiveData<LinkedHashMap<String, List<CategoriesModelClass>>> =
-        MutableLiveData()
+
     var mutableCollectionList: MutableLiveData<MutableList<CategoriesModelClass>> =
         MutableLiveData()
-    var hashMap: LinkedHashMap<String, List<CategoriesModelClass>> = LinkedHashMap()
 
-    var date1 = "2020:09:24 06:18:00"
+
+    var date1 = "2020:09:24 06:15:00"
     var date2 = "2020:09:25 08:18:00"
 
     var mutableproductList: MutableLiveData<List<CategoriesModelClass>>? = MutableLiveData()

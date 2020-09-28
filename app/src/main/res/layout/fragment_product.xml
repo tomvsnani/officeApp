@@ -234,7 +234,7 @@
                 android:background="#6b6b6b"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-            <TextView
+            <WebView
                 android:id="@+id/productpageDescriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

@@ -1,9 +1,9 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottomsheet"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
     android:background="#fff"
@@ -14,179 +14,23 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/view8">
 
-    <View
-        android:id="@+id/oo"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#6b6b6b"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/productItemNameTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Makeup Brush sett t t t  t  t t t tt t t t t t  t t t t  t t  t t "
-        android:textColor="#090909"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/productPageMessagesImageView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/productPagePriceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Price : 200"
-        android:textColor="#E62121"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/productItemNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/productItemNameTextView" />
-
     <ImageView
-        android:id="@+id/productPageMessagesImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_baseline_message_24"
-        app:layout_constraintEnd_toStartOf="@+id/productPageShareTImageView"
-        app:layout_constraintTop_toTopOf="@+id/productPageShareTImageView" />
-
-    <ImageView
-        android:id="@+id/productPageShareTImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:background="@drawable/ic_baseline_share_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="#6b6b6b"
-        app:layout_constraintTop_toBottomOf="@+id/productPagePriceTextView"
-        tools:layout_editor_absoluteX="-40dp" />
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/doctors" />
 
     <TextView
-        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="18dp"
-        android:layout_weight="1"
-        android:text="Quantity"
-        android:textColor="#292727"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        android:layout_gravity="right"
+        android:padding="2dp"
+        android:layout_margin="8dp"
+        android:text="this is a text"
+        android:textColor="@color/yellow"
 
-    <LinearLayout
-        android:id="@+id/productaddorremoveitemslinearlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2">
-
-        <ImageButton
-            android:id="@+id/productremoveitemsImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#fbe9e7"
-            android:padding="8dp"
-            android:src="@drawable/ic_baseline_remove_24"
-            android:textColor="@color/red"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/productitemquantitiytextview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:padding="8dp"
-            android:text="2"
-            android:textColor="#6b6b6b"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/productadditemsImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#fbe9e7"
-            android:padding="8dp"
-            android:src="@drawable/ic_baseline_add_24"
-            android:textColor="@color/red"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/productaddToCartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#c62828"
-        android:text="Add to CArt"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 
-    <View
-        android:id="@+id/view3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="#6b6b6b"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:id="@+id/htmldescriptionscrollview"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3">
-
-        <WebView
-            android:id="@+id/productpageDescriptionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-android:textColor="#6b6b6b"
-            android:text="description"
-
-            />
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

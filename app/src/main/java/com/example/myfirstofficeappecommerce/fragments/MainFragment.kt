@@ -1,17 +1,18 @@
 package com.example.myfirstofficeappecommerce.fragments
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextClock
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.contains
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,88 +22,85 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.CategoriesEachRecyclerAdapter
-import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
 import com.example.myfirstofficeappecommerce.Adapters.CollectionsAdapter
 import com.example.myfirstofficeappecommerce.Adapters.DifferentProductsCategoriesRecyclerViewAdapter
+import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.ModelClass
-import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentMainBinding
 import com.example.myfirstofficeappecommerce.databinding.TimerBannerHorizontalLayoutBinding
 import com.example.myfirstofficeappecommerce.databinding.TimerBannerVerticalLayoutBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.*
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
+import kotlinx.coroutines.*
 import kotlin.math.abs
 
 
 class MainFragment() : Fragment() {
-    var millies :Long?=null
-    var recyclerView: RecyclerView? = null;
-    var adapterr: CollectionsAdapter? = null;
+    private var millies: Long? = null
+    private var recyclerView: RecyclerView? = null;
+    private var adapterr: CollectionsAdapter? = null;
     var list: List<ModelClass>? = null
-    var viewPager2Banner1: ViewPager2? = null
+    private var viewPager2Banner1: ViewPager2? = null
     var tablayoutBanner1: TabLayout? = null;
     var categoryMap: LinkedHashMap<String, List<CategoriesModelClass>>? = null;
-    var searchEditText: EditText? = null
+    private var searchEditText: EditText? = null
     var isScrollForward: Boolean = true
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
-    var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
+    private var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
     var navigationView: NavigationView? = null
     var a: MutableList<CategoriesModelClass> = ArrayList()
     private var binding: FragmentMainBinding? = null
-    var viewpager2Banner2: ViewPager2? = null
+    private var viewpager2Banner2: ViewPager2? = null
     var tablayoutBanner2: TabLayout? = null
     var menu: Menu? = null
-    var featuredItemsRecycler: RecyclerView? = null
-    var typeOfFeaturedList: String = "List"
-    var featuredProductsAdapter: CategoriesEachRecyclerAdapter? = null
-    var bannerDiffProductsCatgoriesRecycler: RecyclerView? = null
-    var daysTextView1: TextView? = null
-    var daysTextView2: TextView? = null
-    var hoursTextView1: TextView? = null
-    var hoursTextView2: TextView? = null
-    var minutesTextView1: TextView? = null
-    var minutesTextView2: TextView? = null
-    var secondsTextView1: TextView? = null
-    var secondsTextView2: TextView? = null
+    private var featuredItemsRecycler: RecyclerView? = null
+    private var typeOfFeaturedList: String = "Grid"
+    private var featuredProductsAdapter: CategoriesEachRecyclerAdapter? = null
+    private var bannerDiffProductsCatgoriesRecycler: RecyclerView? = null
+    private var daysTextView1: TextView? = null
+    private var daysTextView2: TextView? = null
+    private var hoursTextView1: TextView? = null
+    private var hoursTextView2: TextView? = null
+    private var minutesTextView1: TextView? = null
+    private var minutesTextView2: TextView? = null
+    private var secondsTextView1: TextView? = null
+    private var secondsTextView2: TextView? = null
 
 
-    var daysTextView1H: TextView? = null
-    var daysTextView2H: TextView? = null
-    var hoursTextView1H: TextView? = null
-    var hoursTextView2H: TextView? = null
-    var minutesTextView1H: TextView? = null
-    var minutesTextView2H: TextView? = null
-    var secondsTextView1H: TextView? = null
-    var secondsTextView2H: TextView? = null
+    private var daysTextView1H: TextView? = null
+    private var daysTextView2H: TextView? = null
+    private var hoursTextView1H: TextView? = null
+    private var hoursTextView2H: TextView? = null
+    private var minutesTextView1H: TextView? = null
+    private var minutesTextView2H: TextView? = null
+    private var secondsTextView1H: TextView? = null
+    private var secondsTextView2H: TextView? = null
 
-    var daysConstant = 60 * 60 * 1000 * 24
+    private var daysConstant = 60 * 60 * 1000 * 24
 
-    val hourConstant = 60 * 60 * 1000
+    private val hourConstant = 60 * 60 * 1000
 
-    val minConst = 60 * 1000
+    private val minConst = 60 * 1000
 
     val secondConst = 1000
+    private var repeatJobhorizontal: Job? = null
+    private var repeatJobvertial: Job? = null
 
 
     private val SCROLL_TIMEOUT = 4000L
 
+    private var linearlayoutFlipFront: LinearLayout? = null
+    private var linearlayoutFlipBack: LinearLayout? = null
+    private var textViewFlipFront: TextView? = null
+    private var textViewFlipBack: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(context)
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
-        millies=CategoriesDataProvider.getMillies()
+        millies = CategoriesDataProvider.getMillies()
 
         super.onCreate(savedInstanceState)
     }
@@ -114,6 +112,10 @@ class MainFragment() : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
         binding = FragmentMainBinding.bind(view)
+        linearlayoutFlipFront = binding!!.flipinclude.cardflipfront
+        textViewFlipFront = binding!!.flipinclude.textfront
+        linearlayoutFlipBack = binding!!.flipinclude.cardflipback
+        textViewFlipBack = binding!!.flipinclude.textback
         (activity as MainActivity).unlockDrawer()
 
         setHasOptionsMenu(true)
@@ -131,11 +133,6 @@ class MainFragment() : Fragment() {
 
         setUpFeaturedProducts()
 
-        setUpVerticalBannerTimer(view)
-
-
-        setUpHoriZontalTimer()
-
 
         bannerDiffProductsCatgoriesRecycler = binding!!.bennerWithDiffProductsCategoriesRecycler
         bannerDiffProductsCatgoriesRecycler!!.adapter =
@@ -146,6 +143,53 @@ class MainFragment() : Fragment() {
         featuredProductsAdapter!!.submitList(CategoriesDataProvider.getCategoryData() as MutableList<CategoriesModelClass>)
 
         return view
+    }
+
+    override fun onResume() {
+
+        setUpVerticalBannerTimer()
+
+        setUpHoriZontalTimer()
+        super.onResume()
+    }
+
+
+    override fun onStart() {
+
+        setFlipAnimation()
+
+        super.onStart()
+    }
+
+    private fun setFlipAnimation() {
+        val scale = resources.displayMetrics.density
+        linearlayoutFlipFront!!.cameraDistance = 9000 * scale
+        linearlayoutFlipBack!!.cameraDistance = 9000 * scale
+
+        linearlayoutFlipFront!!.setOnClickListener {
+            ObjectAnimator.ofFloat(linearlayoutFlipFront, "rotationY", 0f, 180f).apply {
+                duration = 1500
+                interpolator = AccelerateDecelerateInterpolator()
+            }.start()
+
+            ObjectAnimator.ofFloat(linearlayoutFlipBack, "rotationY", -180f, 0f).apply {
+                duration = 1500
+                interpolator = AccelerateDecelerateInterpolator()
+            }.start()
+
+            ObjectAnimator.ofFloat(linearlayoutFlipFront, "alpha", 1f, 0f).apply {
+                duration = 1
+                interpolator = AccelerateDecelerateInterpolator()
+                startDelay = 700
+            }.start()
+
+            ObjectAnimator.ofFloat(linearlayoutFlipBack, "alpha", 0f, 1f).apply {
+                duration = 1
+                interpolator = AccelerateDecelerateInterpolator()
+                startDelay = 700
+            }.start()
+
+        }
     }
 
 
@@ -163,9 +207,9 @@ class MainFragment() : Fragment() {
         horizontalTimer(millies!!)
     }
 
-    private fun setUpVerticalBannerTimer(view: View) {
+    private fun setUpVerticalBannerTimer() {
         var verticaltimerbinding =
-            TimerBannerVerticalLayoutBinding.bind(view.findViewById(R.id.timerverticalinclude))
+            TimerBannerVerticalLayoutBinding.bind(binding!!.timerverticalinclude.root)
         hoursTextView1 = verticaltimerbinding.hoursTextView1
         hoursTextView2 = verticaltimerbinding.hoursTextView2
         daysTextView1 = verticaltimerbinding.daysTextView1
@@ -180,82 +224,91 @@ class MainFragment() : Fragment() {
         verticaltimer(millies!!)
     }
 
-    fun horizontalTimer(millies: Long) {
-        var repeatJob = CoroutineScope(Dispatchers.Main).launch {
+    private fun horizontalTimer(millies: Long) {
+        repeatJobhorizontal = CoroutineScope(Dispatchers.Main).launch {
             repeat(1) {
+                if (isActive) {
 
-                var reducedTime = abs(millies - 1000)
+                    var reducedTime = abs(millies - 1000)
 
-                var tempreducuedTime = abs(millies - 1000)
+                    var tempreducuedTime = abs(millies - 1000)
 
-                var days = reducedTime / daysConstant
+                    var days = reducedTime / daysConstant
 
-                reducedTime -= days * daysConstant
+                    reducedTime -= days * daysConstant
 
-                var hours = reducedTime / (hourConstant)
+                    var hours = reducedTime / (hourConstant)
 
-                reducedTime -= (hours * (hourConstant))
+                    reducedTime -= (hours * (hourConstant))
 
-                val minutes = (reducedTime) / (minConst)
-                reducedTime -= (minutes * minConst)
-                val seconds = (reducedTime) / 1000
+                    val minutes = (reducedTime) / (minConst)
+                    reducedTime -= (minutes * minConst)
+                    val seconds = (reducedTime) / 1000
 
-                daysTextView1H!!.text = if (days < 10) 0.toString() else (days / 10).toString()
+                    daysTextView1H!!.text = if (days < 10) 0.toString() else (days / 10).toString()
 
-                daysTextView2H!!.text = (days % 10).toString()
+                    daysTextView2H!!.text = (days % 10).toString()
 
-                hoursTextView1H!!.text = if (hours < 10) 0.toString() else (hours / 10).toString()
-                hoursTextView2H!!.text = (hours % 10).toString()
-                minutesTextView1H!!.text =
-                    if (minutes < 10) 0.toString() else (minutes / 10).toString()
-                minutesTextView2H!!.text = (minutes % 10).toString()
-                secondsTextView1H!!.text =
-                    if (seconds < 10) 0.toString() else (seconds / 10).toString()
-                secondsTextView2H!!.text = (seconds % 10).toString()
-                delay(1000)
-                horizontalTimer(tempreducuedTime)
-
+                    hoursTextView1H!!.text =
+                        if (hours < 10) 0.toString() else (hours / 10).toString()
+                    hoursTextView2H!!.text = (hours % 10).toString()
+                    minutesTextView1H!!.text =
+                        if (minutes < 10) 0.toString() else (minutes / 10).toString()
+                    minutesTextView2H!!.text = (minutes % 10).toString()
+                    secondsTextView1H!!.text =
+                        if (seconds < 10) 0.toString() else (seconds / 10).toString()
+                    secondsTextView2H!!.text = (seconds % 10).toString()
+                    delay(1000)
+                    horizontalTimer(tempreducuedTime)
+                }
             }
 
         }
     }
 
+    override fun onStop() {
+        repeatJobhorizontal!!.cancel()
+        repeatJobvertial!!.cancel()
+        super.onStop()
+    }
+
     private fun verticaltimer(millies: Long) {
-        var repeatJob = CoroutineScope(Dispatchers.Main).launch {
+        repeatJobvertial = CoroutineScope(Dispatchers.Main).launch {
             repeat(1) {
+                if (isActive) {
+                    var reducedTime = abs(millies - 1000)
 
-                var reducedTime = abs(millies - 1000)
+                    var tempreducuedTime = abs(millies - 1000)
 
-                var tempreducuedTime = abs(millies - 1000)
+                    var days = reducedTime / daysConstant
 
-                var days = reducedTime / daysConstant
+                    reducedTime -= days * daysConstant
 
-                reducedTime -= days * daysConstant
+                    var hours = reducedTime / (hourConstant)
 
-                var hours = reducedTime / (hourConstant)
+                    reducedTime -= (hours * (hourConstant))
 
-                reducedTime -= (hours * (hourConstant))
+                    val minutes = (reducedTime) / (minConst)
+                    reducedTime -= (minutes * minConst)
+                    val seconds = (reducedTime) / 1000
 
-                val minutes = (reducedTime) / (minConst)
-                reducedTime -= (minutes * minConst)
-                val seconds = (reducedTime) / 1000
+                    daysTextView1!!.text = if (days < 10) 0.toString() else (days / 10).toString()
 
-                daysTextView1!!.text = if (days < 10) 0.toString() else (days / 10).toString()
+                    daysTextView2!!.text = (days % 10).toString()
 
-                daysTextView2!!.text = (days % 10).toString()
+                    hoursTextView1!!.text =
+                        if (hours < 10) 0.toString() else (hours / 10).toString()
+                    hoursTextView2!!.text = (hours % 10).toString()
+                    minutesTextView1!!.text =
+                        if (minutes < 10) 0.toString() else (minutes / 10).toString()
+                    minutesTextView2!!.text = (minutes % 10).toString()
+                    secondsTextView1!!.text =
+                        if (seconds < 10) 0.toString() else (seconds / 10).toString()
+                    secondsTextView2!!.text = (seconds % 10).toString()
+                    delay(1000)
+                    verticaltimer(tempreducuedTime)
 
-                hoursTextView1!!.text = if (hours < 10) 0.toString() else (hours / 10).toString()
-                hoursTextView2!!.text = (hours % 10).toString()
-                minutesTextView1!!.text =
-                    if (minutes < 10) 0.toString() else (minutes / 10).toString()
-                minutesTextView2!!.text = (minutes % 10).toString()
-                secondsTextView1!!.text =
-                    if (seconds < 10) 0.toString() else (seconds / 10).toString()
-                secondsTextView2!!.text = (seconds % 10).toString()
-                delay(1000)
-                verticaltimer(tempreducuedTime)
-
-
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.webkit.WebView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
@@ -58,8 +59,9 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
         )
         (activity as MainActivity).lockDrawer()
         totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
-        toolbar = view.findViewById(R.id.cartToolbar)
         setHasOptionsMenu(true)
+        toolbar = view.findViewById(R.id.cartToolbar)
+
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
@@ -138,7 +140,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 //                    )
 //                )
 //                .addToBackStack(null).commit()
-            var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = null
+            var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = ArrayList()
             for (i in ApplicationClass.selectedVariantList!!) {
                 checkoutLineItemInput?.add(CheckoutLineItemInput(i.quantityOfItem, ID(i.id)))
             }
@@ -176,56 +178,11 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                         val checkoutId = response.data()!!.checkoutCreate.checkout.id.toString()
                         val checkoutWebUrl = response.data()!!.checkoutCreate.checkout.webUrl
 
-                        val queryy = query { rootQuery: QueryRootQuery ->
-                            rootQuery
-                                .node(
-                                    ID(checkoutId)
-                                ) { nodeQuery: NodeQuery ->
-                                    nodeQuery
-                                        .onCheckout { checkoutQuery: CheckoutQuery ->
-                                            checkoutQuery
-                                                .availableShippingRates { availableShippingRatesQuery: AvailableShippingRatesQuery ->
-                                                    availableShippingRatesQuery
-                                                        .ready()
-                                                        .shippingRates { shippingRateQuery: ShippingRateQuery ->
-                                                            shippingRateQuery
-                                                                .handle()
-                                                                .price()
-                                                                .title()
-                                                        }
-                                                }
-                                        }
-                                }
-                        }
-
-
-                        CategoriesDataProvider.graphh!!.queryGraph(queryy).enqueue(
-                            object : GraphCall.Callback<QueryRoot> {
-                                override fun onResponse(response: GraphResponse<QueryRoot>) {
-                                    val checkout = response.data()!!.node as Checkout
-                                    val shippingRates =
-                                        checkout.availableShippingRates.shippingRates
-                                }
-
-                                override fun onFailure(error: GraphError) {}
-                            },
-                            null,
-                            RetryHandler.exponentialBackoff(800, TimeUnit.MILLISECONDS, 1.2f)
-                                .build()
-
-                        )
-
-//                        var checkout = Checkout(ID(checkoutId))
-//                        Log.d("checkout",checkout.webUrl)
-
-
-
-
+                   activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,WebViewFragment(checkoutWebUrl,"checkout"))
+                       .addToBackStack(null).commit()
                         Log.d("checkoutsuccess", "$checkoutId $checkoutWebUrl")
                     }
                 }
-
-
                 override fun onFailure(error: GraphError) {
                     Log.d("checkouterror", error.message.toString())
                 }

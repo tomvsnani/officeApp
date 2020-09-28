@@ -41,8 +41,7 @@ class CategoriesFragment(
         this.tabType = tabType
     }
 
-    var viewPager2: ViewPager2? = null
-    var tablayout: TabLayout? = null;
+
 
     var toolbar: Toolbar? = null
     var selectedItemsList: MutableList<CategoriesModelClass> =
@@ -70,49 +69,7 @@ class CategoriesFragment(
         checkoutButton!!.setOnClickListener {
             openCartFragment()
         }
-        (viewPager2 as ViewPager2).adapter =
-            CategoryViewPagerAdapter(
-                childFragmentManager, list!!,lifecycle
-            ) {
 
-                selectedItemsList =
-                    ApplicationClass.selectedItemsList as MutableList<CategoriesModelClass>
-                showOrHideItemCountIndicator()
-            }
-
-
-        tablayout = view.findViewById(R.id.tablayoutincategory)
-
-
-        TabLayoutMediator(
-            (tablayout as TabLayout),
-            (viewPager2 as ViewPager2)
-        ) { tab: TabLayout.Tab, i: Int ->
-
-            tab.text = list!![i].itemName
-            tab.tag = list!![i].id
-
-        }.attach()
-        viewPager2!!.currentItem = ApplicationClass.selectedTab?:tabType!!
-        ApplicationClass.selectedTab= (tablayout!!.selectedTabPosition)
-
-        Log.d("tabnameee", tablayout!!.getTabAt(tablayout!!.selectedTabPosition)!!.tag.toString())
-
-        tablayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                ApplicationClass.selectedTab = tab?.position
-                Log.d("tabname", tab!!.text.toString())
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-        })
 
         return view
     }
@@ -131,7 +88,6 @@ class CategoriesFragment(
 
         ((activity as MainActivity).drawerLayout as DrawerLayout).addDrawerListener((activity as MainActivity).actionBarToggle!!)
         ((activity as MainActivity).actionBarToggle as ActionBarDrawerToggle).syncState()
-        viewPager2 = view.findViewById(R.id.viewpagerincategory)
         selectedItemDisplayCardView = view.findViewById(R.id.itemsselectedindicatorcardview)
         itemSelectedCountTextView = view.findViewById(R.id.numberOfItemSelectedTextView)
         checkoutButton = view.findViewById(R.id.checkoutButton)

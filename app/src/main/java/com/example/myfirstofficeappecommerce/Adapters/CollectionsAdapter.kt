@@ -92,7 +92,7 @@ class CollectionsAdapter(
                     Constants.CATEGORY_CUSTOM -> {
                         if (!modelClass.categoryLink.isBlank())
                             mainActivity.activity!!.supportFragmentManager.beginTransaction()
-                                .replace(R.id.container, WebViewFragment(modelClass.categoryLink))
+                                .replace(R.id.container, WebViewFragment(modelClass.categoryLink,""))
                                 .addToBackStack(null)
                                 .commit()
                     }

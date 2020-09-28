@@ -13,5 +13,6 @@
         android:orderInCategory="1"
         android:title="Cart"
         app:actionLayout="@layout/cart_menu_custom_menu"
+
         app:showAsAction="always" />
 </menu>

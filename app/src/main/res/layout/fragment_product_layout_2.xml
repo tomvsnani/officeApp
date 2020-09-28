@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#fff"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -74,11 +76,11 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <View
+            android:id="@+id/view8"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
             android:background="#6b6b6b"
-            android:id="@+id/view8"
             app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -98,5 +100,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/productcolorRecyclerView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <include layout="@layout/test_resouce_file"/>
+
+    <include
+        android:id="@+id/bottomsheeet"
+        layout="@layout/bottomsheet_include" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

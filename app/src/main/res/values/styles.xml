@@ -13,6 +13,6 @@
     <style name="NavigationView"  parent="Base.Theme.AppCompat">
         <item name="android:listDivider">@color/navdivcolor</item>
         <item name="android:textColorPrimary">@color/lightblack</item>
-        <item name="android:textColorSecondary">@color/yellow</item>
+        <item name="android:textColorSecondary">@color/red</item>
     </style>
 </resources>

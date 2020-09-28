@@ -26,6 +26,7 @@
         android:layout_marginLeft="1dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="4dp"
+        android:textColor="#fff"
         android:visibility="gone"
         android:background="@drawable/circlewrapdrawable"
         android:gravity="center"

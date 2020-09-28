@@ -247,8 +247,9 @@
                 android:background="#e0e0e0"
                 android:padding="2dp">
 
-                <include layout="@layout/timer_banner_vertical_layout"
-                    android:id="@+id/timerverticalinclude"/>
+                <include
+                    android:id="@+id/timerverticalinclude"
+                    layout="@layout/timer_banner_vertical_layout" />
             </LinearLayout>
 
             <LinearLayout
@@ -263,10 +264,10 @@
                     layout="@layout/timer_banner_horizontal_layout" />
             </LinearLayout>
 
-
+            <include layout="@layout/flip_layout_include"
+                android:id="@+id/flipinclude"/>
 
         </LinearLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 
