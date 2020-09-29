@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -26,6 +28,8 @@ import com.example.myfirstofficeappecommerce.Adapters.ProductColorRecyclerViewAd
 import com.example.myfirstofficeappecommerce.Adapters.ProductSizeRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
+import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModel
+import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactory
 import com.example.myfirstofficeappecommerce.databinding.FragmentProductLayout2Binding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
@@ -75,12 +79,24 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     ): View? {
 
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
+        initializeViews(view)
+
+        var viewmodel=ViewModelProvider(this,CategoriesViewModelFactory(modelClass.id)).get(CategoriesViewModel::class.java)
+        viewmodel.getVariantData()
+        viewmodel.variantmutableLiveData!!.observe(this, Observer {
+          if(it.size>0){
+              variantList=it.toList()
+              getSelectedVariant()
+              assignDataToViews()
+              submitDataToSizeColorAdapters()
+          }
+        })
 
         binding = FragmentProductLayout2Binding.bind(view)
 
-        getSelectedVariant()
 
-        initializeViews(view)
+
+
 
         (activity as MainActivity).lockDrawer()
 
@@ -98,9 +114,9 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         setUpClickListeners()
 
-        assignDataToViews()
 
-        submitDataToSizeColorAdapters()
+
+
 
 
         return view
@@ -113,7 +129,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                     ?.copy()
 
         } else {
-            selectedVariant = modelClass.variantsList!![0].copy()
+            selectedVariant = variantList!![0].copy()
 
         }
     }

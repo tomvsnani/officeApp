@@ -169,19 +169,7 @@ class CategoriesEachRecyclerAdapter(
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
 
         var modelClass = currentList[position]
-        Log.d("finding", modelClass.itemName + " " + modelClass.quantityOfItem)
-//        if (modelClass.quantityOfItem > 0) {
-//            if (displayType != "grid") {
-//                holder.addToCart.visibility = View.GONE
-//                holder.addOrRemoveItemLinearLayout.visibility = View.VISIBLE
-//            }
-//            holder.quantityOfItemAddaedToCartTextView.text = modelClass.quantityOfItem.toString()
-//        } else {
-//            if (displayType != "grid") {
-//                holder.addToCart.visibility = View.VISIBLE
-//                holder.addOrRemoveItemLinearLayout.visibility = View.GONE
-//            }
-//        }
+
         holder.itemDescription.text = modelClass.itemDescriptionText
         holder.realmrp.text =
             " MRP : ${fragment.getString(R.string.Rs)} ${

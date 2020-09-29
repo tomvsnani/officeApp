@@ -28,7 +28,6 @@ import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactor
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.Utils
-import kotlinx.android.synthetic.main.fragment_cart.view.*
 import kotlinx.coroutines.*
 
 
@@ -86,12 +85,12 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
         recyclerView!!.itemAnimator = null
 
 
-        val categoriesModelClass: CategoriesViewModel =
+        val categoriesDataProvider: CategoriesViewModel =
             ViewModelProvider(this, CategoriesViewModelFactory(get!!.id))
                 .get(CategoriesViewModel::class.java)
         progressbar!!.visibility = View.VISIBLE
-        categoriesModelClass.getData()
-        categoriesModelClass.mutableLiveData?.observe(viewLifecycleOwner, Observer {
+        categoriesDataProvider.getProductDataBasedOnColletionId()
+        categoriesDataProvider.mutableLiveData?.observe(viewLifecycleOwner, Observer {
 
             adapterr!!.submitList(it)
             CoroutineScope(Dispatchers.Main).launch {
@@ -108,7 +107,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
                     adapterr!!.currentList[adapterr!!.itemCount - 1].hasNextPage
                 ) {
                     recyclerviewLastLayout!!.visibility = View.VISIBLE
-                    categoriesModelClass.loadmore(adapterr!!.currentList[adapterr!!.currentList.size - 1])
+                    categoriesDataProvider.LoadMoreDataBasedOnCollectionId(adapterr!!.currentList[adapterr!!.currentList.size - 1])
                 }
 
             }

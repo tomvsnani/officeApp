@@ -12,9 +12,13 @@ import com.shopify.graphql.support.ID
 
 class CategoriesViewModel(var id: String) : ViewModel() {
     var mutableLiveData: MutableLiveData<MutableList<CategoriesModelClass>>? = MutableLiveData()
-    var productList: MutableList<CategoriesModelClass> = ArrayList()
+    var productListBasedOnCollectionId: MutableList<CategoriesModelClass> = ArrayList()
 
-    fun getData() {
+    var variantmutableLiveData: MutableLiveData<MutableList<VariantsModelClass>>? =
+        MutableLiveData()
+    var variantListBasedOnProductId: MutableList<VariantsModelClass> = ArrayList()
+
+    fun getProductDataBasedOnColletionId() {
         val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
             rootQuery.node(ID(id)) { _queryBuilderr ->
                 _queryBuilderr.onCollection { _queryBuilder ->
@@ -49,7 +53,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
                                             .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
                                                 args!!.first(
-                                                    100
+                                                    1
                                                 )
                                             },
                                                 { _queryBuilder ->
@@ -79,7 +83,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
     }
 
 
-    fun loadmore(categoriesmodel: CategoriesModelClass) {
+    fun LoadMoreDataBasedOnCollectionId(categoriesmodel: CategoriesModelClass) {
 
         Log.d("loadmore", "called")
         val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
@@ -117,7 +121,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
                                             .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
                                                 args!!.first(
-                                                    100
+                                                    1
                                                 )
                                             },
                                                 { _queryBuilder ->
@@ -188,6 +192,8 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                         )
                     }
 
+
+
                     var productmodelclass = CategoriesModelClass(
                         id = productEdge.node.id.toString(),
                         itemName = productEdge.node.title,
@@ -201,11 +207,11 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                     )
 
                     Log.d("istrue", productmodelclass.hasNextPage.toString())
-                    productList.add(productmodelclass)
+                    productListBasedOnCollectionId.add(productmodelclass)
                 }
 
 
-                mutableLiveData!!.postValue(productList.distinctBy { it.id } as MutableList<CategoriesModelClass>)
+                mutableLiveData!!.postValue(productListBasedOnCollectionId.distinctBy { it.id } as MutableList<CategoriesModelClass>)
 
             }
 
@@ -214,11 +220,70 @@ class CategoriesViewModel(var id: String) : ViewModel() {
             }
         })
 
-//        } else {
-//            Log.d("indata", mutableLiveData.toString())
-//
-//            mutableLiveData!!.postValue(productList)
-//        }
+
+    }
+
+
+    fun getVariantData() {
+        var query = Storefront.query { _queryBuilder ->
+            _queryBuilder.node(ID(id)) { _queryBuilder ->
+                _queryBuilder.onProduct {
+                    it.variants({ args: Storefront.ProductQuery.VariantsArguments? ->
+                        args!!.first(
+                            100
+                        )
+                    }, { _queryBuilder ->
+                        _queryBuilder.edges { _queryBuilder ->
+                            _queryBuilder.node { _queryBuilder ->
+                                _queryBuilder.price().price().image { _queryBuilder ->
+                                    _queryBuilder.src().id()
+                                }.weight().title().selectedOptions { _queryBuilder ->
+                                    _queryBuilder.name().value()
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        fetchVariantDataQuery(query)
+    }
+
+    private fun fetchVariantDataQuery(query: Storefront.QueryRootQuery?) {
+        var calldata: QueryGraphCall? = null
+        //  if (productList.isEmpty()) {
+
+        calldata = CategoriesDataProvider.graphh!!.queryGraph(query)
+        calldata!!.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
+            override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
+                var storefront: Storefront.Product =
+                    response.data()!!.node as Storefront.Product
+                for (variantEdge in storefront.variants.edges) {
+                    var sizeIndex = 2;
+                    if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name == "Size")
+                        sizeIndex = 1
+                    variantListBasedOnProductId.add(
+                        VariantsModelClass(
+                            variantEdge.node.id.toString(),
+                            id,
+                            if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
+                            if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
+                            variantEdge.node.price.toFloat(),
+                            name = variantEdge.node.title
+
+
+                        )
+                    )
+                }
+                variantmutableLiveData!!.postValue(variantListBasedOnProductId)
+            }
+
+            override fun onFailure(error: GraphError) {
+
+            }
+        })
+
+
     }
 
 
