@@ -130,19 +130,11 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
         )
 
         proceedTextViewCart!!.setOnClickListener {
-//            activity!!.supportFragmentManager.beginTransaction()
-//                .replace(
-//                    R.id.container, OrdersFragment(
-//                        ApplicationClass.selectedItemsList!!.map {
-//                            it.isOrdered = true
-//                            return@map it
-//                        }
-//                    )
-//                )
-//                .addToBackStack(null).commit()
+
             var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = ArrayList()
             for (i in ApplicationClass.selectedVariantList!!) {
                 checkoutLineItemInput?.add(CheckoutLineItemInput(i.quantityOfItem, ID(i.id)))
+                i.isOrdered=true
             }
             val input = CheckoutCreateInput()
                 .setLineItemsInput(

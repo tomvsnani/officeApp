@@ -56,7 +56,7 @@ class MainFragment() : Fragment() {
     var tablayoutBanner2: TabLayout? = null
     var menu: Menu? = null
     private var featuredItemsRecycler: RecyclerView? = null
-    private var typeOfFeaturedList: String = "Grid"
+    private var typeOfFeaturedList: String = "Horizontal"
     private var featuredProductsAdapter: CategoriesEachRecyclerAdapter? = null
     private var bannerDiffProductsCatgoriesRecycler: RecyclerView? = null
     private var daysTextView1: TextView? = null

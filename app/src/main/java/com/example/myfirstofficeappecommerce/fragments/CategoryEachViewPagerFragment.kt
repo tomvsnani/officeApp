@@ -131,6 +131,12 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
                 (activity as MainActivity).drawerLayout?.openDrawer(GravityCompat.START)
             }
             return true
+
+
+        }
+        if(item.itemId==R.id.search_menu){
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,SearchFragment()).addToBackStack(null).commit()
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

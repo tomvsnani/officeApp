@@ -1,7 +1,6 @@
 package com.example.myfirstofficeappecommerce
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -71,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 return@setNavigationItemSelectedListener true
             }
 
-            if (menuItem.itemId == R.id.wishlist) {
+            if (menuItem.itemId == R.id.wishlistmenu) {
 
 
                 supportFragmentManager
@@ -86,10 +85,19 @@ class MainActivity : AppCompatActivity() {
 
                 return@setNavigationItemSelectedListener true
             }
+
+            if (menuItem.itemId == R.id.recentlistmenu) {
+
+            }
+
+
             if (menuItem.groupId == 1) {
                 ApplicationClass.selectedTab = menuItem.itemId
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container,CategoryEachViewPagerFragment(list?.get(menuItem.itemId),{}))
+                    .replace(
+                        R.id.container,
+                        CategoryEachViewPagerFragment(list?.get(menuItem.itemId), {})
+                    )
                     .addToBackStack(null)
 
                     .commit()

@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -94,7 +95,7 @@ class searchfragmentRecyclerAdapter(
 
         var textView: TextView? = null
 
-        var linearLayout: LinearLayout? = null
+        var linearLayout: ConstraintLayout? = null
 
         var searchFragImageView: ImageView? = null
 

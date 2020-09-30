@@ -16,8 +16,12 @@
                     android:title="@string/my_orders" />
 
                 <item
-                    android:id="@+id/wishlist"
+                    android:id="@+id/wishlistmenu"
                     android:title="@string/wish_list" />
+
+                <item
+                    android:id="@+id/recentlistmenu"
+                    android:title="@string/recent_items" />
             </menu>
         </item>
     </group>
