@@ -18,7 +18,8 @@ data class CategoriesModelClass(
     var variantsList: MutableList<VariantsModelClass>? = ArrayList(),
     var cursor:String?="",
     var hasNextPage:Boolean=false,
-    var categoryLink:String=""
+    var categoryLink:String="",
+    var isRecent:Boolean=false
 
 
     ) {

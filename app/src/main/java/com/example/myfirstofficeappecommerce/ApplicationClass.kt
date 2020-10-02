@@ -14,6 +14,7 @@ class ApplicationClass : Application() {
         var selectedItemsList: List<CategoriesModelClass>? = ArrayList()
         var selectedTab: Int? = null
         var selectedVariantList: MutableList<VariantsModelClass>? = ArrayList()
+        var recentsList:MutableList<VariantsModelClass>?=ArrayList()
          var mydb: MyDatabase? = null
     }
 

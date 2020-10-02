@@ -15,4 +15,9 @@
         <item name="android:textColorPrimary">@color/lightblack</item>
         <item name="android:textColorSecondary">@color/red</item>
     </style>
+
+    <style name="textInputEditTextStyle" >
+        <item name="colorAccent">@color/lightblack</item>
+
+    </style>
 </resources>

@@ -138,6 +138,15 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
             activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,SearchFragment()).addToBackStack(null).commit()
             return true
         }
+
+       if( item.itemId == R.id.profilemenu ) {
+           activity!!.supportFragmentManager.beginTransaction().replace(
+               R.id.container,
+               ProfileFragment()
+           ).addToBackStack(null)
+               .commit()
+
+       }
         return super.onOptionsItemSelected(item)
     }
 

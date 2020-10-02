@@ -22,4 +22,5 @@ This cosmetic case is perfect for keeping all of your favorite makeup and toilet
     <string name="my_orders">My Orders</string>
     <string name="fav_items_added_toast">Added to favourite items</string>
     <string name="recent_items">Recent Items</string>
+    <string name="loginErrorMessgae">\"Please Enter username or password \"</string>
 </resources>

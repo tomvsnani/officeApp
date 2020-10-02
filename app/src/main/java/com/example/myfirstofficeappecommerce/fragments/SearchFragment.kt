@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,8 @@ import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModel
+import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactory
 import com.shopify.buy3.*
 
 
@@ -57,6 +60,7 @@ open class SearchFragment() : Fragment() {
 
             Constants.SEARCH_FRAG_SCROLL_TYPE
         )
+
         CategoriesDataProvider.mutableCollectionList.observeForever {
 
             recyclr!!.layoutManager = GridLayoutManager(context, 4, RecyclerView.VERTICAL, false)
@@ -161,6 +165,14 @@ open class SearchFragment() : Fragment() {
             showSoftwareKeyboard(true)
 
         }
+        if( item.itemId == R.id.profilemenu ) {
+            activity!!.supportFragmentManager.beginTransaction().replace(
+                R.id.container,
+                ProfileFragment()
+            ).addToBackStack(null)
+                .commit()
+
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -245,7 +257,7 @@ open class SearchFragment() : Fragment() {
                         _queryBuilder.node { _queryBuilder ->
                             _queryBuilder.title()
 
-                                .description()
+                                .descriptionHtml()
 
                                 .images({ args: Storefront.ProductQuery.ImagesArguments? ->
                                     args!!.first(
@@ -262,7 +274,7 @@ open class SearchFragment() : Fragment() {
 
                                 .variants({ args: Storefront.ProductQuery.VariantsArguments? ->
                                     args!!.first(
-                                        10
+                                        1
                                     )
                                 },
                                     { _queryBuilder ->
@@ -284,6 +296,14 @@ open class SearchFragment() : Fragment() {
                 })
             }
         }
+    }
+
+    override fun onDestroy() {
+        val inputManager =
+            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        searchEditText!!.clearFocus()
+        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        super.onDestroy()
     }
 
 }

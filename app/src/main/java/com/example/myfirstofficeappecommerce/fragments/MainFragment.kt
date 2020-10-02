@@ -1,11 +1,13 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -102,6 +104,8 @@ class MainFragment() : Fragment() {
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
         millies = CategoriesDataProvider.getMillies()
 
+
+
         super.onCreate(savedInstanceState)
     }
 
@@ -150,16 +154,27 @@ class MainFragment() : Fragment() {
         setUpVerticalBannerTimer()
 
         setUpHoriZontalTimer()
+
+        try {
+            val inputManager =
+                activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            searchEditText!!.clearFocus()
+            inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        } catch (e: Exception) {
+        }
+
         super.onResume()
     }
 
 
     override fun onStart() {
 
+
         setFlipAnimation()
 
         super.onStart()
     }
+
 
     private fun setFlipAnimation() {
         val scale = resources.displayMetrics.density
@@ -514,6 +529,15 @@ class MainFragment() : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId == R.id.profilemenu) {
+            activity!!.supportFragmentManager.beginTransaction().replace(
+                R.id.container,
+                ProfileFragment()
+            ).addToBackStack(null)
+                .commit()
+
+        }
         if (item.itemId == android.R.id.home) {
             if ((activity as MainActivity).drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
                 (activity as MainActivity).drawerLayout?.closeDrawer(GravityCompat.START)

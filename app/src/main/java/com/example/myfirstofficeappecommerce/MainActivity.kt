@@ -57,65 +57,80 @@ class MainActivity : AppCompatActivity() {
                 drawerLayout?.openDrawer(GravityCompat.START)
             }
 
-            if (menuItem.itemId == R.id.ordersmenu) {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(
+            when {
+                menuItem.itemId == R.id.ordersmenu -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(
+                            R.id.container,
+                            OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
+                                it.isOrdered
+                            })
+                        ).addToBackStack(null)
+                        .commit()
+                    return@setNavigationItemSelectedListener true
+                }
+                menuItem.itemId == R.id.recentmenu -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(
+                            R.id.container,
+                            RecentsFragment(ApplicationClass.recentsList!!.filter {
+                                it.isRecent
+                            })
+                        ).addToBackStack(null)
+                        .commit()
+                    return@setNavigationItemSelectedListener true
+
+
+                }
+                menuItem.itemId == R.id.wishlistmenu -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(
+                            R.id.container,
+                            WishListFragment()
+                        ).addToBackStack(null)
+                        .commit()
+
+
+
+                    return@setNavigationItemSelectedListener true
+                }
+                menuItem.groupId == 1 -> {
+                    ApplicationClass.selectedTab = menuItem.itemId
+                    supportFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.container,
+                            CategoryEachViewPagerFragment(list?.get(menuItem.itemId), {})
+                        )
+                        .addToBackStack(null)
+
+                        .commit()
+
+                    return@setNavigationItemSelectedListener true
+                }
+                menuItem.itemId == R.id.homemenu -> {
+
+                    supportFragmentManager.beginTransaction().replace(
                         R.id.container,
-                        OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
-                            it.isOrdered
-                        })
-                    ).addToBackStack(null)
-                    .commit()
-                return@setNavigationItemSelectedListener true
-            }
-
-            if (menuItem.itemId == R.id.wishlistmenu) {
-
-
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(
-                        R.id.container,
-                        WishListFragment()
-                    ).addToBackStack(null)
-                    .commit()
-
-
-
-                return@setNavigationItemSelectedListener true
-            }
-
-            if (menuItem.itemId == R.id.recentlistmenu) {
-
-            }
-
-
-            if (menuItem.groupId == 1) {
-                ApplicationClass.selectedTab = menuItem.itemId
-                supportFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.container,
-                        CategoryEachViewPagerFragment(list?.get(menuItem.itemId), {})
+                        MainFragment()
                     )
-                    .addToBackStack(null)
+                        .commit()
+                    return@setNavigationItemSelectedListener true
 
-                    .commit()
+                }
+                menuItem.itemId == R.id.profilemenu -> {
+                    supportFragmentManager.beginTransaction().replace(
+                        R.id.container,
+                        ProfileFragment()
+                    ).addToBackStack(null)
+                        .commit()
 
-                return@setNavigationItemSelectedListener true
+                    return@setNavigationItemSelectedListener true
+                }
+                else -> return@setNavigationItemSelectedListener true
             }
-
-            if (menuItem.itemId == R.id.homemenu) {
-
-                supportFragmentManager.beginTransaction().replace(
-                    R.id.container,
-                    MainFragment()
-                )
-                    .commit()
-                return@setNavigationItemSelectedListener true
-
-            }
-            return@setNavigationItemSelectedListener true
 
 
         }

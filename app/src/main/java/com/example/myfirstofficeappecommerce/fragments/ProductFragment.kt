@@ -68,6 +68,11 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+       if(ApplicationClass.recentsList!!.find { it.parentProductId==modelClass.id }==null) {
+           var recentItem=modelClass.variantsList!![0]
+           recentItem.isRecent=true
+           ApplicationClass.recentsList!!.add(recentItem)
+       }
         super.onCreate(savedInstanceState)
 
     }
