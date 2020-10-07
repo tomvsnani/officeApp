@@ -3,12 +3,19 @@ package com.example.myfirstofficeappecommerce.Models
 import androidx.recyclerview.widget.DiffUtil
 
 data class ModelClass(
-    val typeOfView: String="",
-    val title: String="",
-    val subTitle: String="",
-    val imageUrl: String?="",
-    val detail: String?="",
-    val id: Int?=-1
+    var typeOfView: String="",
+    var title: String="",
+    var subTitle: String="",
+    var imageUrl: String?="",
+    var detail: String?="",
+    var id: String?="",
+    var phoneNumber:String?="",
+    var isSelectedAddress:Boolean=false,
+    var pinCode:String="",
+    var city:String="",
+    var state:String="",
+    var hnum:String="",
+    var country:String=""
 
 ) {
     companion object {

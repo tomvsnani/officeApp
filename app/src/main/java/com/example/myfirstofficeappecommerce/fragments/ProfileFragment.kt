@@ -51,8 +51,7 @@ class ProfileFragment : Fragment() {
         createAccountButton = binding!!.registrationSubmitButton
         signInButton = binding!!.signInButton
         progressbar = binding!!.profileProgressBar
-        isRegistered =
-            activity!!.getPreferences(Activity.MODE_PRIVATE).getBoolean("isRegistered", false)
+
 
 
         binding!!.registrationSubmitButton2.setOnClickListener {
@@ -61,7 +60,7 @@ class ProfileFragment : Fragment() {
             createAccountButton!!.visibility = View.VISIBLE
             binding!!.textView6.visibility = View.VISIBLE
             binding!!.registrationSubmitButton2.visibility = View.GONE
-            binding!!.view5.visibility=View.VISIBLE
+            binding!!.view5.visibility = View.VISIBLE
             it.visibility = View.GONE
 
         }
@@ -267,7 +266,10 @@ class ProfileFragment : Fragment() {
                             .show()
 
                         var sharedPref = activity!!.getPreferences(Activity.MODE_PRIVATE)
-                        sharedPref.edit().putBoolean("isLoggedIn", true).apply()
+                        sharedPref.edit().putString(
+                            "token",
+                            response.data()!!.customerAccessTokenCreate.customerAccessToken.accessToken
+                        ).apply()
 
                     }
 
@@ -311,12 +313,6 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onStop() {
-        val inputManager =
-            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-        super.onStop()
-    }
 
 }

@@ -379,7 +379,7 @@ object CategoriesDataProvider {
                 "ok",
                 "null",
                 "null",
-                id = 1
+                id = ""
             ),
             ModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
@@ -387,7 +387,7 @@ object CategoriesDataProvider {
                 "ok",
                 "null",
                 "null",
-                id = 1
+                id = ""
             ),
             ModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
@@ -395,7 +395,7 @@ object CategoriesDataProvider {
                 "ok",
                 "null",
                 "null",
-                id = 1
+                id = ""
             ),
             ModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
@@ -403,7 +403,7 @@ object CategoriesDataProvider {
                 "ok",
                 "null",
                 "null",
-                id = 1
+                id = ""
             ),
             ModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
@@ -411,7 +411,7 @@ object CategoriesDataProvider {
                 "ok",
                 "null",
                 "null",
-                id = 1
+                id = ""
             )
 
         )

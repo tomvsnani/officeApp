@@ -22,7 +22,8 @@ data class VariantsModelClass(
     var isOrdered: Boolean = false,
     var name: String = "",
     var curserposition:String ="",
-    var isRecent:Boolean=false
+    var isRecent:Boolean=false,
+    var orderId:String=""
 
 
     ) {

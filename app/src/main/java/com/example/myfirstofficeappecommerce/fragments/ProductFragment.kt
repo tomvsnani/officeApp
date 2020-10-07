@@ -271,7 +271,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
 
             //adding product model to selected items
-            if (ApplicationClass.selectedVariantList!!.find { it.id == selectedVariant!!.id } == null) {
+            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null) {
                 selectedVariant!!.quantityOfItem++
                 selectedVariant!!.isSelected = true
                 ApplicationClass.selectedVariantList!!.add(selectedVariant!!.copy())

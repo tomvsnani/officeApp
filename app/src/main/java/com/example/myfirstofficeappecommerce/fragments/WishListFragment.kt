@@ -1,8 +1,10 @@
 package com.example.myfirstofficeappecommerce.fragments
 
+import android.app.Activity
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -42,6 +44,19 @@ class WishListFragment() : Fragment() {
     }
 
 
+    override fun onStart() {
+        var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
+        if (token == "") {
+            Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,ProfileFragment())
+             .commit()
+        } else {
+
+        }
+        super.onStart()
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +72,7 @@ class WishListFragment() : Fragment() {
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         recyclerView = view?.findViewById(R.id.wishlistRecyclerView)
         recyclerView?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        ordersAdapters = WishlistAdapter()
+        ordersAdapters = WishlistAdapter(this)
         recyclerView?.adapter = ordersAdapters
         ApplicationClass.mydb!!.dao().getAllFavVariants(true).observe(viewLifecycleOwner, Observer {
             ordersAdapters!!.submitList(it)

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="8dp"
     app:cardCornerRadius="20dp"
     android:layout_margin="8dp"
+    app:contentPadding="8dp"
     app:cardBackgroundColor="#fff"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -38,8 +39,8 @@
             android:layout_marginRight="8dp"
             android:padding="4dp"
             android:text="hello"
-            android:textSize="18sp"
-            android:textColor="#000"
+            android:textSize="14sp"
+            android:textColor="#6b6b6b"
             app:layout_constraintEnd_toStartOf="@+id/wishlistItemImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -102,15 +103,20 @@
             app:layout_constraintStart_toStartOf="@+id/wishlistDateTextView"
             app:layout_constraintTop_toBottomOf="@+id/wishlistDateTextView" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="#e0e0e0"
+        <Button
+            android:id="@+id/wishlistbuybutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Button"
+            android:background="@color/red"
+            android:minHeight="40dp"
+            android:textColor="#fff"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wishlistTotalAmountTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/wishlistItemImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

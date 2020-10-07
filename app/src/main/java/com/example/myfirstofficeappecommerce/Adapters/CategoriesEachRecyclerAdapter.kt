@@ -136,6 +136,7 @@ class CategoriesEachRecyclerAdapter(
                     if (variant != null) {
                         variant.isfav=true
                         CoroutineScope(Dispatchers.IO).launch {
+                            Log.d("modelcq",variant.imgSrc!!)
                             ApplicationClass.mydb!!.dao().insert(variant)
                             createToastforFavItems(fragment.getString(R.string.fav_items_added_toast))
                         }

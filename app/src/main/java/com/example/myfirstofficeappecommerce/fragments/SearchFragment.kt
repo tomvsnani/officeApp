@@ -298,12 +298,6 @@ open class SearchFragment() : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        val inputManager =
-            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        searchEditText!!.clearFocus()
-        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-        super.onDestroy()
-    }
+
 
 }

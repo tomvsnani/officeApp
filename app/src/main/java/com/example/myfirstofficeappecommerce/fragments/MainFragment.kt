@@ -155,13 +155,7 @@ class MainFragment() : Fragment() {
 
         setUpHoriZontalTimer()
 
-        try {
-            val inputManager =
-                activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            searchEditText!!.clearFocus()
-            inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-        } catch (e: Exception) {
-        }
+
 
         super.onResume()
     }

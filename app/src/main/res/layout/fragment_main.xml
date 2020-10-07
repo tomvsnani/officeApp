@@ -7,6 +7,7 @@
     android:background="#ffffff"
     android:orientation="vertical"
 
+
     tools:context=".fragments.MainFragment">
 
     <include
@@ -87,6 +88,13 @@
 
                     />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#e0e0e0" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
@@ -230,8 +238,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                 />
+                    android:layout_marginBottom="8dp" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -264,8 +271,9 @@
                     layout="@layout/timer_banner_horizontal_layout" />
             </LinearLayout>
 
-            <include layout="@layout/flip_layout_include"
-                android:id="@+id/flipinclude"/>
+            <include
+                android:id="@+id/flipinclude"
+                layout="@layout/flip_layout_include" />
 
         </LinearLayout>
 
