@@ -68,11 +68,11 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
-       if(ApplicationClass.recentsList!!.find { it.parentProductId==modelClass.id }==null) {
-           var recentItem=modelClass.variantsList!![0]
-           recentItem.isRecent=true
-           ApplicationClass.recentsList!!.add(recentItem)
-       }
+        if (ApplicationClass.recentsList!!.find { it.parentProductId == modelClass.id } == null) {
+            var recentItem = modelClass.variantsList!![0]
+            recentItem.isRecent = true
+            ApplicationClass.recentsList!!.add(recentItem)
+        }
         super.onCreate(savedInstanceState)
 
     }
@@ -86,15 +86,17 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
         initializeViews(view)
 
-        var viewmodel=ViewModelProvider(this,CategoriesViewModelFactory(modelClass.id)).get(CategoriesViewModel::class.java)
+        var viewmodel = ViewModelProvider(this, CategoriesViewModelFactory(modelClass.id)).get(
+            CategoriesViewModel::class.java
+        )
         viewmodel.getVariantData()
         viewmodel.variantmutableLiveData!!.observe(this, Observer {
-          if(it.size>0){
-              variantList=it.toList()
-              getSelectedVariant()
-              assignDataToViews()
-              submitDataToSizeColorAdapters()
-          }
+            if (it.size > 0) {
+                variantList = it.toList()
+                getSelectedVariant()
+                assignDataToViews()
+                submitDataToSizeColorAdapters()
+            }
         })
 
         binding = FragmentProductLayout2Binding.bind(view)
@@ -166,14 +168,11 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     }
 
 
-
-
     private fun setUpToolbar(view: View) {
         toolbar = view.findViewById(R.id.productToolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
-
 
 
     private fun setUpProductImageViewPager(view: View) {
@@ -192,7 +191,6 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         }.attach()
     }
-
 
 
     private fun assignDataToViews() {
@@ -234,8 +232,6 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         itemPriceTextView!!.text =
             "MRP : ${activity!!.getString(R.string.Rs)} ${selectedVariant!!.price}"
     }
-
-
 
 
     private fun setUpClickListeners() {
@@ -343,7 +339,6 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             .getLocationOnScreen(cartPositionn)
 
 
-
 //animate Y property of textview
 
         ObjectAnimator.ofFloat(
@@ -352,7 +347,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         )
             .apply {
 
-                interpolator =  LinearInterpolator()
+                interpolator = LinearInterpolator()
                 duration = 1000
 
             }.start()

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.ApplicationClass
-import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.fragments.CartFragment
@@ -20,7 +19,7 @@ import com.example.myfirstofficeappecommerce.fragments.CartFragment
 class WishlistAdapter(var fragment:Fragment) :
     ListAdapter<VariantsModelClass, WishlistAdapter.WishListViewHolder>(VariantsModelClass.diffUtil) {
     inner class WishListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var wishlistItemNameTextView: TextView? = itemView.findViewById(R.id.wishlistitemNameTextView)
+        var wishlistItemNameTextView: TextView? = itemView.findViewById(R.id.checkoutOverViewitemNameTextView)
         var wishlistLocationNameTextView: TextView? = itemView.findViewById(R.id.wishlistlocationTextView)
         var wishlistItemsQuntityTextView: TextView? =
             itemView.findViewById(R.id.wishlistQunatityTextView)

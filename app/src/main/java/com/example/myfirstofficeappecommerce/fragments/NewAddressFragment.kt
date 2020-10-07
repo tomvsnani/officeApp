@@ -141,7 +141,7 @@ class NewAddressFragment(var checkoutId: String) : Fragment() {
                             RetryHandler.exponentialBackoff(500, TimeUnit.MILLISECONDS, 1.2f)
                                 .whenResponse<Storefront.QueryRoot> { responsee: GraphResponse<Storefront.QueryRoot> ->
                                     ((responsee as GraphResponse<QueryRoot>).data()!!
-                                        .node as Payment).ready == false
+                                        .node as Checkout).ready == false
                                 }
                                 .maxCount(12)
                                 .build()
