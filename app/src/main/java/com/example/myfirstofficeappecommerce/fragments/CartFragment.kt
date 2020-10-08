@@ -23,7 +23,6 @@ import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
 import com.shopify.graphql.support.Input
-import java.util.concurrent.TimeUnit
 
 
 class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {
@@ -168,6 +167,9 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                         .checkout { checkoutQuery: CheckoutQuery ->
                             checkoutQuery
                                 .webUrl()
+                                .totalTax()
+                                .totalPrice()
+                                .subtotalPrice()
                         }
                         .userErrors { userErrorQuery: UserErrorQuery ->
                             userErrorQuery
@@ -187,58 +189,14 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                     val checkoutWebUrl = response.data()!!.checkoutCreate.checkout.webUrl
 
 
-                    val queryy = query { rootQuery ->
-                        rootQuery
-                            .node(
-                                ID(checkoutId)
-                            ) { nodeQuery ->
-                                nodeQuery
-                                    .onCheckout { checkoutQuery ->
-                                        checkoutQuery
-                                            .availableShippingRates { availableShippingRatesQuery ->
-                                                availableShippingRatesQuery
-                                                    .ready()
-                                                    .shippingRates { shippingRateQuery ->
-                                                        shippingRateQuery
-                                                            .handle()
-                                                            .price()
-                                                            .title()
-                                                    }
-                                            }
-                                    }
-                            }
-                    }
 
-                    CategoriesDataProvider.graphh!!.queryGraph(queryy).enqueue(
-                        object :
-                            GraphCall.Callback<Storefront.QueryRoot> {
-                            override fun onResponse(response: GraphResponse<QueryRoot>) {
-                                val checkout = response.data()!!.node as Checkout
-                                val shippingRates = checkout.availableShippingRates.shippingRates
-                                Log.d("ratess", shippingRates.toString())
-
-                            }
-
-                            override fun onFailure(error: GraphError) {
-                                Log.d("ratessf", error.message.toString())
-                            }
-                        },
-                        null,
-                        RetryHandler.exponentialBackoff(500, TimeUnit.MILLISECONDS, 1.2f)
-                            .whenResponse<Storefront.QueryRoot> { responsee: GraphResponse<Storefront.QueryRoot> ->
-                                ((responsee as GraphResponse<QueryRoot>).data()!!
-                                    .node as Payment).ready == false
-                            }
-                            .maxCount(12)
-                            .build()
-                    )
 
                     activity!!.supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, FinalisingOrderFragment(checkoutId))
+                        .replace(R.id.container, FinalisingOrderFragment(checkoutId,response.data()!!.checkoutCreate.checkout.totalTax.precision().toFloat()))
                         .addToBackStack(null).commit()
 
 
-                    Log.d("checkoutsuccess", "$checkoutId $checkoutWebUrl")
+                    Log.d("checkoutsuccess", response.data()!!.checkoutCreate.checkout.totalTax.precision().toFloat().toString())
                 }
             }
 

@@ -3,7 +3,6 @@ package com.example.myfirstofficeappecommerce
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,7 +18,6 @@ import com.example.myfirstofficeappecommerce.Adapters.ChooseAddressRecyclerAdapt
 import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.databinding.FragmentFinalisingOrderBinding
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
-import com.example.myfirstofficeappecommerce.fragments.NewAddressFragment
 import com.example.myfirstofficeappecommerce.fragments.WebViewFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
@@ -27,7 +25,7 @@ import com.shopify.graphql.support.ID
 import java.util.concurrent.TimeUnit
 
 
-class FinalisingOrderFragment(var checkoutId: String) : Fragment() {
+class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Fragment() {
     var recyclerView: RecyclerView? = null
     var adapter: ChooseAddressRecyclerAdapter? = null
     var binding: FragmentFinalisingOrderBinding? = null
@@ -202,14 +200,18 @@ class FinalisingOrderFragment(var checkoutId: String) : Fragment() {
                                         .availableShippingRates { availableShippingRatesQuery ->
                                             availableShippingRatesQuery
                                                 .ready()
+
                                                 .shippingRates { shippingRateQuery ->
                                                     shippingRateQuery
                                                         .handle()
                                                         .price()
                                                         .title()
+
                                                 }
+
                                         }
                                 }
+
                         }
                 }
 
@@ -223,7 +225,7 @@ class FinalisingOrderFragment(var checkoutId: String) : Fragment() {
                                 checkout.availableShippingRates.shippingRates
                             var c = 0f;
                             for (i in shippingRates)
-                                c += i.price.toFloat()
+                                c += i.price.precision().toFloat()
 
 
 
@@ -245,9 +247,9 @@ class FinalisingOrderFragment(var checkoutId: String) : Fragment() {
                                 binding!!.checkoutReviewInclude.checkoutOverViewPriceTextView.text =
                                     a.toString()
                                 binding!!.checkoutReviewInclude.checkoutOverViewShippingCostTextView.text =
-                                    c.toString()
+                                    ( c+totalTax).toString()
                                 binding!!.checkoutReviewInclude.checkoutOverViewTotalPriceTextView.text =
-                                    (a.toFloat() + c.toFloat()).toString()
+                                    (a.toFloat() + c+totalTax).toString()
                                 binding!!.addressstepsinclude.checkoutTextView2.setBackground(
                                     resources.getDrawable(
                                         R.drawable.circle_background_drawable_highlighted

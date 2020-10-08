@@ -78,6 +78,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
                                         .node { node: OrderQuery ->
                                             node
                                                 .orderNumber()
+
                                                 .totalPrice()
                                                 .shippingAddress { _queryBuilder ->
                                                     _queryBuilder.address1().city()
