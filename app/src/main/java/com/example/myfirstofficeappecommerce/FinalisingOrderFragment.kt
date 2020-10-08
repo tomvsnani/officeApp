@@ -77,10 +77,8 @@ class FinalisingOrderFragment(var checkoutId: String) : Fragment() {
                     )
 
                 )
-                binding!!.addressstepsinclude.checkoutTextView2.setBackground(
-                    resources.getDrawable(
-                        R.drawable.circle_background_drawable_highlighted
-                    )
+                binding!!.addressstepsinclude.checkoutTextView2.background = resources.getDrawable(
+                    R.drawable.circle_background_drawable_highlighted
                 )
                 binding!!.addressstepsinclude.checkoutTextView2.setTextColor(
                     Color.WHITE
@@ -248,11 +246,22 @@ class FinalisingOrderFragment(var checkoutId: String) : Fragment() {
                                     a.toString()
                                 binding!!.checkoutReviewInclude.checkoutOverViewShippingCostTextView.text =
                                     c.toString()
+                                binding!!.checkoutReviewInclude.checkoutOverViewTotalPriceTextView.text =
+                                    (a.toFloat() + c.toFloat()).toString()
                                 binding!!.addressstepsinclude.checkoutTextView2.setBackground(
                                     resources.getDrawable(
                                         R.drawable.circle_background_drawable_highlighted
                                     )
                                 )
+                                binding!!.checkoutReviewInclude.chooseAddressnameTextView.text =
+                                    fname + " " + lname
+                                binding!!.checkoutReviewInclude.chooseAddressPhoneNumber.text =
+                                    phone
+                                binding!!.checkoutReviewInclude.chooseAddressaddressTextView.text =
+                                    address1 + " " + city + " " + province + " " + " " + zip + " " + country
+
+
+
                                 binding!!.addressstepsinclude.checkoutTextView2.setTextColor(
                                     Color.WHITE
                                 )
