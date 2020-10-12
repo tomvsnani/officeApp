@@ -62,6 +62,8 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                                                             _queryBuilder.price()
                                                                 .selectedOptions { _queryBuilder ->
                                                                     _queryBuilder.name().value()
+                                                                }.image {
+                                                                    _queryBuilder ->_queryBuilder.src()
                                                                 }
 
 
@@ -269,7 +271,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                             if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
                             if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
                             variantEdge.node.price.toFloat(),
-                            name = variantEdge.node.title
+                            name = variantEdge.node.title,imgSrc = variantEdge.node.image.src
 
 
                         )

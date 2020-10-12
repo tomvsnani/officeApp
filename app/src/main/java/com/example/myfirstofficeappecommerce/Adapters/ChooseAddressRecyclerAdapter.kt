@@ -10,12 +10,16 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
+import com.example.myfirstofficeappecommerce.FinalisingOrderFragment
 import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.fragments.EditAddressFragment
+import com.example.myfirstofficeappecommerce.fragments.NewAddressFragment
 import com.example.myfirstofficeappecommerce.fragments.WebViewFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.Checkout
@@ -25,7 +29,7 @@ import com.shopify.graphql.support.ID
 import java.util.concurrent.TimeUnit
 
 
-class ChooseAddressRecyclerAdapter(var context: Context, var checkoutId: String) :
+class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String) :
     ListAdapter<ModelClass, ChooseAddressRecyclerAdapter.ChooseAddressViewHolder>(ModelClass.diffUtil) {
     inner class ChooseAddressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var ItemNameTextView: TextView? = itemView.findViewById(R.id.chooseAddressnameTextView)
@@ -39,7 +43,13 @@ class ChooseAddressRecyclerAdapter(var context: Context, var checkoutId: String)
 
         init {
 
-            editButton?.setOnClickListener { }
+            editButton?.setOnClickListener {
+
+                (context as FinalisingOrderFragment).parentFragment!!.childFragmentManager.beginTransaction()
+                    .replace(R.id.container1,EditAddressFragment(currentList[absoluteAdapterPosition]))
+                    .addToBackStack(null).commit()
+
+            }
 
             radioButton!!.setOnClickListener {
                 var modelclass=currentList[absoluteAdapterPosition]
@@ -138,16 +148,7 @@ class ChooseAddressRecyclerAdapter(var context: Context, var checkoutId: String)
                         )
 
 
-                        (context as MainActivity).supportFragmentManager.beginTransaction()
-                            .replace(
-                                R.id.container,
-                                WebViewFragment(
-                                    response.data()!!.checkoutShippingAddressUpdate.checkout.webUrl,
-                                    "checkout"
-                                )
-                            )
-                            .addToBackStack(null)
-                            .commit()
+
                     }
 
                     override fun onFailure(error: GraphError) {
@@ -169,51 +170,52 @@ class ChooseAddressRecyclerAdapter(var context: Context, var checkoutId: String)
             }
 
 
-            val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
-                rootQuery
-                    .customer(
-                        ((context as Activity).getPreferences(Activity.MODE_PRIVATE)
-                            .getString("token", ""))
-                    ) { _queryBuilder ->
-                        _queryBuilder.defaultAddress { _queryBuilder ->
-                            _queryBuilder.address1().city().province().zip().phone().firstName().lastName().country()
-                        }
-                    }
-            }
-
-
-            var call1 =
-                CategoriesDataProvider.graphh!!.queryGraph(query1)
-            call1.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
-                var addressList = ArrayList<ModelClass>()
-
-                override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
-
-                    var address = response.data()!!.customer.defaultAddress
-
-                    var modelClass = ModelClass(
-                        title = address.firstName,
-                        subTitle = address.lastName,
-                        hnum = address.address1,
-                        city = address.city,
-                        state = address.province,
-                        pinCode = address.zip,
-                        phoneNumber = if (address.phone == "" || address.phone.isNullOrBlank()) " no Phone number provided"
-                        else address.phone, id = address.id.toString(),
-                        country = address.country
-                    )
-                    currentList.find {
-                        it.phoneNumber == modelClass.phoneNumber && it.subTitle == modelClass.subTitle && it.title == modelClass.title
-                    }!!.isSelectedAddress = true
-                    (context as Activity).runOnUiThread { notifyDataSetChanged() }
-
-                }
-
-                override fun onFailure(error: GraphError) {
-
-                }
-
-            })
+//            val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
+//                rootQuery
+//                    .customer(
+//                        ((context.activity!!).getPreferences(Activity.MODE_PRIVATE)
+//                            .getString("token", ""))
+//                    ) { _queryBuilder ->
+//                        _queryBuilder.defaultAddress { _queryBuilder ->
+//                            _queryBuilder.address1().city().province().zip().phone().firstName().lastName().country()
+//                        }
+//                    }
+//            }
+//
+//
+//            var call1 =
+//                CategoriesDataProvider.graphh!!.queryGraph(query1)
+//            call1.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
+//                var addressList = ArrayList<ModelClass>()
+//
+//                override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
+//
+//                    var address = response.data()!!.customer.defaultAddress
+//
+//                    var modelClass = ModelClass(
+//                        title = address.firstName,
+//                        subTitle = address.lastName,
+//                        hnum = address.address1,
+//                        city = address.city,
+//                        state = address.province,
+//                        pinCode = address.zip,
+//                        phoneNumber = if (address.phone == "" || address.phone.isNullOrBlank()) " no Phone number provided"
+//                        else address.phone, id = address.id.toString(),
+//                        country = address.country
+//                    )
+//                //    Log.d("isnull",(currentList.find {  it.id==address.id.toString()}==null).toString())
+//                    currentList.find {
+//                        it.phoneNumber == modelClass.phoneNumber && it.subTitle == modelClass.subTitle && it.title == modelClass.title
+//                    }!!.isSelectedAddress = true
+//                    (context.activity!!).runOnUiThread { notifyDataSetChanged() }
+//
+//                }
+//
+//                override fun onFailure(error: GraphError) {
+//
+//                }
+//
+//            })
         }
 
     }
@@ -227,7 +229,7 @@ class ChooseAddressRecyclerAdapter(var context: Context, var checkoutId: String)
     }
 
     override fun submitList(list: MutableList<ModelClass>?) {
-        super.submitList(ArrayList(list))
+        super.submitList(list!!.toList())
 
     }
 

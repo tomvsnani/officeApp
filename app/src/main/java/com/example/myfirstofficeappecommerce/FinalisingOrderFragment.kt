@@ -18,20 +18,24 @@ import com.example.myfirstofficeappecommerce.Adapters.ChooseAddressRecyclerAdapt
 import com.example.myfirstofficeappecommerce.Models.ModelClass
 import com.example.myfirstofficeappecommerce.databinding.FragmentFinalisingOrderBinding
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
+import com.example.myfirstofficeappecommerce.fragments.NewAddressFragment
 import com.example.myfirstofficeappecommerce.fragments.WebViewFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
+import layout.CheckoutOverViewFragment
 import java.util.concurrent.TimeUnit
 
 
-class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Fragment() {
+class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fragment() {
     var recyclerView: RecyclerView? = null
     var adapter: ChooseAddressRecyclerAdapter? = null
     var binding: FragmentFinalisingOrderBinding? = null
     private var toolbar: Toolbar? = null
     var newAddressLayoutBinding: NewAddressLayoutBinding? = null
     var webUrl: String = ""
+    var addressList = ArrayList<ModelClass>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,100 +44,61 @@ class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Frag
 
         var v = inflater.inflate(R.layout.fragment_finalising_order, container, false)
 
+        if (addressList.isNotEmpty())
+            addressList.clear()
+
         initialzeViews(v)
 
-        retrieve_all_the_addresses()
+        if (ApplicationClass.signInType == Constants.NORMAL_SIGN_IN) {
 
-        binding!!.addAddressFragment.setOnClickListener {
-            binding!!.step1orderlinearlayout.visibility = View.GONE
-            binding!!.newaddressinclude.root.visibility = View.VISIBLE
+            retrieve_all_the_addresses()
 
+            binding!!.addAddressButton.visibility = View.GONE
+        } else {
+            binding!!.addAddressButton.visibility = View.VISIBLE
+            binding!!.viewmoreaddressesbutton.visibility = View.GONE
         }
 
 
-        binding!!.checkoutReviewInclude.checkoutOverViewContinueButton.setOnClickListener {
-            activity!!.supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.container,
-                    WebViewFragment(
-                        webUrl,
-                        "checkout"
-                    )
-                )
-                .addToBackStack(null)
-                .commit()
-        }
-
-        binding!!.checkoutReviewInclude.changeaddressbutton.setOnClickListener {
-            activity!!.runOnUiThread {
-                binding!!.step1orderlinearlayout.visibility = View.VISIBLE
-                binding!!.newaddressinclude.root.visibility = View.GONE
-                binding!!.checkoutReviewInclude.root.visibility = View.GONE
-                binding!!.addressstepsinclude.checkoutview1.setBackgroundColor(
-                    resources.getColor(
-                        R.color.red
-                    )
-
-                )
-                binding!!.addressstepsinclude.checkoutTextView2.background = resources.getDrawable(
-                    R.drawable.circle_background_drawable_highlighted
-                )
-                binding!!.addressstepsinclude.checkoutTextView2.setTextColor(
-                    Color.WHITE
-                )
-            }
-        }
-
-
-        newAddressLayoutBinding = binding!!.newaddressinclude
-
-        newAddressLayoutBinding!!.addAddressButton.setOnClickListener {
-
-
-            if (newAddressLayoutBinding!!.cityEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.nameEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.provinceEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.zipEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.lastnameEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.countryEditText.text.toString().isNotBlank()
-            ) {
-                getTheShippingRatesBasedOnSelectedAddress(
-                    newAddressLayoutBinding!!.cityEditText.text.toString(),
-                    newAddressLayoutBinding!!.cityEditText.text.toString(),
-                    newAddressLayoutBinding!!.nameEditText.text.toString(),
-                    newAddressLayoutBinding!!.PhonenumberEditText.text.toString(),
-                    newAddressLayoutBinding!!.provinceEditText.text.toString(),
-                    newAddressLayoutBinding!!.zipEditText.text.toString(),
-                    newAddressLayoutBinding!!.lastnameEditText.text.toString(),
-                    newAddressLayoutBinding!!.countryEditText.text.toString()
-                )
-            } else Toast.makeText(context, "Please enter all details", Toast.LENGTH_SHORT).show()
-        }
-
-
-
-
-
-        binding!!.deliveroThisAddressButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Not yet implemented",
-                Toast.LENGTH_SHORT
-            ).show()
-            var a = adapter!!.currentList.find { it.isSelectedAddress }
-            getTheShippingRatesBasedOnSelectedAddress(
-                a!!.hnum,
-                a!!.city,
-                a!!.title,
-                a.subTitle,
-                a.phoneNumber!!,
-                a.state,
-                a.pinCode,
-                a.country
-            )
-        }
+        initializeClickListeners()
 
         return v
+    }
+
+    private fun initializeClickListeners() {
+        binding!!.viewmoreaddressesbutton.setOnClickListener {
+            adapter!!.submitList(addressList)
+            it.visibility = View.GONE
+            binding!!.addAddressButton.visibility = View.VISIBLE
+        }
+
+        binding!!.addAddressButton.setOnClickListener {
+            parentFragment!!.childFragmentManager.beginTransaction()
+                .replace(R.id.container1, NewAddressFragment(checkoutId, webUrl, totalTax))
+                .addToBackStack(null).commit()
+
+        }
+        binding!!.deliveroThisAddressButton.setOnClickListener {
+
+            var a = adapter!!.currentList.find { it.isSelectedAddress }
+            if (a != null)
+                getTheShippingRatesBasedOnSelectedAddress(
+                    a!!.hnum,
+                    a!!.city,
+                    a!!.title,
+                    a.subTitle,
+                    a.phoneNumber!!,
+                    a.state,
+                    a.pinCode,
+                    a.country
+                )
+            else
+                Toast.makeText(
+                    context,
+                    "Please select an address or add an address",
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
     }
 
     private fun getTheShippingRatesBasedOnSelectedAddress(
@@ -155,6 +120,17 @@ class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Frag
             .setZip(zip)
             .setLastName(lname)
             .setCountry(country)
+
+        val modelClass = ModelClass(
+            hnum = address1,
+            city = city,
+            title = fname,
+            subTitle = lname,
+            phoneNumber = phone,
+            state = province,
+            pinCode = zip,
+            country = country
+        )
 
         val query = mutation { mutationQuery: MutationQuery ->
             mutationQuery
@@ -224,57 +200,41 @@ class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Frag
                             val shippingRates =
                                 checkout.availableShippingRates.shippingRates
                             var c = 0f;
-                            for (i in shippingRates)
+                            var modelList: MutableList<ModelClass> = ArrayList()
+                            for (i in shippingRates) {
+                                var model = ModelClass(
+                                    title = i.title,
+                                    subTitle = i.handle,
+                                    shippingPrice = i.price.precision().toString()
+                                )
+                                modelList.add(model)
                                 c += i.price.precision().toFloat()
+                            }
 
 
 
                             activity!!.runOnUiThread {
-                                binding!!.step1orderlinearlayout.visibility = View.GONE
-                                binding!!.newaddressinclude.root.visibility = View.GONE
-                                binding!!.checkoutReviewInclude.root.visibility = View.VISIBLE
-                                binding!!.addressstepsinclude.checkoutview1.setBackgroundColor(
-                                    resources.getColor(
-                                        R.color.red
+                                parentFragment!!.childFragmentManager.beginTransaction()
+                                    .replace(
+                                        R.id.container1,
+                                        CheckoutOverViewFragment(
+                                            webUrl,
+                                            c,
+                                            totalTax,
+                                            modelClass,
+                                            ApplicationClass.selectedVariantList!!,
+                                            modelList,
+                                            checkoutId
+                                        )
                                     )
-
-
-                                )
-                                var a = 0f;
-                                for (i in ApplicationClass.selectedVariantList!!)
-                                    a += i.price!!
-
-                                binding!!.checkoutReviewInclude.checkoutOverViewPriceTextView.text =
-                                    a.toString()
-                                binding!!.checkoutReviewInclude.checkoutOverViewShippingCostTextView.text =
-                                    ( c+totalTax).toString()
-                                binding!!.checkoutReviewInclude.checkoutOverViewTotalPriceTextView.text =
-                                    (a.toFloat() + c+totalTax).toString()
-                                binding!!.addressstepsinclude.checkoutTextView2.setBackground(
-                                    resources.getDrawable(
-                                        R.drawable.circle_background_drawable_highlighted
-                                    )
-                                )
-                                binding!!.checkoutReviewInclude.chooseAddressnameTextView.text =
-                                    fname + " " + lname
-                                binding!!.checkoutReviewInclude.chooseAddressPhoneNumber.text =
-                                    phone
-                                binding!!.checkoutReviewInclude.chooseAddressaddressTextView.text =
-                                    address1 + " " + city + " " + province + " " + " " + zip + " " + country
-
-
-
-                                binding!!.addressstepsinclude.checkoutTextView2.setTextColor(
-                                    Color.WHITE
-                                )
+                                    .addToBackStack(null)
+                                    .commit()
                                 Toast.makeText(
                                     context,
                                     "Address updated",
                                     Toast.LENGTH_SHORT
                                 ).show()
-//                               binding!!.addressstepsinclude.checkoutTextView3.background=resources.getDrawable(R.drawable.circle_background_drawable_highlighted)
-//                               binding!!.addressstepsinclude.checkoutTextView3.setTextColor(Color.WHITE)
-//                               binding!!.addressstepsinclude.checkoutview2.setBackgroundColor(resources.getColor(R.color.red))
+
                             }
                         }
 
@@ -311,7 +271,7 @@ class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Frag
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding = FragmentFinalisingOrderBinding.bind(v)
-        adapter = ChooseAddressRecyclerAdapter(activity!!, checkoutId)
+        adapter = ChooseAddressRecyclerAdapter(this, checkoutId)
         recyclerView = v.findViewById(R.id.chooseaddressrecyclerview)
         recyclerView!!.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         recyclerView!!.adapter = adapter
@@ -327,13 +287,16 @@ class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Frag
 
                         args!!.first(10)
                     }, { _queryBuilder ->
+
                         _queryBuilder.edges { _queryBuilder ->
                             _queryBuilder.node { _queryBuilder ->
                                 _queryBuilder.address1().city().province().zip().phone().firstName()
                                     .lastName().country()
                             }
                         }
-                    })
+                    }).defaultAddress { _queryBuilder ->
+                        _queryBuilder!!.address1().phone()
+                    }
                 }
         }
 
@@ -341,7 +304,7 @@ class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Frag
         var call =
             CategoriesDataProvider.graphh!!.queryGraph(query)
         call.enqueue(object : GraphCall.Callback<QueryRoot> {
-            var addressList = ArrayList<ModelClass>()
+
 
             override fun onResponse(response: GraphResponse<QueryRoot>) {
 
@@ -362,7 +325,22 @@ class FinalisingOrderFragment(var checkoutId: String,var totalTax: Float) : Frag
                         )
                     )
                 }
-                activity!!.runOnUiThread { adapter!!.submitList(addressList) }
+
+
+
+                activity!!.runOnUiThread {
+
+                    var a =
+                        addressList.find { it.id == response.data()!!.customer.defaultAddress.id.toString() }
+                    a!!.isSelectedAddress = true
+
+                    adapter!!.submitList(if (addressList.size > 0) mutableListOf(a) else null)
+
+                    adapter!!.notifyDataSetChanged()
+
+
+                }
+
 
             }
 

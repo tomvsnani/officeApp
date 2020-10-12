@@ -98,7 +98,11 @@ class CategoriesEachRecyclerAdapter(
                 //callback()
             }
 
+
+
             itemImage.setOnClickListener {
+                Log.d("listimaa",currentList[adapterPosition].imageUrl+" "+currentList[adapterPosition].variantsList!![0].imgSrc)
+
                 fragment.activity!!.supportFragmentManager.beginTransaction()
                     .replace(R.id.container, ProductFragment(currentList[adapterPosition]))
                     .addToBackStack(null).commit()

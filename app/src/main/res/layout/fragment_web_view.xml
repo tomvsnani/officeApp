@@ -37,7 +37,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
+<include layout="@layout/order_processing_step3_layout"
+    android:id="@+id/stepinclude"/>
     <WebView
     android:layout_width="match_parent"
     android:layout_height="match_parent"

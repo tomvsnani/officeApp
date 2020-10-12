@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.OrdersAdaptes
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
+import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
@@ -54,7 +55,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
             activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ProfileFragment())
+                .replace(R.id.container,  ProfileFragment(Constants.NORMAL_SIGN_IN))
                 .commit()
         } else {
             getOrders(token)

@@ -9,7 +9,7 @@ data class CategoriesModelClass(
     var itemDescriptionText: String? = "",
     var itemNetWeight: String = "",
     var realTimeMrp: Int = 0,
-    var imageUrl: String = "ok",
+    var imageUrl: String = "",
     var quantityOfItem: Int = 0,
     var id: String = "",
     var groupId: String = "",

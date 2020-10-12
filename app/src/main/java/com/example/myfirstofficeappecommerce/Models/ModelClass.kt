@@ -15,7 +15,8 @@ data class ModelClass(
     var city:String="",
     var state:String="",
     var hnum:String="",
-    var country:String=""
+    var country:String="",
+    var shippingPrice:String=""
 
 ) {
     companion object {

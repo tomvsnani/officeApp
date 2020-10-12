@@ -210,6 +210,20 @@
             app:layout_constraintTop_toTopOf="@+id/view5"
             app:layout_constraintVertical_bias="0.0" />
 
+        <TextView
+            android:id="@+id/guestsigninTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="Guest Login"
+            android:padding="8dp"
+            android:background="#445ae3"
+            android:textColor="#fff"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signInButton" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar

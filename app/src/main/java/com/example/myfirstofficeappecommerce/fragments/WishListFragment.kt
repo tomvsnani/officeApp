@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.WishlistAdapter
 import com.example.myfirstofficeappecommerce.ApplicationClass
+import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.R
 
@@ -48,7 +49,8 @@ class WishListFragment() : Fragment() {
         var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,ProfileFragment())
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, ProfileFragment(
+                Constants.NORMAL_SIGN_IN))
              .commit()
         } else {
 

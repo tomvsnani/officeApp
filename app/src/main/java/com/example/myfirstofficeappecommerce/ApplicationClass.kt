@@ -16,6 +16,8 @@ class ApplicationClass : Application() {
         var selectedVariantList: MutableList<VariantsModelClass>? = ArrayList()
         var recentsList:MutableList<VariantsModelClass>?=ArrayList()
          var mydb: MyDatabase? = null
+        var weburl:String?=null
+        var signInType:String=""
     }
 
 

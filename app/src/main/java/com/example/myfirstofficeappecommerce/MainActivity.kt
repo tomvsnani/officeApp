@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,16 @@ class MainActivity : AppCompatActivity() {
     var drawerLayout: DrawerLayout? = null
     var actionBarToggle: ActionBarDrawerToggle? = null
     var list: List<CategoriesModelClass>? = null
+    var parentfragment:CheckOutActivity?=null
+
+
+    override fun onBackPressed() {
+
+        if(supportFragmentManager.backStackEntryCount==0)
+            finish()
+        else
+            super.onBackPressed()
+    }
 
 
     fun lockDrawer() {
@@ -123,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 menuItem.itemId == R.id.profilemenu -> {
                     supportFragmentManager.beginTransaction().replace(
                         R.id.container,
-                        ProfileFragment()
+                        ProfileFragment(Constants.NORMAL_SIGN_IN)
                     ).addToBackStack(null)
                         .commit()
 

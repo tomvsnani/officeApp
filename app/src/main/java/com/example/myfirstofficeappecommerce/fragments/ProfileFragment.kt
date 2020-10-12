@@ -14,8 +14,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.myfirstofficeappecommerce.CategoriesDataProvider
-import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.databinding.FragmentProfile2Binding
 import com.google.android.material.textfield.TextInputEditText
 import com.shopify.buy3.GraphCall
@@ -25,7 +24,7 @@ import com.shopify.buy3.Storefront
 import com.shopify.buy3.Storefront.*
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment(var signInType: String,var checkoutId:String="",var totalTax:Float=0f) : Fragment() {
 
     var nameInputTxetView: TextInputEditText? = null
     var phnInputTxetView: TextInputEditText? = null
@@ -52,7 +51,10 @@ class ProfileFragment : Fragment() {
         signInButton = binding!!.signInButton
         progressbar = binding!!.profileProgressBar
 
-
+        if (signInType == Constants.GUEST_SIGN_IN)
+            binding!!.guestsigninTextView.visibility = View.VISIBLE
+        else
+            binding!!.guestsigninTextView.visibility = View.GONE
 
         binding!!.registrationSubmitButton2.setOnClickListener {
             binding!!.phnEditTextWrapper.visibility = View.VISIBLE
@@ -63,6 +65,10 @@ class ProfileFragment : Fragment() {
             binding!!.view5.visibility = View.VISIBLE
             it.visibility = View.GONE
 
+        }
+
+        binding!!.guestsigninTextView.setOnClickListener {
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,CheckOutActivity(checkoutId,totalTax))
         }
 
 
@@ -312,7 +318,6 @@ class ProfileFragment : Fragment() {
 
         super.onCreate(savedInstanceState)
     }
-
 
 
 }

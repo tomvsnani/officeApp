@@ -20,14 +20,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.CategoriesEachRecyclerAdapter
-import com.example.myfirstofficeappecommerce.ApplicationClass
-import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModel
 import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactory
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.R
-import com.example.myfirstofficeappecommerce.Utils
 import kotlinx.coroutines.*
 
 
@@ -142,7 +139,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
        if( item.itemId == R.id.profilemenu ) {
            activity!!.supportFragmentManager.beginTransaction().replace(
                R.id.container,
-               ProfileFragment()
+               ProfileFragment(Constants.NORMAL_SIGN_IN)
            ).addToBackStack(null)
                .commit()
 

@@ -60,7 +60,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     private var colorRecyclerAdapter: ProductColorRecyclerViewAdapter? = null
     private var sizeRecyclerViewAdapter: ProductSizeRecyclerViewAdapter? = null
     private var selectedVariant: VariantsModelClass? = null
-    private var variantList: List<VariantsModelClass>? = modelClass.variantsList!!.toList()
+    private var variantList: List<VariantsModelClass>? =null
     private var htmlDescriptionScroll: ScrollView? = null
     var binding: FragmentProductLayout2Binding? = null
 
@@ -73,6 +73,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             recentItem.isRecent = true
             ApplicationClass.recentsList!!.add(recentItem)
         }
+
         super.onCreate(savedInstanceState)
 
     }
@@ -84,6 +85,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     ): View? {
 
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
+
         initializeViews(view)
 
         var viewmodel = ViewModelProvider(this, CategoriesViewModelFactory(modelClass.id)).get(
@@ -137,6 +139,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         } else {
             selectedVariant = variantList!![0].copy()
+Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
+
 
         }
     }
@@ -267,14 +271,15 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
 
             //adding product model to selected items
-            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null) {
+            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant!=null) {
                 selectedVariant!!.quantityOfItem++
                 selectedVariant!!.isSelected = true
+
                 ApplicationClass.selectedVariantList!!.add(selectedVariant!!.copy())
                 addTocartButton!!.visibility = View.GONE
                 addOrRemoveItemsLinear!!.visibility = View.VISIBLE
             }
-            Log.d("selecteditems", ApplicationClass.selectedVariantList.toString())
+            Log.d("selecteditems",selectedVariant!!.imgSrc+" ok")
             itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
             startCartAnimation()
@@ -510,11 +515,11 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         bottomSheetBehavior!!.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                    htmlDescriptionScroll!!.viewTreeObserver.addOnScrollChangedListener {
-                        bottomSheetBehavior!!.isDraggable = htmlDescriptionScroll!!.scrollY == 0
-                    }
-                }
+//                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+//                    htmlDescriptionScroll!!.viewTreeObserver.addOnScrollChangedListener {
+//                        bottomSheetBehavior!!.isDraggable = htmlDescriptionScroll!!.scrollY == 0
+//                    }
+//                }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -527,6 +532,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     }
 
     private fun initializeViews(view: View) {
+
         colorRecyclerView = view.findViewById(R.id.productcolorRecyclerView)
 
         sizeRecyclerView = view.findViewById(R.id.productsizeRecyclerview)

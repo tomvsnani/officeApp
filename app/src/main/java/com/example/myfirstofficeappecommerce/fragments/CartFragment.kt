@@ -1,6 +1,8 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -94,9 +96,9 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
         recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
-            //   Log.d("recommendedqu",modelClass.quantityOfItem.toString())
+
             modelClass.quantityOfItem++
-            //  Log.d("recommendedqu",modelClass.quantityOfItem.toString())
+
 
             var count =
                 list.filter { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }
@@ -130,13 +132,23 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
         proceedTextViewCart!!.setOnClickListener {
             var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
             if (token == "") {
-                Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
-                activity!!.supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ProfileFragment())
-                    .addToBackStack(null).commit()
-            } else {
-                createCheckout()
-            }
+                var alert = AlertDialog.Builder(context!!).create()
+
+                alert.setButton(
+                    AlertDialog.BUTTON_NEGATIVE, "Signin"
+                ) { p0, p1 -> createCheckout(Constants.NORMAL_SIGN_IN) }
+
+
+                alert.setButton(
+                    AlertDialog.BUTTON_POSITIVE, "Continue as Guest"
+                ) { p0, p1 -> createCheckout(Constants.GUEST_SIGN_IN) }
+
+
+                alert.setCancelable(false)
+
+                alert.show()
+            } else
+                createCheckout(Constants.NORMAL_SIGN_IN)
 
 
         }
@@ -145,12 +157,16 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
         return view
     }
 
-    private fun createCheckout() {
+    private fun createCheckout(signinType: String) {
+        ApplicationClass.signInType = signinType
+
         var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = ArrayList()
+
         for (i in ApplicationClass.selectedVariantList!!) {
             checkoutLineItemInput?.add(CheckoutLineItemInput(i.quantityOfItem, ID(i.id)))
             i.isOrdered = true
         }
+
         val input = CheckoutCreateInput()
             .setLineItemsInput(
                 Input.value(
@@ -160,6 +176,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
         val query = mutation { mutationQuery: MutationQuery ->
             mutationQuery
+
                 .checkoutCreate(
                     input
                 ) { createPayloadQuery: CheckoutCreatePayloadQuery ->
@@ -181,29 +198,96 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
         CategoriesDataProvider.graphh!!.mutateGraph(query).enqueue(object :
             GraphCall.Callback<Mutation> {
+
             override fun onResponse(response: GraphResponse<Mutation>) {
+
                 if (response.data()!!.checkoutCreate.userErrors.isNotEmpty()) {
+
                     // handle user friendly errors
                 } else {
+
                     val checkoutId = response.data()!!.checkoutCreate.checkout.id.toString()
                     val checkoutWebUrl = response.data()!!.checkoutCreate.checkout.webUrl
 
+                    if (signinType == Constants.NORMAL_SIGN_IN) {
+                        if (activity!!.getPreferences(Activity.MODE_PRIVATE)
+                                .getString("token", "") != ""
+                        )
+                            associateWithUserQuery(checkoutId)
+                        else
+                            activity!!.supportFragmentManager.beginTransaction()
+                                .replace(
+                                    R.id.container,
 
+                                    ProfileFragment(Constants.NORMAL_SIGN_IN)
+                                ).addToBackStack(null).commit()
+                    } else {
+                        activity!!.supportFragmentManager.beginTransaction()
+                            .replace(
+                                R.id.container,
+                                CheckOutActivity(
+                                    checkoutId,
+                                    response.data()!!.checkoutCreate.checkout.totalTax.precision()
+                                        .toFloat()
+                                )
+                            ).addToBackStack(null).commit()
 
-
-                    activity!!.supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, FinalisingOrderFragment(checkoutId,response.data()!!.checkoutCreate.checkout.totalTax.precision().toFloat()))
-                        .addToBackStack(null).commit()
-
-
-                    Log.d("checkoutsuccess", response.data()!!.checkoutCreate.checkout.totalTax.precision().toFloat().toString())
+                    }
                 }
             }
+
 
             override fun onFailure(error: GraphError) {
                 Log.d("checkouterror", error.message.toString())
             }
         })
+    }
+
+    private fun associateWithUserQuery(checkoutId: String) {
+        var associateCustomerQuery = mutation { mutationQuery: MutationQuery ->
+            mutationQuery
+
+                .checkoutCustomerAssociate(
+                    ID(checkoutId),
+                    activity!!.getPreferences(Activity.MODE_PRIVATE)
+                        .getString("token", "")
+                ) {
+
+                        _queryBuilder ->
+                    _queryBuilder.checkout { _queryBuilder ->
+                        _queryBuilder.totalTax()
+
+                    }
+                }
+        }
+
+        CategoriesDataProvider.graphh!!.mutateGraph(associateCustomerQuery)
+            .enqueue(object :
+                GraphCall.Callback<Mutation> {
+                override fun onResponse(response: GraphResponse<Mutation>) {
+                    val checkoutIdd =
+                        response.data()!!.checkoutCustomerAssociate.checkout.id.toString()
+                    val checkoutWebUrl =
+                        response.data()!!.checkoutCustomerAssociate.checkout.webUrl
+                    activity!!.supportFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.container,
+                            CheckOutActivity(
+                                checkoutIdd,
+                                response.data()!!.checkoutCustomerAssociate.checkout.totalTax.precision()
+                                    .toFloat()
+                            )
+                        )
+                        .addToBackStack(null).commit()
+                    Log.d("associate", response.errors().toString())
+                }
+
+                override fun onFailure(error: GraphError) {
+                    Log.d(
+                        "asssociateerror", error.message.toString()
+                    )
+                }
+            })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

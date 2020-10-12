@@ -1,9 +1,12 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.webkit.WebView
@@ -11,8 +14,11 @@ import android.webkit.WebViewClient
 import android.widget.Toolbar
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
+import androidx.fragment.app.FragmentManager
+import com.example.myfirstofficeappecommerce.CheckOutActivity
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentWebViewBinding
 
@@ -35,7 +41,33 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                binding!!.webviewprogressbar.visibility=View.GONE
+                Log.d("pageurl", url!!)
+                binding!!.webviewprogressbar.visibility = View.GONE
+
+                if (url!!.contains("thank_you")) {
+                    binding!!.stepinclude.checkoutTextView3.apply {
+                        setTextColor(Color.WHITE)
+                        setBackground(resources.getDrawable(R.drawable.circle_background_drawable_highlighted))
+                        var builder = AlertDialog.Builder(context)
+
+                        var alert = builder.create()
+                        alert.setMessage("Your order has been placed successfully")
+                        alert.setButton(
+                            AlertDialog.BUTTON_POSITIVE, ""
+                        ) { p0, p1 -> }
+                        alert.show()
+                        Thread.sleep(2000)
+                        webview!!.clearHistory()
+                        webview=null
+                        (parentFragment as CheckOutActivity).clearAllFragmets()
+//                        parentFragment!!.childFragmentManager.popBackStackImmediate(
+//                            null,
+//                            FragmentManager.POP_BACK_STACK_INCLUSIVE
+//                        )
+
+
+                    }
+                }
                 super.onPageFinished(view, url)
             }
         }
@@ -55,18 +87,23 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
         webview!!.settings.javaScriptEnabled = true;
         webview!!.settings.loadWithOverviewMode = true;
 
+        if (activity != null)
+            activity!!.onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
 
-        activity!!.onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (webview!!.canGoBack())
-                    webview!!.goBack()
-                else {
-                    isEnabled = false
-                    activity!!.onBackPressed()
+
+                    if (webview!=null && webview!!.canGoBack() ) {
+
+                        webview!!.goBack()
+                    }
+                    else {
+                        isEnabled = false
+                        activity?.onBackPressed()
+
+                    }
                 }
-            }
 
-        })
+            })
 
         return binding!!.root
     }
