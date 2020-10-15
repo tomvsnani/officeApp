@@ -752,7 +752,14 @@ object CategoriesDataProvider {
             override fun onFailure(error: GraphError) {
                 Log.d("connectionfail", error.message.toString())
             }
-        })
+        }, null,
+            RetryHandler.exponentialBackoff(500, TimeUnit.MILLISECONDS, 1.2f)
+                .whenResponse<Storefront.QueryRoot> { responsee: GraphResponse<Storefront.QueryRoot> ->
+                    responsee.data()!!.shop.collections.edges == null
+
+                }
+                .maxCount(12)
+                .build())
 
         mutableCollectionList.observeForever { Log.d("connectionreceived", it.toString()) }
     }
@@ -883,10 +890,12 @@ object CategoriesDataProvider {
     fun getMillies(): Long {
 
 
-        var simpleDateFormatStartDate = SimpleDateFormat("yyyy:mm:dd hh:mm:ss", Locale.getDefault()).parse(date1)
+        var simpleDateFormatStartDate =
+            SimpleDateFormat("yyyy:mm:dd hh:mm:ss", Locale.getDefault()).parse(date1)
 
 
-        var simpleDateFormatEndDate = SimpleDateFormat("yyyy:mm:dd hh:mm:ss", Locale.getDefault()).parse(date2)
+        var simpleDateFormatEndDate =
+            SimpleDateFormat("yyyy:mm:dd hh:mm:ss", Locale.getDefault()).parse(date2)
 
         return simpleDateFormatStartDate.time - simpleDateFormatEndDate.time
 

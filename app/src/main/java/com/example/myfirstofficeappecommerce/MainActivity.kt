@@ -3,27 +3,30 @@ package com.example.myfirstofficeappecommerce
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
+import com.example.myfirstofficeappecommerce.databinding.ActivityMainBinding
 import com.example.myfirstofficeappecommerce.fragments.*
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity() : AppCompatActivity() {
 
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
     private var navigationView: NavigationView? = null
     var drawerLayout: DrawerLayout? = null
     var actionBarToggle: ActionBarDrawerToggle? = null
     var list: List<CategoriesModelClass>? = null
-    var parentfragment:CheckOutActivity?=null
+    var parentfragment: CheckOutActivity? = null
+    var binding: ActivityMainBinding? = null
 
 
     override fun onBackPressed() {
 
-        if(supportFragmentManager.backStackEntryCount==0)
+        if (supportFragmentManager.backStackEntryCount == 0)
             finish()
         else
             super.onBackPressed()
@@ -41,18 +44,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding!!.root)
+        list = ApplicationClass.selectedItemsList
         drawerLayout = findViewById(R.id.drawerlayout)
         navigationView = findViewById(R.id.navigationview)
 
         var a = navigationView!!.menu.addSubMenu(0, 1, 0, "Categories")
-        CategoriesDataProvider.mutableCollectionList.observeForever { t ->
-            list = t.toList()
-            for (i in 0 until t.size) {
-                a.add(1, i, 0, t[i].itemName)
-            }
+
+
+        for (i in list!!.indices) {
+            a.add(1, i, 0, list!![i].itemName)
         }
+
+        binding!!.mainactivityprogressbar.visibility = View.GONE
+
 
 
         supportFragmentManager.beginTransaction().replace(

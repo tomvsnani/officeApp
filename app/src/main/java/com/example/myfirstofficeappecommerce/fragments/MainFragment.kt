@@ -104,8 +104,6 @@ class MainFragment() : Fragment() {
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
         millies = CategoriesDataProvider.getMillies()
 
-
-
         super.onCreate(savedInstanceState)
     }
 
@@ -126,7 +124,6 @@ class MainFragment() : Fragment() {
 
         setUpToolbar(view)
 
-//activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,testfrag()).commit()
         etUpDrawerLayout()
 
         setUpSearchEditText(view)
@@ -148,6 +145,9 @@ class MainFragment() : Fragment() {
 
         return view
     }
+
+
+
 
     override fun onResume() {
 
