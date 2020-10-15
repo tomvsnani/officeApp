@@ -1,7 +1,6 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.transition.TransitionInflater
@@ -9,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -68,7 +66,9 @@ class ProfileFragment(var signInType: String,var checkoutId:String="",var totalT
         }
 
         binding!!.guestsigninTextView.setOnClickListener {
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,CheckOutActivity(checkoutId,totalTax))
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,
+                CheckOutMainWrapperFragment(checkoutId,totalTax)
+            )
         }
 
 

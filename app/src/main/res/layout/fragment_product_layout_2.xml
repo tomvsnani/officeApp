@@ -11,10 +11,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:background="#fff"
         android:orientation="vertical"
-
+        android:id="@+id/productfragmentouterlayout"
         tools:context=".fragments.OrdersFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -104,4 +103,11 @@
     <include
         android:id="@+id/bottomsheeet"
         layout="@layout/bottomsheet_include" />
+
+    <ProgressBar
+        android:id="@+id/productfragmentprogressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/red" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

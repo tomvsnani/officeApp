@@ -1,13 +1,11 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -28,7 +26,7 @@ import com.example.myfirstofficeappecommerce.Adapters.CollectionsAdapter
 import com.example.myfirstofficeappecommerce.Adapters.DifferentProductsCategoriesRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.databinding.FragmentMainBinding
 import com.example.myfirstofficeappecommerce.databinding.TimerBannerHorizontalLayoutBinding
 import com.example.myfirstofficeappecommerce.databinding.TimerBannerVerticalLayoutBinding
@@ -43,7 +41,7 @@ class MainFragment() : Fragment() {
     private var millies: Long? = null
     private var recyclerView: RecyclerView? = null;
     private var adapterr: CollectionsAdapter? = null;
-    var list: List<ModelClass>? = null
+    var list: List<UserDetailsModelClass>? = null
     private var viewPager2Banner1: ViewPager2? = null
     var tablayoutBanner1: TabLayout? = null;
     var categoryMap: LinkedHashMap<String, List<CategoriesModelClass>>? = null;
@@ -145,8 +143,6 @@ class MainFragment() : Fragment() {
 
         return view
     }
-
-
 
 
     override fun onResume() {
@@ -345,8 +341,8 @@ class MainFragment() : Fragment() {
         toolbar = view.findViewById(R.id.maintoolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.title = null
-        (activity as AppCompatActivity).supportActionBar!!.setHomeButtonEnabled(true)
-        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as MainActivity).actionBarToggle = ActionBarDrawerToggle(
             activity, (activity as MainActivity).drawerLayout, R.string.openDrawerLayout,
             R.string.closeDrawerLayout
@@ -415,16 +411,12 @@ class MainFragment() : Fragment() {
         (viewPager2Banner1 as ViewPager2).registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                Log.d("tabcount", tablayoutBanner1!!.tabCount.toString() + " " + position)
                 if (position < tablayoutBanner1!!.tabCount)
                     tablayoutBanner1!!.postDelayed({
                         if (position == tablayoutBanner1?.tabCount?.minus(1)) {
                             isScrollForward = false
 
-                            Log.d(
-                                "tabbackword",
-                                tablayoutBanner1!!.tabCount.toString() + " " + position + "   "
-                            )
+
                         }
                         if (position == 0) {
                             isScrollForward = true
@@ -473,10 +465,7 @@ class MainFragment() : Fragment() {
                         if (position == tablayoutBanner2?.tabCount?.minus(1)) {
                             isScrollForward = false
 
-                            Log.d(
-                                "tabbackword",
-                                tablayoutBanner1!!.tabCount.toString() + " " + position + "   "
-                            )
+
                         }
                         if (position == 0) {
                             isScrollForward = true
@@ -512,24 +501,19 @@ class MainFragment() : Fragment() {
         (recyclerView as RecyclerView).layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
-        var categoryMenu: SubMenu? = if (menu != null) menu!!.addSubMenu("Category") else null
+        adapterr?.submitList(CategoriesDataProvider.getCategoryData() as MutableList<CategoriesModelClass>)
 
-        adapterr!!.submitList(CategoriesDataProvider.getCategoryData() as MutableList<CategoriesModelClass>)
-//        CategoriesDataProvider.mutableCollectionList.observeForever { t: MutableList<CategoriesModelClass>? ->
-//
-//            adapterr!!.submitList(t)
-//        }
 
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == R.id.profilemenu) {
-            activity!!.supportFragmentManager.beginTransaction().replace(
+            activity?.supportFragmentManager?.beginTransaction()?.replace(
                 R.id.container,
                 ProfileFragment(Constants.NORMAL_SIGN_IN)
-            ).addToBackStack(null)
-                .commit()
+            )?.addToBackStack(null)
+                ?.commit()
 
         }
         if (item.itemId == android.R.id.home) {
@@ -541,37 +525,37 @@ class MainFragment() : Fragment() {
             return true
         }
         if (item.itemId == R.id.cartmenu) {
-            activity!!.supportFragmentManager.beginTransaction()
-                .replace(
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(
                     R.id.container,
                     CartFragment(
                         ApplicationClass.selectedVariantList
                     )
                 )
-                .addToBackStack(null)
-                .commit()
+                ?.addToBackStack(null)
+                ?.commit()
         }
         return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Log.d("incheck", selectedItemsList!!.size.toString())
+
         this.menu = menu
         menu.findItem(R.id.cartmenu).actionView.findViewById<ImageView>(R.id.cartmenuitem)
             .setOnClickListener {
-                activity!!.supportFragmentManager.beginTransaction()
-                    .replace(
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(
                         R.id.container,
                         CartFragment(
                             ApplicationClass.selectedVariantList
                         )
                     )
-                    .addToBackStack(null)
-                    .commit()
+                    ?.addToBackStack(null)
+                    ?.commit()
 
             }
         if (Utils.getItemCount().toInt() > 0) {
-            Log.d("incheck", "yes")
+
             menu.findItem(R.id.cartmenu).actionView.findViewById<TextView>(R.id.cartitemNumberIndicatormenu)
                 .apply {
                     visibility = View.VISIBLE

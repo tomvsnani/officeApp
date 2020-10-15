@@ -14,18 +14,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.searchfragmentRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
-import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModel
-import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactory
 import com.shopify.buy3.*
 
 
@@ -97,11 +94,11 @@ open class SearchFragment() : Fragment() {
 
                             for (productEdge in response.data()?.shop?.products?.edges!!) {
 
-                                var productImageSrcList: MutableList<ModelClass> = ArrayList()
+                                var productImageSrcList: MutableList<UserDetailsModelClass> = ArrayList()
 
                                 // adding aa images to product imagelist
                                 for (imageedge in productEdge.node.images.edges)
-                                    productImageSrcList.add(ModelClass(imageUrl = imageedge.node.src))
+                                    productImageSrcList.add(UserDetailsModelClass(imageUrl = imageedge.node.src))
 
                                 var variantList: MutableList<VariantsModelClass> = ArrayList()
 

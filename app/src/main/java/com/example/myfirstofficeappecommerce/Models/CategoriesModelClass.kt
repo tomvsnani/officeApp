@@ -13,7 +13,7 @@ data class CategoriesModelClass(
     var quantityOfItem: Int = 0,
     var id: String = "",
     var groupId: String = "",
-    var imageSrcOfVariants: List<ModelClass> = ArrayList(),
+    var imageSrcOfVariants: List<UserDetailsModelClass> = ArrayList(),
     var isFav: Boolean = false,
     var variantsList: MutableList<VariantsModelClass>? = ArrayList(),
     var cursor:String?="",

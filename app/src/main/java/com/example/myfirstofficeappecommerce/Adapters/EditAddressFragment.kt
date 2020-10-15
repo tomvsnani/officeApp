@@ -12,16 +12,15 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.MainActivity
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
-import java.util.concurrent.TimeUnit
 
 
-class EditAddressFragment(var modelClass: ModelClass) : Fragment() {
+class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fragment() {
 
     var newAddressLayoutBinding: NewAddressLayoutBinding? = null
     private var toolbar: Toolbar? = null
@@ -41,13 +40,13 @@ class EditAddressFragment(var modelClass: ModelClass) : Fragment() {
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
 
-        newAddressLayoutBinding!!.cityEditText.setText(modelClass.city)
+        newAddressLayoutBinding!!.cityEditText.setText(userDetailsModelClass.city)
 
-        newAddressLayoutBinding!!.nameEditText.setText(modelClass.title)
-        newAddressLayoutBinding!!.provinceEditText.setText(modelClass.state)
-        newAddressLayoutBinding!!.zipEditText.setText(modelClass.pinCode)
-        newAddressLayoutBinding!!.lastnameEditText.setText(modelClass.subTitle)
-        newAddressLayoutBinding!!.countryEditText.setText(modelClass.country)
+        newAddressLayoutBinding!!.nameEditText.setText(userDetailsModelClass.title)
+        newAddressLayoutBinding!!.provinceEditText.setText(userDetailsModelClass.state)
+        newAddressLayoutBinding!!.zipEditText.setText(userDetailsModelClass.pinCode)
+        newAddressLayoutBinding!!.lastnameEditText.setText(userDetailsModelClass.subTitle)
+        newAddressLayoutBinding!!.countryEditText.setText(userDetailsModelClass.country)
 
         newAddressLayoutBinding!!.addAddressButton.setOnClickListener {
 
@@ -77,7 +76,7 @@ class EditAddressFragment(var modelClass: ModelClass) : Fragment() {
                     mutationQuery
                         .customerAddressUpdate(
                             activity!!.getPreferences(Activity.MODE_PRIVATE)
-                                .getString("token", ""), ID(modelClass.id), input
+                                .getString("token", ""), ID(userDetailsModelClass.id), input
                         ) { _queryBuilder ->
                             _queryBuilder.customerAddress { _queryBuilder ->
 

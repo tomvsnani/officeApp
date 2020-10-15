@@ -88,7 +88,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/cityEditTextWrapper"
+        android:id="@+id/expireMonthTextWRapper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -106,13 +106,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="city"
-            android:inputType="textPassword" />
+         />
 
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/provinceTextWrapper"
+        android:id="@+id/expireYearTextWrapper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -122,20 +122,20 @@
         android:theme="@style/textInputEditTextStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cityEditTextWrapper">
+        app:layout_constraintTop_toBottomOf="@+id/expireMonthTextWRapper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/provinceEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="state"
-            android:inputType="textPassword" />
+           />
 
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/zipTextWrapper"
+        android:id="@+id/cvvTextWrapper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -146,14 +146,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/provinceTextWrapper">
+        app:layout_constraintTop_toBottomOf="@+id/expireYearTextWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/zipEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="zip"
-            android:inputType="textPassword" />
+           />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -194,7 +194,7 @@
         android:theme="@style/textInputEditTextStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/zipTextWrapper">
+        app:layout_constraintTop_toBottomOf="@+id/cvvTextWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/countryEditText"

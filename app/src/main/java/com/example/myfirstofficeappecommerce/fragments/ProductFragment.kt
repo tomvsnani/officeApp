@@ -60,7 +60,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     private var colorRecyclerAdapter: ProductColorRecyclerViewAdapter? = null
     private var sizeRecyclerViewAdapter: ProductSizeRecyclerViewAdapter? = null
     private var selectedVariant: VariantsModelClass? = null
-    private var variantList: List<VariantsModelClass>? =null
+    private var variantList: List<VariantsModelClass>? = null
     private var htmlDescriptionScroll: ScrollView? = null
     var binding: FragmentProductLayout2Binding? = null
 
@@ -87,27 +87,11 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
 
         initializeViews(view)
-
-        var viewmodel = ViewModelProvider(this, CategoriesViewModelFactory(modelClass.id)).get(
-            CategoriesViewModel::class.java
-        )
-        viewmodel.getVariantData()
-        viewmodel.variantmutableLiveData!!.observe(this, Observer {
-            if (it.size > 0) {
-                variantList = it.toList()
-                getSelectedVariant()
-                assignDataToViews()
-                submitDataToSizeColorAdapters()
-            }
-        })
-
         binding = FragmentProductLayout2Binding.bind(view)
-
-
-
-
-
+        binding!!.productfragmentouterlayout.visibility = View.GONE
         (activity as MainActivity).lockDrawer()
+
+        getProductData()
 
         setHasOptionsMenu(true)
 
@@ -123,12 +107,24 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         setUpClickListeners()
 
-
-
-
-
-
         return view
+    }
+
+    private fun getProductData() {
+        var viewmodel = ViewModelProvider(this, CategoriesViewModelFactory(modelClass.id)).get(
+            CategoriesViewModel::class.java
+        )
+        viewmodel.getVariantData()
+        viewmodel.variantmutableLiveData!!.observe(this, Observer {
+            if (it.size > 0) {
+                variantList = it.toList()
+                getSelectedVariant()
+                assignDataToViews()
+                submitDataToSizeColorAdapters()
+                binding!!.productfragmentprogressbar.visibility = View.GONE
+                binding!!.productfragmentouterlayout.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun getSelectedVariant() {
@@ -139,8 +135,6 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         } else {
             selectedVariant = variantList!![0].copy()
-Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
-
 
         }
     }
@@ -260,7 +254,7 @@ Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
             }!!.quantityOfItem =
                 selectedVariant!!.quantityOfItem
 
-            Log.d("selecteditems", ApplicationClass.selectedVariantList.toString())
+
             showOrHideItemCountIndicator()
         }
 
@@ -271,7 +265,7 @@ Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
 
 
             //adding product model to selected items
-            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant!=null) {
+            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant != null) {
                 selectedVariant!!.quantityOfItem++
                 selectedVariant!!.isSelected = true
 
@@ -279,7 +273,7 @@ Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
                 addTocartButton!!.visibility = View.GONE
                 addOrRemoveItemsLinear!!.visibility = View.VISIBLE
             }
-            Log.d("selecteditems",selectedVariant!!.imgSrc+" ok")
+
             itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
             startCartAnimation()
@@ -297,7 +291,6 @@ Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
 
                 }!!.quantityOfItem =
                     selectedVariant!!.quantityOfItem
-                Log.d("selecteditemsber", ApplicationClass.selectedVariantList.toString())
 
 
             }
@@ -453,12 +446,7 @@ Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
 
                 itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
 
-                Log.d("selecteditems", ApplicationClass.selectedVariantList.toString())
 
-                Log.d(
-                    "selecteddsize",
-                    "${selectedVariant!!.color} ${selectedVariant!!.size} ${selectedVariant!!.id}"
-                )
             }
 
 
@@ -468,6 +456,7 @@ Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
     }
 
     private fun setUpProductColorRecyclerView() {
+
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
 
             val isVariantAvailable =
@@ -499,10 +488,6 @@ Log.d("selectedd",variantList!![0].imgSrc+" "+"ok")
                 "MRP : ${activity!!.getString(R.string.Rs)} ${selectedVariant!!.price}"
 
 
-            Log.d(
-                "selecteddcolor",
-                "${selectedVariant!!.color} ${selectedVariant!!.size} ${selectedVariant!!.id}"
-            )
         }
 
         colorRecyclerView!!.layoutManager =

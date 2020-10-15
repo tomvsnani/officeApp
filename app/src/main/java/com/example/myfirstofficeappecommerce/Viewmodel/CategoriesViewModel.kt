@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.shopify.buy3.*
 import com.shopify.graphql.support.ID
@@ -62,8 +62,8 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                                                             _queryBuilder.price()
                                                                 .selectedOptions { _queryBuilder ->
                                                                     _queryBuilder.name().value()
-                                                                }.image {
-                                                                    _queryBuilder ->_queryBuilder.src()
+                                                                }.image { _queryBuilder ->
+                                                                    _queryBuilder.src()
                                                                 }
 
 
@@ -132,7 +132,9 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                                                             _queryBuilder.price()
                                                                 .selectedOptions { _queryBuilder ->
                                                                     _queryBuilder.name().value()
-                                                                }.image { _queryBuilder ->_queryBuilder.src().id()  }
+                                                                }.image { _queryBuilder ->
+                                                                    _queryBuilder.src().id()
+                                                                }
 
 
                                                         }
@@ -167,11 +169,11 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
                 for (productEdge in storefront.products.edges) {
 
-                    var productImageSrcList: MutableList<ModelClass> = ArrayList()
+                    var productImageSrcList: MutableList<UserDetailsModelClass> = ArrayList()
 
                     // adding aa images to product imagelist
                     for (imageedge in productEdge.node.images.edges)
-                        productImageSrcList.add(ModelClass(imageUrl = imageedge.node.src))
+                        productImageSrcList.add(UserDetailsModelClass(imageUrl = imageedge.node.src))
 
                     var variantList: MutableList<VariantsModelClass> = ArrayList()
 
@@ -187,13 +189,14 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                                 if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
                                 if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
                                 variantEdge.node.price.toFloat(),
-                                name = productEdge.node.title,imgSrc = variantEdge?.node?.image?.src?:productImageSrcList[0].imageUrl
+                                name = productEdge.node.title,
+                                imgSrc = variantEdge?.node?.image?.src
+                                    ?: productImageSrcList[0].imageUrl
 
 
                             )
                         )
                     }
-
 
 
                     var productmodelclass = CategoriesModelClass(
@@ -262,7 +265,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                     response.data()!!.node as Storefront.Product
                 for (variantEdge in storefront.variants.edges) {
                     var sizeIndex = 2;
-                    if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name == "Size")
+                    if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name == "Shoe Size")
                         sizeIndex = 1
                     variantListBasedOnProductId.add(
                         VariantsModelClass(
@@ -271,7 +274,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                             if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
                             if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
                             variantEdge.node.price.toFloat(),
-                            name = variantEdge.node.title,imgSrc = variantEdge.node.image.src
+                            name = variantEdge.node.title, imgSrc = variantEdge.node.image.src
 
 
                         )

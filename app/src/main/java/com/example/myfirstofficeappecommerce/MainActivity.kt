@@ -1,7 +1,6 @@
 package com.example.myfirstofficeappecommerce
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -19,8 +18,8 @@ class MainActivity() : AppCompatActivity() {
     private var navigationView: NavigationView? = null
     var drawerLayout: DrawerLayout? = null
     var actionBarToggle: ActionBarDrawerToggle? = null
-    var list: List<CategoriesModelClass>? = null
-    var parentfragment: CheckOutActivity? = null
+    var list: List<CategoriesModelClass>? = ArrayList()
+    var parentfragment: CheckOutMainWrapperFragment? = null
     var binding: ActivityMainBinding? = null
 
 
@@ -53,7 +52,7 @@ class MainActivity() : AppCompatActivity() {
         var a = navigationView!!.menu.addSubMenu(0, 1, 0, "Categories")
 
 
-        for (i in list!!.indices) {
+        for (i in list?.indices!!) {
             a.add(1, i, 0, list!![i].itemName)
         }
 

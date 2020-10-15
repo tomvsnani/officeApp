@@ -1,7 +1,6 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -11,14 +10,9 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toolbar
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.iterator
-import androidx.fragment.app.FragmentManager
-import com.example.myfirstofficeappecommerce.CheckOutActivity
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentWebViewBinding
 
@@ -59,7 +53,7 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
                         Thread.sleep(2000)
                         webview!!.clearHistory()
                         webview=null
-                        (parentFragment as CheckOutActivity).clearAllFragmets()
+                        (parentFragment as CheckOutMainWrapperFragment).clearAllFragmets()
 //                        parentFragment!!.childFragmentManager.popBackStackImmediate(
 //                            null,
 //                            FragmentManager.POP_BACK_STACK_INCLUSIVE

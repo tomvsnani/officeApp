@@ -2,13 +2,12 @@ package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -25,21 +24,22 @@ import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
 import com.shopify.graphql.support.Input
+import kotlinx.android.synthetic.main.fragment_cart.*
 
 
 class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {
 
     var toolbar: Toolbar? = null
-    var slecetdItemsRecycler: RecyclerView? = null
-    var recommendedItemsRecycler: RecyclerView? = null
-    var itemsSelectedAdapter: CartItemsSelectedRecyclerViewAdapter? = null
+    private var slecetdItemsRecycler: RecyclerView? = null
+    private var recommendedItemsRecycler: RecyclerView? = null
+    private var itemsSelectedAdapter: CartItemsSelectedRecyclerViewAdapter? = null
     var totalAmountTextView: TextView? = null
-    var count = 0
-    var recommendedAdapter: CartItemRecommendedAdapter? = null
-    var proceedTextViewCart: TextView? = null
+    private var recommendedAdapter: CartItemRecommendedAdapter? = null
+    private var proceedTextViewCart: TextView? = null
     var list: MutableList<VariantsModelClass> = ArrayList()
-    var emptycartlayout: ConstraintLayout? = null
-    var cartNestedScroll: NestedScrollView? = null
+    private var emptycartlayout: ConstraintLayout? = null
+    private var cartNestedScroll: NestedScrollView? = null
+    var progressbar: ProgressBar? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,84 +52,26 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
             container,
             false
         )
-        (activity as MainActivity).lockDrawer()
-        totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
-        setHasOptionsMenu(true)
-        toolbar = view.findViewById(R.id.cartToolbar)
+        setUpToolBar(view)
 
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
+        initializeViews(view)
 
+        setUpItemsSelectedRecyclerView()
 
-        emptycartlayout = view.findViewById(R.id.emptycartlayout)
-        slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
-        recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
-        proceedTextViewCart = view.findViewById(R.id.proceedTextViewCart)
-        cartNestedScroll = view.findViewById(R.id.include2)
-
-        itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this) {
-            this.list.clear()
-            this.list = it as MutableList<VariantsModelClass>
-
-        }
-        if (selectedItemsList!!.isEmpty()) {
-            Log.d("listtt", selectedItemsList.toString())
-            emptycartlayout!!.visibility = View.VISIBLE
-            cartNestedScroll!!.visibility = View.GONE
-        } else {
-            Log.d("listtt1", selectedItemsList.toString())
-            emptycartlayout!!.visibility = View.GONE
-            cartNestedScroll!!.visibility = View.VISIBLE
-        }
-        slecetdItemsRecycler!!.itemAnimator = null
-        slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
-        slecetdItemsRecycler!!.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        itemsSelectedAdapter!!.submitList(ApplicationClass.selectedVariantList!!.filter { it.quantityOfItem > 0 } as MutableList<VariantsModelClass>)
-
-
-        recommendedItemsRecycler!!.layoutManager =
-            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         list = selectedItemsList!!.toMutableList()
 
-
-        recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
-
-            modelClass.quantityOfItem++
+        setUpRecommendedItemsRecyclerView()
 
 
-            var count =
-                list.filter { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }
-            if (count.isNotEmpty()) {
-                list.find { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }!!.quantityOfItem =
-                    modelClass.quantityOfItem
-
-                (ApplicationClass.selectedVariantList as MutableList).find { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }!!.quantityOfItem =
-                    modelClass.quantityOfItem
-
-//                (ApplicationClass.selectedItemsList as MutableList).find { it.id==modelClass.parentProductId }!!.quantityOfItem++
-            } else {
-                Log.d("recommendedqu", modelClass.quantityOfItem.toString())
-                list.add(modelClass)
-                (ApplicationClass.selectedVariantList as MutableList).add(modelClass)
-
-//                (ApplicationClass.selectedItemsList as MutableList).add( CategoriesModelClass(id=modelClass.parentProductId!!,quantityOfItem = modelClass.quantityOfItem))
-//
-            }
-
-            itemsSelectedAdapter!!.submitList(list.filter { it.quantityOfItem > 0 } as MutableList<VariantsModelClass>)
+        setUpOnClickListener()
 
 
-        }
+        return view
+    }
 
-        recommendedItemsRecycler!!.adapter = recommendedAdapter
-        recommendedAdapter!!.submitList(
-            CategoriesDataProvider.getRecommendedData() as MutableList<VariantsModelClass>
-        )
-
+    private fun setUpOnClickListener() {
         proceedTextViewCart!!.setOnClickListener {
+
             var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
             if (token == "") {
                 var alert = AlertDialog.Builder(context!!).create()
@@ -152,14 +94,92 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
         }
+    }
+
+    private fun setUpRecommendedItemsRecyclerView() {
+        recommendedItemsRecycler!!.layoutManager =
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
 
-        return view
+
+        recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
+
+            modelClass.quantityOfItem++
+
+
+            var count =
+                list.filter { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }
+            if (count.isNotEmpty()) {
+                list.find { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }!!.quantityOfItem =
+                    modelClass.quantityOfItem
+
+                (ApplicationClass.selectedVariantList as MutableList).find { it.id == modelClass.id && it.parentProductId == modelClass.parentProductId }!!.quantityOfItem =
+                    modelClass.quantityOfItem
+
+
+            } else {
+                Log.d("recommendedqu", modelClass.quantityOfItem.toString())
+                list.add(modelClass)
+                (ApplicationClass.selectedVariantList as MutableList).add(modelClass)
+
+            }
+
+            itemsSelectedAdapter!!.submitList(list.filter { it.quantityOfItem > 0 } as MutableList<VariantsModelClass>)
+
+
+        }
+        recommendedItemsRecycler!!.adapter = recommendedAdapter
+        recommendedAdapter!!.submitList(
+            CategoriesDataProvider.getRecommendedData() as MutableList<VariantsModelClass>
+        )
+    }
+
+    private fun setUpItemsSelectedRecyclerView() {
+        itemsSelectedAdapter = CartItemsSelectedRecyclerViewAdapter(this) {
+            this.list.clear()
+            this.list = it as MutableList<VariantsModelClass>
+
+        }
+
+        if (selectedItemsList!!.isEmpty()) {
+
+            emptycartlayout!!.visibility = View.VISIBLE
+            cartNestedScroll!!.visibility = View.GONE
+        } else {
+
+            emptycartlayout!!.visibility = View.GONE
+            cartNestedScroll!!.visibility = View.VISIBLE
+        }
+        slecetdItemsRecycler!!.itemAnimator = null
+        slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
+        slecetdItemsRecycler!!.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        itemsSelectedAdapter!!.submitList(ApplicationClass.selectedVariantList!!.filter { it.quantityOfItem > 0 } as MutableList<VariantsModelClass>)
+    }
+
+    private fun initializeViews(view: View) {
+        progressbar = view.findViewById<ProgressBar>(R.id.cardfragmentprogressbar)
+        totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
+        emptycartlayout = view.findViewById(R.id.emptycartlayout)
+        slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
+        recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
+        proceedTextViewCart = view.findViewById(R.id.proceedTextViewCart)
+        cartNestedScroll = view.findViewById(R.id.include2)
+    }
+
+    private fun setUpToolBar(view: View) {
+        (activity as MainActivity).lockDrawer()
+        setHasOptionsMenu(true)
+        toolbar = view.findViewById(R.id.cartToolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
     }
 
     private fun createCheckout(signinType: String) {
         ApplicationClass.signInType = signinType
-
+        progressbar!!.visibility = View.VISIBLE
         var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = ArrayList()
 
         for (i in ApplicationClass.selectedVariantList!!) {
@@ -210,8 +230,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                     val checkoutWebUrl = response.data()!!.checkoutCreate.checkout.webUrl
 
                     if (signinType == Constants.NORMAL_SIGN_IN) {
-                        if (activity!!.getPreferences(Activity.MODE_PRIVATE)
-                                .getString("token", "") != ""
+                        if (activity?.getPreferences(Activity.MODE_PRIVATE)
+                                ?.getString("token", "") != ""
                         )
                             associateWithUserQuery(checkoutId)
                         else
@@ -225,7 +245,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                         activity!!.supportFragmentManager.beginTransaction()
                             .replace(
                                 R.id.container,
-                                CheckOutActivity(
+                                CheckOutMainWrapperFragment(
                                     checkoutId,
                                     response.data()!!.checkoutCreate.checkout.totalTax.precision()
                                         .toFloat()
@@ -272,7 +292,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                     activity!!.supportFragmentManager.beginTransaction()
                         .replace(
                             R.id.container,
-                            CheckOutActivity(
+                            CheckOutMainWrapperFragment(
                                 checkoutIdd,
                                 response.data()!!.checkoutCustomerAssociate.checkout.totalTax.precision()
                                     .toFloat()

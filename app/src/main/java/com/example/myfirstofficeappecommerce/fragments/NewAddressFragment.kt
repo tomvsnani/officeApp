@@ -13,13 +13,12 @@ import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.MainActivity
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
-import layout.CheckoutOverViewFragment
 import java.util.concurrent.TimeUnit
 
 
@@ -94,7 +93,7 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
             .setCountry(country)
 
 
-        val modelClass = ModelClass(
+        val modelClass = UserDetailsModelClass(
             hnum = address1,
             city = city,
             title = fname,
@@ -176,10 +175,10 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
                             val shippingRates =
                                 checkout.availableShippingRates.shippingRates
                             var c = 0f;
-                            var modelList:MutableList<ModelClass> =ArrayList()
+                            var userDetailsModelList:MutableList<UserDetailsModelClass> =ArrayList()
                             for (i in shippingRates) {
-                                var model=ModelClass(title = i.title,subTitle = i.handle,shippingPrice = i.price.precision().toString())
-                                modelList.add(model)
+                                var model=UserDetailsModelClass(title = i.title,subTitle = i.handle,shippingPrice = i.price.precision().toString())
+                                userDetailsModelList.add(model)
                                 c += i.price.precision().toFloat()
                             }
 
@@ -190,7 +189,7 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
                                     .replace(
                                         R.id.container1,
                                         CheckoutOverViewFragment(webUrl, c, totalTax, modelClass,
-                                            ApplicationClass.selectedVariantList!!,modelList,checkoutId)
+                                            ApplicationClass.selectedVariantList!!,userDetailsModelList,checkoutId)
                                     )
                                     .addToBackStack(null)
                                     .commit()

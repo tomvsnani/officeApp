@@ -1,6 +1,5 @@
 package com.example.myfirstofficeappecommerce.Adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
-import com.example.myfirstofficeappecommerce.fragments.WebViewFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
-import layout.CheckoutOverViewFragment
-import java.util.concurrent.TimeUnit
 
 
 class ShippingRatesAdapter(
@@ -27,7 +23,7 @@ class ShippingRatesAdapter(
     var checkoutId: String,
     var callback: (clickedPos: Int) -> Unit
 ) :
-    ListAdapter<ModelClass, ShippingRatesAdapter.ShippingAddressChangeViewHolder>(ModelClass.diffUtil) {
+    ListAdapter<UserDetailsModelClass, ShippingRatesAdapter.ShippingAddressChangeViewHolder>(UserDetailsModelClass.DIFF_UTIL) {
     inner class ShippingAddressChangeViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         var shippingRatesNameTextView: TextView? =
@@ -63,7 +59,7 @@ class ShippingRatesAdapter(
 
     }
 
-     fun getNewWebAddressBasedOnShippingProvider(modelclass: ModelClass) {
+     fun getNewWebAddressBasedOnShippingProvider(modelclass: UserDetailsModelClass) {
         val query1 = mutation { m: MutationQuery ->
             m.checkoutShippingLineUpdate(
                 ID(checkoutId), modelclass.subTitle,
@@ -109,21 +105,21 @@ class ShippingRatesAdapter(
 
     }
 
-    override fun submitList(list: MutableList<ModelClass>?) {
+    override fun submitList(list: MutableList<UserDetailsModelClass>?) {
         super.submitList(list!!.toList())
 
     }
 
     override fun onBindViewHolder(holder: ShippingAddressChangeViewHolder, position: Int) {
-        var modelClass: ModelClass = currentList[position]
+        var userDetailsModelClass: UserDetailsModelClass = currentList[position]
         if(position==0) {
-            modelClass.isSelectedAddress = true
+            userDetailsModelClass.isSelectedAddress = true
 
         }
 
-        holder.radioButton!!.isChecked = modelClass.isSelectedAddress
-        holder.shippingPriceTextView!!.text = modelClass.shippingPrice
-        holder.shippingRatesNameTextView!!.text = modelClass.title
+        holder.radioButton!!.isChecked = userDetailsModelClass.isSelectedAddress
+        holder.shippingPriceTextView!!.text = userDetailsModelClass.shippingPrice
+        holder.shippingRatesNameTextView!!.text = userDetailsModelClass.title
 
 
     }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.shopify.buy3.*
 import com.shopify.graphql.support.ID
@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
 
 object CategoriesDataProvider {
     var graphh: GraphClient? = null
@@ -371,9 +370,9 @@ object CategoriesDataProvider {
 //        return map
 //    }
 //
-    fun getListDataForHorizontalScroll(): List<ModelClass> {
+    fun getListDataForHorizontalScroll(): List<UserDetailsModelClass> {
         return listOf(
-            ModelClass(
+            UserDetailsModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
                 "Laptop",
                 "ok",
@@ -381,7 +380,7 @@ object CategoriesDataProvider {
                 "null",
                 id = ""
             ),
-            ModelClass(
+            UserDetailsModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
                 "Phone",
                 "ok",
@@ -389,7 +388,7 @@ object CategoriesDataProvider {
                 "null",
                 id = ""
             ),
-            ModelClass(
+            UserDetailsModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
                 "Light",
                 "ok",
@@ -397,7 +396,7 @@ object CategoriesDataProvider {
                 "null",
                 id = ""
             ),
-            ModelClass(
+            UserDetailsModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
                 "Toys",
                 "ok",
@@ -405,7 +404,7 @@ object CategoriesDataProvider {
                 "null",
                 id = ""
             ),
-            ModelClass(
+            UserDetailsModelClass(
                 Constants.HORIZONTAL_LIST_ITEM_NAMES,
                 "Mugs",
                 "ok",
@@ -835,11 +834,11 @@ object CategoriesDataProvider {
                 var storefront: Storefront.Collection =
                     response.data()!!.node as Storefront.Collection
                 for (productEdge in storefront.products.edges) {
-                    var productImageSrcList: MutableList<ModelClass> = ArrayList()
+                    var productImageSrcList: MutableList<UserDetailsModelClass> = ArrayList()
 
                     // adding aa images to product imagelist
                     for (imageedge in productEdge.node.images.edges)
-                        productImageSrcList.add(ModelClass(imageUrl = imageedge.node.src))
+                        productImageSrcList.add(UserDetailsModelClass(imageUrl = imageedge.node.src))
 
                     var variantList: MutableList<VariantsModelClass> = ArrayList()
 

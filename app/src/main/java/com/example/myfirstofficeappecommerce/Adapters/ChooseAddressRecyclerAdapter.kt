@@ -1,7 +1,5 @@
 package com.example.myfirstofficeappecommerce.Adapters
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,23 +12,19 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
-import com.example.myfirstofficeappecommerce.FinalisingOrderFragment
-import com.example.myfirstofficeappecommerce.MainActivity
-import com.example.myfirstofficeappecommerce.Models.ModelClass
+import com.example.myfirstofficeappecommerce.fragments.FinalisingOrderFragment
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.fragments.EditAddressFragment
-import com.example.myfirstofficeappecommerce.fragments.NewAddressFragment
-import com.example.myfirstofficeappecommerce.fragments.WebViewFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.Checkout
 import com.shopify.buy3.Storefront.QueryRoot
-import com.shopify.graphql.support.AbstractResponse
 import com.shopify.graphql.support.ID
 import java.util.concurrent.TimeUnit
 
 
 class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String) :
-    ListAdapter<ModelClass, ChooseAddressRecyclerAdapter.ChooseAddressViewHolder>(ModelClass.diffUtil) {
+    ListAdapter<UserDetailsModelClass, ChooseAddressRecyclerAdapter.ChooseAddressViewHolder>(UserDetailsModelClass.DIFF_UTIL) {
     inner class ChooseAddressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var ItemNameTextView: TextView? = itemView.findViewById(R.id.chooseAddressnameTextView)
         var LocationNameTextView: TextView? =
@@ -228,20 +222,20 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
 
     }
 
-    override fun submitList(list: MutableList<ModelClass>?) {
+    override fun submitList(list: MutableList<UserDetailsModelClass>?) {
         super.submitList(list!!.toList())
 
     }
 
     override fun onBindViewHolder(holder: ChooseAddressViewHolder, position: Int) {
-        var modelClass: ModelClass = currentList[position]
+        var userDetailsModelClass: UserDetailsModelClass = currentList[position]
 
-        holder.radioButton!!.isChecked = modelClass.isSelectedAddress
-        holder.ItemNameTextView?.text = modelClass.title
+        holder.radioButton!!.isChecked = userDetailsModelClass.isSelectedAddress
+        holder.ItemNameTextView?.text = userDetailsModelClass.title
 
-        holder.LocationNameTextView?.text = modelClass.hnum+" "+modelClass.city+" \n"+modelClass.state+" "+modelClass.pinCode
+        holder.LocationNameTextView?.text = userDetailsModelClass.hnum+" "+userDetailsModelClass.city+" \n"+userDetailsModelClass.state+" "+userDetailsModelClass.pinCode
 
-        holder.phnNumTextView?.text = modelClass.phoneNumber
+        holder.phnNumTextView?.text = userDetailsModelClass.phoneNumber
 
 
     }

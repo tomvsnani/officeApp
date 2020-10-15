@@ -24,28 +24,30 @@ class ProductColorRecyclerViewAdapter(
 
     inner class ProductColorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageView: ImageView = itemView.findViewById(R.id.productcolorrowTextview)
-        var cardView:CardView=itemView.findViewById(R.id.cardviewcolor)
+        var cardView: CardView = itemView.findViewById(R.id.cardviewcolor)
 
         init {
-            cardView.setOnClickListener  {
-                if(adapterPosition>=0)
+            cardView.setOnClickListener {
+                if (adapterPosition >= 0)
                     callback(currentList[adapterPosition].color.toString())
 
-                currentList.filter { it.isSelected=false
-                    return@filter true} as MutableList<VariantsModelClass>
-                currentList[adapterPosition].isSelected=true
+                currentList.filter {
+                    it.isSelected = false
+                    return@filter true
+                } as MutableList<VariantsModelClass>
+                currentList[adapterPosition].isSelected = true
                 notifyDataSetChanged()
 
 
-           }
+            }
         }
 
     }
 
     override fun submitList(list: MutableList<VariantsModelClass>?) {
-        val a:MutableList<VariantsModelClass> = ArrayList()
-        for(i in list!!){
-            Log.d("helloheyyy1111",i.color+"  "+i.isSelected+" "+i.id)
+        val a: MutableList<VariantsModelClass> = ArrayList()
+        for (i in list!!) {
+            Log.d("helloheyyy1111", i.color + "  " + i.isSelected + " " + i.id)
             a.add(i.copy())
         }
         super.submitList(a)
@@ -62,13 +64,15 @@ class ProductColorRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ProductColorViewHolder, position: Int) {
 
         var modelClass: VariantsModelClass = currentList[position]
+        Log.d(
+            "modelclasscolorr",
+            modelClass.color + "  " + modelClass.name + "  " + modelClass.isSelected
+        )
 
-        if(modelClass.isSelected) {
+        if (modelClass.isSelected) {
             holder.cardView.cardElevation = 20f
-            Log.d("modelclasscolorr",modelClass.color+"  "+modelClass.name+"  "+modelClass.isSelected)
-        }
-        else
-            holder.cardView.cardElevation=0f
+        } else
+            holder.cardView.cardElevation = 0f
 
         //Log.d("modelclasscolor",modelClass.color.toString())
         when {
@@ -77,19 +81,19 @@ class ProductColorRecyclerViewAdapter(
 
 
             modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "b" -> {
-                //Log.d("modelclasscolorr",  modelClass.color!!.toLowerCase(Locale.ROOT))
-                if (modelClass.color!!.toLowerCase(Locale.ROOT) == "black")
+
+                if (modelClass.color!!.toLowerCase(Locale.ROOT) .contains( "black"))
                     holder.imageView.setBackgroundColor(Color.BLACK)
                 else
-                holder.imageView.setBackgroundColor(Color.BLUE)
+                    holder.imageView.setBackgroundColor(Color.BLUE)
 
             }
             modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "g" -> {
-                if (modelClass.color!!.toLowerCase(Locale.ROOT) == "gre")
+                Log.d("modelclasscolorre",  modelClass.color!!.toLowerCase(Locale.ROOT))
+                if (modelClass.color!!.toLowerCase(Locale.ROOT) .contains( "green"))
                     holder.imageView.setBackgroundColor(Color.GREEN)
                 else holder.imageView.setBackgroundColor(Color.GRAY)
             }
-
 
 
             modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "w" ->
@@ -103,8 +107,8 @@ class ProductColorRecyclerViewAdapter(
             modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "y" -> holder.imageView.setBackgroundColor(
                 Color.YELLOW
             )
-            else ->{
-                holder.imageView.visibility=View.GONE
+            else -> {
+                holder.imageView.visibility = View.GONE
             }
 
 //            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->

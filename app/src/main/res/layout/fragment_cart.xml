@@ -280,6 +280,12 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+<ProgressBar
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:indeterminateTint="@color/red"
+    android:id="@+id/cardfragmentprogressbar"
+    android:visibility="gone"
+    android:layout_gravity="center"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
