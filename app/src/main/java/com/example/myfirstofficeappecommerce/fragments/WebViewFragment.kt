@@ -13,8 +13,13 @@ import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myfirstofficeappecommerce.ApplicationClass
+import com.example.myfirstofficeappecommerce.Database.MyDatabase
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentWebViewBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WebViewFragment(var link: String, var type: String) : Fragment() {
 
@@ -52,7 +57,7 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
                         alert.show()
                         Thread.sleep(2000)
                         webview!!.clearHistory()
-                        webview=null
+                        webview = null
                         (parentFragment as CheckOutMainWrapperFragment).clearAllFragmets()
 //                        parentFragment!!.childFragmentManager.popBackStackImmediate(
 //                            null,
@@ -60,6 +65,17 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
 //                        )
 
 
+                        CoroutineScope(Dispatchers.IO).launch {
+                            if (ApplicationClass.selectedVariantList
+                                !!.find { it.isfav } != null
+                            )
+                                MyDatabase.getDbInstance(context!!).dao()
+                                    .delete(
+                                        ApplicationClass.selectedVariantList
+                                        !!.find { it.isfav }!!
+                                    )
+                            ApplicationClass.selectedVariantList!!.clear()
+                        }
                     }
                 }
                 super.onPageFinished(view, url)
@@ -86,11 +102,10 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
                 override fun handleOnBackPressed() {
 
 
-                    if (webview!=null && webview!!.canGoBack() ) {
+                    if (webview != null && webview!!.canGoBack()) {
 
                         webview!!.goBack()
-                    }
-                    else {
+                    } else {
                         isEnabled = false
                         activity?.onBackPressed()
 

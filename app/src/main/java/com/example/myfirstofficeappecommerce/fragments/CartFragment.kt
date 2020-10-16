@@ -25,6 +25,7 @@ import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
 import com.shopify.graphql.support.Input
 import kotlinx.android.synthetic.main.fragment_cart.*
+import java.util.concurrent.TimeUnit
 
 
 class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {
@@ -239,7 +240,10 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                                 .replace(
                                     R.id.container,
 
-                                    ProfileFragment(Constants.NORMAL_SIGN_IN)
+                                    ProfileFragment(
+                                        Constants.NORMAL_SIGN_IN,
+                                        fragment = this@CartFragment
+                                    )
                                 ).addToBackStack(null).commit()
                     } else {
                         activity!!.supportFragmentManager.beginTransaction()
@@ -258,7 +262,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
             override fun onFailure(error: GraphError) {
-                Log.d("checkouterror", error.message.toString())
+
             }
         })
     }
@@ -299,13 +303,11 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                             )
                         )
                         .addToBackStack(null).commit()
-                    Log.d("associate", response.errors().toString())
+
                 }
 
                 override fun onFailure(error: GraphError) {
-                    Log.d(
-                        "asssociateerror", error.message.toString()
-                    )
+
                 }
             })
     }

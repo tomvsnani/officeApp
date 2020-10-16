@@ -22,7 +22,12 @@ import com.shopify.buy3.Storefront
 import com.shopify.buy3.Storefront.*
 
 
-class ProfileFragment(var signInType: String,var checkoutId:String="",var totalTax:Float=0f) : Fragment() {
+class ProfileFragment(
+    var signInType: String,
+    var checkoutId: String = "",
+    var totalTax: Float = 0f,
+    var fragment: Fragment? = null
+) : Fragment() {
 
     var nameInputTxetView: TextInputEditText? = null
     var phnInputTxetView: TextInputEditText? = null
@@ -66,8 +71,9 @@ class ProfileFragment(var signInType: String,var checkoutId:String="",var totalT
         }
 
         binding!!.guestsigninTextView.setOnClickListener {
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,
-                CheckOutMainWrapperFragment(checkoutId,totalTax)
+            activity!!.supportFragmentManager.beginTransaction().replace(
+                R.id.container,
+                CheckOutMainWrapperFragment(checkoutId, totalTax)
             )
         }
 
@@ -284,10 +290,42 @@ class ProfileFragment(var signInType: String,var checkoutId:String="",var totalT
                         response.data()!!.customerAccessTokenCreate.customerAccessToken.accessToken + "  " + response.data()!!.customerAccessTokenCreate.customerAccessToken.expiresAt
                     )
 
-                    activity!!.supportFragmentManager.beginTransaction().addToBackStack(null)
-                        .replace(R.id.container, MainFragment())
-                        .addToBackStack(null)
-                        .commit()
+                    when (fragment) {
+                        is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.container, MainFragment())
+
+                            .commit()
+                        is OrdersFragment -> activity!!.supportFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(
+                                R.id.container,
+                                OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
+                                    it.isOrdered
+                                })
+                            )
+
+                            .commit()
+
+                        is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.container, WishListFragment())
+
+                            .commit()
+                        is CartFragment -> activity!!.supportFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(
+                                R.id.container,
+                                CheckOutMainWrapperFragment(checkoutId, totalTax)
+                            )
+
+                            .commit()
+
+                        else -> activity!!.supportFragmentManager.beginTransaction()
+
+                            .replace(R.id.container, MainFragment())
+                            .commit()
+                    }
 
                 } else {
                     activity!!.runOnUiThread { progressbar!!.visibility = View.GONE }
@@ -300,8 +338,6 @@ class ProfileFragment(var signInType: String,var checkoutId:String="",var totalT
                             ).show()
                         }
                 }
-
-
             }
 
             override fun onFailure(error: GraphError) {

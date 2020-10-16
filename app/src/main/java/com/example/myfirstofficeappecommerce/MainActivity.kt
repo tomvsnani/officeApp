@@ -49,7 +49,8 @@ class MainActivity() : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerlayout)
         navigationView = findViewById(R.id.navigationview)
 
-        var a = navigationView!!.menu.addSubMenu(0, 1, 0, "Categories")
+        var a = navigationView!!.menu.addSubMenu(0, 1, 1, "Categories")
+
 
 
         for (i in list?.indices!!) {
@@ -157,6 +158,8 @@ class MainActivity() : AppCompatActivity() {
         menuInflater.inflate(R.menu.toolbarmenu, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
+
 
 
 }

@@ -275,8 +275,6 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                             if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
                             variantEdge.node.price.toFloat(),
                             name = variantEdge.node.title, imgSrc = variantEdge.node.image.src
-
-
                         )
                     )
                 }
