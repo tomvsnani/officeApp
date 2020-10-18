@@ -159,10 +159,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
             override fun onResponse(response: GraphResponse<Mutation>) {
 
-                Log.d(
-                    "webiddd",
-                    response.data()!!.checkoutShippingAddressUpdate.checkout.webUrl
-                )
+
 
 
                 val queryy = query { rootQuery ->
@@ -333,11 +330,14 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
                     var a =
                         addressList.find { it.id == response.data()!!.customer.defaultAddress.id.toString() }
-                    a!!.isSelectedAddress = true
+                    if(a!=null) {
+                        a!!.isSelectedAddress = true
 
-                    adapter!!.submitList(if (addressList.size > 0) mutableListOf(a) else null)
+                        adapter!!.submitList(if (addressList.size > 0) mutableListOf(a) else null)
 
-                    adapter!!.notifyDataSetChanged()
+                        adapter!!.notifyDataSetChanged()
+                    }
+                    else Toast.makeText(context!!,"Add an address",Toast.LENGTH_SHORT).show()
 
 
                 }

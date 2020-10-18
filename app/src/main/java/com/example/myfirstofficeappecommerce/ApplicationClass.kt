@@ -18,6 +18,7 @@ class ApplicationClass : Application() {
          var mydb: MyDatabase? = null
         var weburl:String?=null
         var signInType:String=""
+        var checkoutId:String=""
     }
 
 

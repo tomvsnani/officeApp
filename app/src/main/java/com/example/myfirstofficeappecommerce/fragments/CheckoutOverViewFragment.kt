@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.CheckoutOverViewItemsAdapter
@@ -94,6 +95,7 @@ class CheckoutOverViewFragment(
         adapter = CheckoutOverViewItemsAdapter(context!!)
 
         binding.checkoutoverviewrecyclerview.adapter = adapter
+        binding.checkoutoverviewrecyclerview.addItemDecoration(DividerItemDecoration(context!!,RecyclerView.VERTICAL))
         adapter!!.submitList(list)
 
 

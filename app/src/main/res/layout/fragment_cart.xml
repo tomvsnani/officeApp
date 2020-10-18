@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,6 +51,7 @@
                     android:textSize="18sp" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
+
         <include
             layout="@layout/cartemptylayout"
             android:layout_width="match_parent"
@@ -63,7 +61,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintVertical_bias="1.0" />
+
         <androidx.core.widget.NestedScrollView
             android:id="@+id/include2"
             android:layout_width="match_parent"
@@ -82,17 +81,14 @@
                 android:orientation="vertical">
 
 
-                <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <androidx.core.widget.NestedScrollView
                     android:id="@+id/cartnestedscroll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fillViewport="true"
                     android:fitsSystemWindows="true">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        xmlns:tools="http://schemas.android.com/tools"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#fff">
@@ -100,8 +96,9 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/cartSelecetedRecyclerview"
 
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -109,29 +106,57 @@
                         <TextView
                             android:id="@+id/textView2"
                             android:layout_width="match_parent"
-                            android:layout_height="19dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
                             android:text="Yay! You have unlocked exclusive offers!"
                             android:textColor="#000"
-                            app:layout_constraintBottom_toTopOf="@+id/cartRecyclerviewRecommondedItems"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/cartSelecetedRecyclerview"
-                            app:layout_constraintVertical_bias="1.0" />
+                            app:layout_constraintTop_toBottomOf="@+id/cartSelecetedRecyclerview" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/cartRecyclerviewRecommondedItems"
                             android:layout_width="match_parent"
                             android:layout_height="194dp"
                             android:layout_marginTop="32dp"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/cartSelecetedRecyclerview" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="#e0e0e0"
+                            android:orientation="horizontal"
+                            android:padding="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                            <EditText
+                                android:id="@+id/applycoupontextview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:gravity="center"
+                                android:hint="Apply a coupon code" />
+
+                            <Button
+                                android:id="@+id/discountapplybutton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/red"
+                                android:minHeight="40dp"
+                                android:text="Apply"
+                                android:textColor="#fff" />
+
+                        </LinearLayout>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.core.widget.NestedScrollView>
 
@@ -148,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="#ffffff"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         app:cardCornerRadius="8dp"
                         app:cardElevation="8dp">
 
@@ -245,10 +271,11 @@
                             >
 
                             <TextView
-                                android:id="@+id/totalamounttextviewcart"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:id="@+id/ptotalAmountTextViewCart"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="?attr/selectableItemBackground"
                                 android:gravity="center"
                                 android:padding="8dp"
                                 android:textColor="#ffffff"
@@ -256,23 +283,21 @@
 
                             <View
                                 android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginBottom="4dp"
-                                android:background="#ffffff" />
+                                android:layout_height="40dp"
+                                android:background="#fff" />
 
                             <TextView
                                 android:id="@+id/proceedTextViewCart"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:drawablePadding="-24dp"
+                                android:background="?attr/selectableItemBackground"
+
                                 android:gravity="center"
                                 android:padding="8dp"
                                 android:text="Proceed"
                                 android:textColor="#ffffff"
-                                android:textSize="18sp"
-                                app:drawableRightCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+                                android:textSize="18sp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
@@ -280,12 +305,12 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<ProgressBar
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:indeterminateTint="@color/red"
-    android:id="@+id/cardfragmentprogressbar"
-    android:visibility="gone"
-    android:layout_gravity="center"/>
+    <ProgressBar
+        android:id="@+id/cardfragmentprogressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/red"
+        android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

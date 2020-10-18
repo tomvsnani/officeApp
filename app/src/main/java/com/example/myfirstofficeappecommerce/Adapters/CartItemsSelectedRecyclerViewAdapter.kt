@@ -12,8 +12,12 @@ import com.example.myfirstofficeappecommerce.fragments.CartFragment
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
+import kotlinx.android.synthetic.main.fragment_cart.*
 
-class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var callback:(MutableList<VariantsModelClass>)->Unit) :
+class CartItemsSelectedRecyclerViewAdapter(
+    private var cartFragment: CartFragment,
+    var callback: (MutableList<VariantsModelClass>) -> Unit
+) :
     androidx.recyclerview.widget.ListAdapter<VariantsModelClass, CartItemsSelectedRecyclerViewAdapter.CardItemsSelectedViewHolder>(
         VariantsModelClass.diffUtil
     ) {
@@ -21,17 +25,15 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var ca
 
     inner class CardItemsSelectedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cartItemnameTextView: TextView? = itemView.findViewById(R.id.cartSelectedItemName)
-        var cartQuequeNumberTextView: TextView? =
-            itemView.findViewById(R.id.queuqnumberofselecteditemtextview)
-        var cartItemWeightTextView: TextView? = itemView.findViewById(R.id.cartitemWeight)
+
         var cartItemPriceTextView: TextView? = itemView.findViewById(R.id.cartitemPrice)
         var carItemQuantityTextView: TextView? =
             itemView.findViewById(R.id.cartitemquantitiytextview)
-        var cartdeleteItemImageButton: ImageButton? =
+        private var cartdeleteItemImageButton: ImageButton? =
             itemView.findViewById(R.id.cartItemCloseImageButton)
-        var cartItemremoveItemTextView: ImageButton? =
+        private var cartItemremoveItemTextView: ImageButton? =
             itemView.findViewById(R.id.removeitemsImageButton)
-        var cartItemaddItemImagebutton: ImageButton? =
+        private var cartItemaddItemImagebutton: ImageButton? =
             itemView.findViewById(R.id.additemsImageButton)
 
 
@@ -39,14 +41,13 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var ca
 
             cartdeleteItemImageButton?.setOnClickListener {
                 var list: MutableList<VariantsModelClass> = ArrayList(currentList)
-                totalSum -=(currentList[adapterPosition].price!!.toInt())*currentList[adapterPosition].quantityOfItem
-                currentList[adapterPosition].quantityOfItem=0
-                 cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
+                totalSum -= (currentList[adapterPosition].price!!.toInt()) * currentList[adapterPosition].quantityOfItem
+                currentList[adapterPosition].quantityOfItem = 0
+
                 list.remove(currentList[adapterPosition])
-                if(adapterPosition>=0  && ApplicationClass.selectedVariantList!!.isNotEmpty()) {
+                if (adapterPosition >= 0 && ApplicationClass.selectedVariantList!!.isNotEmpty()) {
                     (ApplicationClass.selectedVariantList as MutableList).removeAt(adapterPosition)
-//                    (ApplicationClass.selectedItemsList as MutableList).remove( (ApplicationClass.selectedItemsList as MutableList)
-//                        .find { it.id==currentList[adapterPosition].parentProductId })
+
                 }
                 submitList(list)
                 callback(list.toMutableList())
@@ -62,49 +63,34 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var ca
                     if (modelClass.quantityOfItem == 0) {
                         var list: MutableList<VariantsModelClass> = currentList.toMutableList()
                         list.remove(modelClass)
-                        if(adapterPosition>=0 && ApplicationClass.selectedVariantList!!.isNotEmpty()) {
-                            Log.d("compareremoved",(ApplicationClass.selectedVariantList)!!.remove(currentList[adapterPosition]).toString())
-
-//                            (ApplicationClass.selectedItemsList as MutableList).remove( (ApplicationClass.selectedItemsList as MutableList)
-//                                .find { it.id==currentList[adapterPosition].parentProductId })
-                        }
+                        ApplicationClass.selectedVariantList?.remove(modelClass)
                         submitList(list)
 
                         callback(list.toMutableList())
 
                     }
                     notifyItemChanged(adapterPosition)
-                    if(modelClass.quantityOfItem!=0)
-                    totalSum -= modelClass.price!!.toInt()
-                    cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
-
-
-                    Log.d(
-                        "comparesizeremovee",
-                        (ApplicationClass.selectedVariantList!!).toString()
-                    )
-
+                    if (modelClass.quantityOfItem != 0)
+                        totalSum -= modelClass.price!!.toInt()
 
 
                 }
+                cartFragment.binding!!.ptotalAmountTextViewCart.text =
+                    "  ${cartFragment.activity!!.getString(R.string.Rs)} $totalSum"
 
 
             }
 
             cartItemaddItemImagebutton?.setOnClickListener {
-                Log.d(
-                    "comparesize",
-                    (ApplicationClass.selectedVariantList!!).toString()
-                )
+
                 currentList[adapterPosition].quantityOfItem++
 
-                Log.d(
-                    "comparesizeokk",
-                    (ApplicationClass.selectedVariantList!!).toString()
-                )
+
                 totalSum += (currentList[adapterPosition].price!!.toInt())
                 notifyItemChanged(adapterPosition)
-                cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
+
+                cartFragment.binding!!.ptotalAmountTextViewCart.text =
+                    "  ${cartFragment.activity!!.getString(R.string.Rs)} ${totalSum}"
 
                 callback(currentList.toMutableList())
 
@@ -120,13 +106,22 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var ca
         list?.filter {
 
             totalSum += (it.quantityOfItem * it.price!!.toInt())
-            cartFragment.totalAmountTextView?.text = "Total : ${totalSum.toString()}"
+
 
             return@filter true
 
         }
+        if (list?.isEmpty()!!) {
+            cartFragment.emptycartlayout!!.visibility = View.VISIBLE
+            cartFragment.cartNestedScroll!!.visibility = View.GONE
 
+        } else {
+            cartFragment.emptycartlayout!!.visibility = View.GONE
+            cartFragment.cartNestedScroll!!.visibility = View.VISIBLE
+        }
         super.submitList(list?.toList())
+        cartFragment.binding!!.ptotalAmountTextViewCart.text =
+            "  ${cartFragment.activity!!.getString(R.string.Rs)} ${totalSum}"
 
         notifyDataSetChanged()
     }
@@ -141,8 +136,9 @@ class CartItemsSelectedRecyclerViewAdapter(var cartFragment: CartFragment,var ca
         var modelclass = currentList[position]
         Log.d("sssss", modelclass.quantityOfItem.toString())
         holder.carItemQuantityTextView?.text = modelclass.quantityOfItem.toString()
-        holder.cartItemPriceTextView?.text =   " MRP : ${cartFragment.getString(R.string.Rs)} ${modelclass.price}"
+        holder.cartItemPriceTextView?.text =
+            " MRP : ${cartFragment.getString(R.string.Rs)} ${modelclass.price}"
         holder.cartItemnameTextView?.text = modelclass.name
-        holder.cartQuequeNumberTextView?.text = modelclass.itemQueueNumber.toString()
+
     }
 }

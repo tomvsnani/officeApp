@@ -23,6 +23,7 @@ class CreditcardDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         var v = inflater.inflate(R.layout.fragment_creditcard_details, container, false)
 
         binding = FragmentCreditcardDetailsBinding.bind(v)

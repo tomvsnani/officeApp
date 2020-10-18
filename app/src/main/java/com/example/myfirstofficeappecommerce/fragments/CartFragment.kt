@@ -1,13 +1,16 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
-import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,13 +22,13 @@ import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Adapters.CartItemRecommendedAdapter
 import com.example.myfirstofficeappecommerce.Adapters.CartItemsSelectedRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
-import com.example.myfirstofficeappecommerce.R
-import com.shopify.buy3.*
+import com.example.myfirstofficeappecommerce.databinding.FragmentCartBinding
+import com.shopify.buy3.GraphCall
+import com.shopify.buy3.GraphError
+import com.shopify.buy3.GraphResponse
+import com.shopify.buy3.Storefront
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
-import com.shopify.graphql.support.Input
-import kotlinx.android.synthetic.main.fragment_cart.*
-import java.util.concurrent.TimeUnit
 
 
 class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {
@@ -34,13 +37,14 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
     private var slecetdItemsRecycler: RecyclerView? = null
     private var recommendedItemsRecycler: RecyclerView? = null
     private var itemsSelectedAdapter: CartItemsSelectedRecyclerViewAdapter? = null
-    var totalAmountTextView: TextView? = null
     private var recommendedAdapter: CartItemRecommendedAdapter? = null
     private var proceedTextViewCart: TextView? = null
     var list: MutableList<VariantsModelClass> = ArrayList()
-    private var emptycartlayout: ConstraintLayout? = null
-    private var cartNestedScroll: NestedScrollView? = null
+    var emptycartlayout: ConstraintLayout? = null
+    var cartNestedScroll: NestedScrollView? = null
     var progressbar: ProgressBar? = null
+    var discountApplyButton: Button? = null
+    var binding: FragmentCartBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,6 +57,9 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
             container,
             false
         )
+
+        binding = FragmentCartBinding.bind(view)
+
         setUpToolBar(view)
 
         initializeViews(view)
@@ -70,31 +77,46 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
         return view
     }
 
+
+    fun setTotalPriceAfterDiscount(price: String) {
+        binding!!.ptotalAmountTextViewCart.text = "  ${activity!!.getString(R.string.Rs)} ${price}"
+    }
+
     private fun setUpOnClickListener() {
         proceedTextViewCart!!.setOnClickListener {
 
             var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
             if (token == "") {
-                var alert = AlertDialog.Builder(context!!).create()
-
-                alert.setButton(
-                    AlertDialog.BUTTON_NEGATIVE, "Signin"
-                ) { p0, p1 -> createCheckout(Constants.NORMAL_SIGN_IN) }
-
-
-                alert.setButton(
-                    AlertDialog.BUTTON_POSITIVE, "Continue as Guest"
-                ) { p0, p1 -> createCheckout(Constants.GUEST_SIGN_IN) }
+                activity!!.supportFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.container,
+                        ProfileFragment(Constants.GUEST_SIGN_IN, fragment = this)
+                    )
+                    .commit()
 
 
-                alert.setCancelable(false)
-
-                alert.show()
             } else
-                createCheckout(Constants.NORMAL_SIGN_IN)
+                (activity as MainActivity).createCheckout(Constants.NORMAL_SIGN_IN)
 
 
         }
+        discountApplyButton!!.setOnClickListener {
+            binding!!.applycoupontextview.clearFocus()
+            var view = binding!!.applycoupontextview
+            var inputManager: InputMethodManager =
+                activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+            MainActivity.applyCoupon = true
+            if (binding!!.applycoupontextview.text.toString().isNotBlank())
+                (activity as MainActivity).DISCOUNT = binding!!.applycoupontextview.text.toString()
+            else
+                Toast.makeText(context!!, "Please enter a coupon code", Toast.LENGTH_SHORT).show()
+            (activity as MainActivity).createCheckout(Constants.GUEST_SIGN_IN)
+
+
+        }
+
     }
 
     private fun setUpRecommendedItemsRecyclerView() {
@@ -142,15 +164,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
         }
 
-        if (selectedItemsList!!.isEmpty()) {
 
-            emptycartlayout!!.visibility = View.VISIBLE
-            cartNestedScroll!!.visibility = View.GONE
-        } else {
-
-            emptycartlayout!!.visibility = View.GONE
-            cartNestedScroll!!.visibility = View.VISIBLE
-        }
         slecetdItemsRecycler!!.itemAnimator = null
         slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
         slecetdItemsRecycler!!.layoutManager =
@@ -161,12 +175,13 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
     private fun initializeViews(view: View) {
         progressbar = view.findViewById<ProgressBar>(R.id.cardfragmentprogressbar)
-        totalAmountTextView = view.findViewById(R.id.totalamounttextviewcart)
+
         emptycartlayout = view.findViewById(R.id.emptycartlayout)
         slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
         recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
         proceedTextViewCart = view.findViewById(R.id.proceedTextViewCart)
         cartNestedScroll = view.findViewById(R.id.include2)
+        discountApplyButton = view.findViewById(R.id.discountapplybutton)
     }
 
     private fun setUpToolBar(view: View) {
@@ -178,139 +193,6 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
     }
 
-    private fun createCheckout(signinType: String) {
-        ApplicationClass.signInType = signinType
-        progressbar!!.visibility = View.VISIBLE
-        var checkoutLineItemInput: MutableList<CheckoutLineItemInput>? = ArrayList()
-
-        for (i in ApplicationClass.selectedVariantList!!) {
-            checkoutLineItemInput?.add(CheckoutLineItemInput(i.quantityOfItem, ID(i.id)))
-            i.isOrdered = true
-        }
-
-        val input = CheckoutCreateInput()
-            .setLineItemsInput(
-                Input.value(
-                    checkoutLineItemInput
-                )
-            )
-
-        val query = mutation { mutationQuery: MutationQuery ->
-            mutationQuery
-
-                .checkoutCreate(
-                    input
-                ) { createPayloadQuery: CheckoutCreatePayloadQuery ->
-                    createPayloadQuery
-                        .checkout { checkoutQuery: CheckoutQuery ->
-                            checkoutQuery
-                                .webUrl()
-                                .totalTax()
-                                .totalPrice()
-                                .subtotalPrice()
-                        }
-                        .userErrors { userErrorQuery: UserErrorQuery ->
-                            userErrorQuery
-                                .field()
-                                .message()
-                        }
-                }
-        }
-
-        CategoriesDataProvider.graphh!!.mutateGraph(query).enqueue(object :
-            GraphCall.Callback<Mutation> {
-
-            override fun onResponse(response: GraphResponse<Mutation>) {
-
-                if (response.data()!!.checkoutCreate.userErrors.isNotEmpty()) {
-
-                    // handle user friendly errors
-                } else {
-
-                    val checkoutId = response.data()!!.checkoutCreate.checkout.id.toString()
-                    val checkoutWebUrl = response.data()!!.checkoutCreate.checkout.webUrl
-
-                    if (signinType == Constants.NORMAL_SIGN_IN) {
-                        if (activity?.getPreferences(Activity.MODE_PRIVATE)
-                                ?.getString("token", "") != ""
-                        )
-                            associateWithUserQuery(checkoutId)
-                        else
-                            activity!!.supportFragmentManager.beginTransaction()
-                                .replace(
-                                    R.id.container,
-
-                                    ProfileFragment(
-                                        Constants.NORMAL_SIGN_IN,
-                                        fragment = this@CartFragment
-                                    )
-                                ).addToBackStack(null).commit()
-                    } else {
-                        activity!!.supportFragmentManager.beginTransaction()
-                            .replace(
-                                R.id.container,
-                                CheckOutMainWrapperFragment(
-                                    checkoutId,
-                                    response.data()!!.checkoutCreate.checkout.totalTax.precision()
-                                        .toFloat()
-                                )
-                            ).addToBackStack(null).commit()
-
-                    }
-                }
-            }
-
-
-            override fun onFailure(error: GraphError) {
-
-            }
-        })
-    }
-
-    private fun associateWithUserQuery(checkoutId: String) {
-        var associateCustomerQuery = mutation { mutationQuery: MutationQuery ->
-            mutationQuery
-
-                .checkoutCustomerAssociate(
-                    ID(checkoutId),
-                    activity!!.getPreferences(Activity.MODE_PRIVATE)
-                        .getString("token", "")
-                ) {
-
-                        _queryBuilder ->
-                    _queryBuilder.checkout { _queryBuilder ->
-                        _queryBuilder.totalTax()
-
-                    }
-                }
-        }
-
-        CategoriesDataProvider.graphh!!.mutateGraph(associateCustomerQuery)
-            .enqueue(object :
-                GraphCall.Callback<Mutation> {
-                override fun onResponse(response: GraphResponse<Mutation>) {
-                    val checkoutIdd =
-                        response.data()!!.checkoutCustomerAssociate.checkout.id.toString()
-                    val checkoutWebUrl =
-                        response.data()!!.checkoutCustomerAssociate.checkout.webUrl
-                    activity!!.supportFragmentManager.beginTransaction()
-                        .replace(
-                            R.id.container,
-                            CheckOutMainWrapperFragment(
-                                checkoutIdd,
-                                response.data()!!.checkoutCustomerAssociate.checkout.totalTax.precision()
-                                    .toFloat()
-                            )
-                        )
-                        .addToBackStack(null).commit()
-
-                }
-
-                override fun onFailure(error: GraphError) {
-
-                }
-            })
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
@@ -330,6 +212,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
+
+
         super.onCreate(savedInstanceState)
     }
 }

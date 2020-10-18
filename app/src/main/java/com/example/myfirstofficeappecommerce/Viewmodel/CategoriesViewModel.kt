@@ -16,6 +16,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
     var variantmutableLiveData: MutableLiveData<MutableList<VariantsModelClass>>? =
         MutableLiveData()
+
     var variantListBasedOnProductId: MutableList<VariantsModelClass> = ArrayList()
 
     fun getProductDataBasedOnColletionId() {
@@ -24,7 +25,6 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                 _queryBuilderr.onCollection { _queryBuilder ->
                     _queryBuilder
                         .title()
-
                         .products({ args: Storefront.CollectionQuery.ProductsArguments? ->
                             args!!.first(
                                 10
@@ -87,7 +87,6 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
     fun LoadMoreDataBasedOnCollectionId(categoriesmodel: CategoriesModelClass) {
 
-        Log.d("loadmore", "called")
         val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
             rootQuery.node(ID(id)) { _queryBuilderr ->
                 _queryBuilderr.onCollection { _queryBuilder ->
@@ -197,8 +196,6 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                             )
                         )
                     }
-
-
                     var productmodelclass = CategoriesModelClass(
                         id = productEdge.node.id.toString(),
                         itemName = productEdge.node.title,
@@ -214,17 +211,12 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                     Log.d("istrue", productmodelclass.hasNextPage.toString())
                     productListBasedOnCollectionId.add(productmodelclass)
                 }
-
-
                 mutableLiveData!!.postValue(productListBasedOnCollectionId.distinctBy { it.id } as MutableList<CategoriesModelClass>)
-
             }
-
             override fun onFailure(error: GraphError) {
                 Log.e("graphvalueerror", error.toString())
             }
         })
-
 
     }
 
@@ -253,6 +245,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
         }
         fetchVariantDataQuery(query)
     }
+
 
     private fun fetchVariantDataQuery(query: Storefront.QueryRootQuery?) {
         var calldata: QueryGraphCall? = null
@@ -285,7 +278,6 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
             }
         })
-
 
     }
 

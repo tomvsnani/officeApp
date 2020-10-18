@@ -71,10 +71,8 @@ class ProfileFragment(
         }
 
         binding!!.guestsigninTextView.setOnClickListener {
-            activity!!.supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                CheckOutMainWrapperFragment(checkoutId, totalTax)
-            )
+
+            (activity as MainActivity).createCheckout(Constants.GUEST_SIGN_IN)
         }
 
 
@@ -110,28 +108,25 @@ class ProfileFragment(
             }
 
         }
-
-
-
         createAccountButton!!.setOnClickListener {
 
             when {
                 nameInputTxetView!!.text.toString().isBlank() -> nameInputTxetView!!.error =
-                    "Name cannot be empty"
+                    getString(R.string.nameEmpty)
                 emailInputTxetView!!.text.toString().isBlank() -> emailInputTxetView!!.error =
-                    "Email cannot be empty"
+                    getString(R.string.emailempty)
                 passwordInputTxetView!!.text.toString().isBlank() -> passwordInputTxetView!!.error =
-                    "password cannot be empty"
+                    getString(R.string.passwordEmpty)
                 phnInputTxetView!!.text.toString().isBlank() -> phnInputTxetView!!.error =
-                    "phone cannot be empty"
+                    getString(R.string.phoneEmptyError)
 
 
                 !emailInputTxetView!!.text.toString().contains("@") -> emailInputTxetView!!.error =
-                    "Please enter a valid email address"
+                    getString(R.string.EnterValidEmail)
                 passwordInputTxetView!!.text.toString().length < 5 -> passwordInputTxetView!!.error =
-                    "password length should be greater than 5 "
+                    getString(R.string.PasswordLengthisLess)
                 phnInputTxetView!!.text.toString().length < 13 -> phnInputTxetView!!.error =
-                    "phone enter the phone number wih country code "
+                    getString(R.string.EnterPhoneNumWithCountryCode)
 
                 else -> {
                     createAccountButton!!.isClickable = false
@@ -150,11 +145,7 @@ class ProfileFragment(
                     }.start()
 
                 }
-
-
             }
-
-
         }
 
         return view
@@ -222,10 +213,11 @@ class ProfileFragment(
                         progressbar!!.visibility = View.GONE
                         Toast.makeText(
                             context,
-                            "Could not log you in please check your details\n ${response.errors()}",
+                            "Could not log you in please check your details\n " + response.errors(),
                             Toast.LENGTH_LONG
                         ).show()
                     }
+
                 }
 
             }
@@ -242,6 +234,7 @@ class ProfileFragment(
         activity!!.runOnUiThread {
             progressbar!!.visibility = View.VISIBLE
         }
+        ApplicationClass.signInType = Constants.NORMAL_SIGN_IN
         val input = CustomerAccessTokenCreateInput(email, password)
         val mutationQuery = mutation { mutation: MutationQuery ->
             mutation
@@ -272,7 +265,7 @@ class ProfileFragment(
                     activity!!.runOnUiThread {
                         Toast.makeText(
                             context,
-                            "You have successfully logged in",
+                            getString(R.string.YouHaveLoggedInToast),
                             Toast.LENGTH_LONG
                         )
                             .show()
@@ -284,11 +277,6 @@ class ProfileFragment(
                         ).apply()
 
                     }
-
-                    Log.d(
-                        "customertoken",
-                        response.data()!!.customerAccessTokenCreate.customerAccessToken.accessToken + "  " + response.data()!!.customerAccessTokenCreate.customerAccessToken.expiresAt
-                    )
 
                     when (fragment) {
                         is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
@@ -308,12 +296,12 @@ class ProfileFragment(
                             .commit()
 
                         is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack(null)
+
                             .replace(R.id.container, WishListFragment())
 
                             .commit()
                         is CartFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack(null)
+
                             .replace(
                                 R.id.container,
                                 CheckOutMainWrapperFragment(checkoutId, totalTax)
