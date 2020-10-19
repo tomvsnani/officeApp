@@ -160,8 +160,6 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
             override fun onResponse(response: GraphResponse<Mutation>) {
 
 
-
-
                 val queryy = query { rootQuery ->
                     rootQuery
                         .node(
@@ -330,14 +328,13 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
                     var a =
                         addressList.find { it.id == response.data()!!.customer.defaultAddress.id.toString() }
-                    if(a!=null) {
+                    if (a != null) {
                         a!!.isSelectedAddress = true
 
                         adapter!!.submitList(if (addressList.size > 0) mutableListOf(a) else null)
 
                         adapter!!.notifyDataSetChanged()
-                    }
-                    else Toast.makeText(context!!,"Add an address",Toast.LENGTH_SHORT).show()
+                    } else Toast.makeText(context!!, "Add an address", Toast.LENGTH_SHORT).show()
 
 
                 }
@@ -349,7 +346,15 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
             }
 
-        })
+        },
+            null,
+            RetryHandler.exponentialBackoff(500, TimeUnit.MILLISECONDS, 1.2f)
+                .whenResponse<QueryRoot> { responsee: GraphResponse<QueryRoot> ->
+                    ((responsee as GraphResponse<QueryRoot>).data()!!
+                        .customer.addresses.edges.size == 0)
+                }
+                .maxCount(12)
+                .build())
     }
 
 }

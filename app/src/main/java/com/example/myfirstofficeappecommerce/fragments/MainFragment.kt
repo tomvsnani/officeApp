@@ -67,8 +67,6 @@ class MainFragment() : Fragment() {
     private var minutesTextView2: TextView? = null
     private var secondsTextView1: TextView? = null
     private var secondsTextView2: TextView? = null
-
-
     private var daysTextView1H: TextView? = null
     private var daysTextView2H: TextView? = null
     private var hoursTextView1H: TextView? = null
@@ -469,10 +467,7 @@ class MainFragment() : Fragment() {
                         }
                         if (position == 0) {
                             isScrollForward = true
-                            Log.d(
-                                "tabforward",
-                                tablayoutBanner1!!.tabCount.toString() + " " + position
-                            )
+
                         }
                         if (!isScrollForward) {
                             tablayoutBanner2?.getTabAt(position - 1)?.select()

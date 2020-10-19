@@ -54,6 +54,24 @@ class ChatScreenFragment : Fragment() {
             )
         )
 
+        binding!!.sendmessgaebutton.setOnClickListener {
+            if (binding!!.entermessageEdittext.text.toString().isNotEmpty()) {
+                var list = (adapter.currentList).toMutableList()
+                list.add(
+                    ChatModel(
+                        "a",
+                        "b",
+                        "5",
+                        Constants.MESSAGE_STATUS_SENT,
+                        adapter.currentList[adapter.currentList.size - 1].id,
+                        binding!!.entermessageEdittext.text.toString()
+                    )
+                )
+                adapter.submitList(list)
+            }
+        }
+
+
         return v
     }
 

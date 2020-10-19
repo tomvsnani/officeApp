@@ -23,6 +23,12 @@ class ChatAdapter(var fragment: ChatScreenFragment) :
 
     }
 
+    override fun submitList(list: MutableList<ChatModel>?) {
+        super.submitList(list!!.toList())
+        Thread.sleep(100)
+        fragment.binding!!.chatrecyclerview.scrollToPosition(currentList.size)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         return ChatViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.chat_row_layout, parent, false)
@@ -70,6 +76,7 @@ class ChatAdapter(var fragment: ChatScreenFragment) :
                 this.topMargin = dpFromPx(fragment.context!!, 4f)
             }
         }
+        holder.binding.messageTextView.text = modelClass.message
     }
 
     fun dpFromPx(context: Context, px: Float): Int {
