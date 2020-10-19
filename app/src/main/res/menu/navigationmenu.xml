@@ -34,10 +34,11 @@
     </group>
     <group android:id="@+id/contactmenu" android:checkableBehavior="single"
         android:orderInCategory="2">
-        <item android:title="Contact Us">
+        <item android:title="Contact Us"
+           >
             <menu>
                 <item
-                    android:id="@+id/phonemenu"
+                    android:id="@+id/chatscreen"
                     android:title="Contact us" />
                 <item
                     android:id="@+id/policymenu"

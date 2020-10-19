@@ -23,6 +23,7 @@ import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.databinding.FragmentSearchBinding
 import com.shopify.buy3.*
 
 
@@ -33,6 +34,7 @@ open class SearchFragment() : Fragment() {
     var recyclr: RecyclerView? = null
     var searchfragmentRecyclerAdapter: searchfragmentRecyclerAdapter? = null
     var searchfragmentRecyclerAdapterSearch: searchfragmentRecyclerAdapter? = null
+    var binding:FragmentSearchBinding?=null
 
     var menu: Menu? = null
     override fun onCreateView(
@@ -40,6 +42,7 @@ open class SearchFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_search, container, false);
+        binding= FragmentSearchBinding.bind(view)
         setHasOptionsMenu(true)
         actionbar = view.findViewById(R.id.searchFragmenttoolbar)
         (activity as AppCompatActivity).setSupportActionBar(actionbar)
@@ -160,6 +163,7 @@ open class SearchFragment() : Fragment() {
         Log.d("menuclicked", "yes")
         if (item.itemId == android.R.id.home) {
             showSoftwareKeyboard(true)
+            activity!!.onBackPressed()
 
         }
         if( item.itemId == R.id.profilemenu ) {
@@ -224,12 +228,12 @@ open class SearchFragment() : Fragment() {
 
     protected fun showSoftwareKeyboard(showKeyboard: Boolean) {
 
-        val inputManager =
-            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        searchEditText!!.clearFocus()
-        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-//        Thread.sleep(2000)
-        activity?.onBackPressed()
+//        val inputManager =
+//            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        searchEditText!!.clearFocus()
+//        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+////        Thread.sleep(2000)
+//        activity?.onBackPressed()
 
 
     }
@@ -295,6 +299,13 @@ open class SearchFragment() : Fragment() {
         }
     }
 
-
+    override fun onStop() {
+        var view=binding!!.searchEditText
+        binding!!.searchEditText.clearFocus()
+        var inputManager: InputMethodManager =
+            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+        super.onStop()
+    }
 
 }

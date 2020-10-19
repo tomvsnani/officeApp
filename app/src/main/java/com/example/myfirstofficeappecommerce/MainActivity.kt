@@ -61,7 +61,7 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
-        list = ApplicationClass.selectedItemsList
+        list = ApplicationClass.menucategorylist
         drawerLayout = findViewById(R.id.drawerlayout)
         navigationView = findViewById(R.id.navigationview)
 
@@ -89,6 +89,17 @@ class MainActivity() : AppCompatActivity() {
             }
 
             when {
+                menuItem.itemId == R.id.chatscreen -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(
+                            R.id.container,
+                            ChatScreenFragment()
+                        ).addToBackStack(null)
+                        .commit()
+                    return@setNavigationItemSelectedListener true
+                }
+
                 menuItem.itemId == R.id.ordersmenu -> {
                     supportFragmentManager
                         .beginTransaction()
@@ -299,7 +310,8 @@ class MainActivity() : AppCompatActivity() {
                                         !!.checkoutDiscountCodeApply.checkout.totalPrice.toString()
                                     )
                                     (f as CartFragment?)?.binding!!.applycoupontextview.setText("")
-                                    (f as CartFragment?)?.binding!!.applycoupontextview.hint = "Discount Applied"
+                                    (f as CartFragment?)?.binding!!.applycoupontextview.hint =
+                                        "Discount Applied"
                                 }
 
                             }

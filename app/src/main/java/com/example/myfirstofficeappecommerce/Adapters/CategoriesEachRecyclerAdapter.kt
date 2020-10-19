@@ -56,10 +56,10 @@ class CategoriesEachRecyclerAdapter(
             addToCart.setOnClickListener {
                 var modelClass = currentList[adapterPosition]
                 var modelClassTemp =
-                    ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }
+                    ApplicationClass.menucategorylist?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }
                 if (modelClassTemp == null) {
                     modelClass.quantityOfItem++
-                    (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+                    (ApplicationClass.menucategorylist as MutableList).add(modelClass)
                     notifyItemChanged(adapterPosition)
                     //callback()
                 }
@@ -70,17 +70,17 @@ class CategoriesEachRecyclerAdapter(
                 var modelClass = currentList[adapterPosition]
                 if (modelClass.quantityOfItem > 0) {
                     modelClass.quantityOfItem--
-                    ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
+                    ApplicationClass.menucategorylist?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
                         modelClass.quantityOfItem
                 }
 
 
-                if (modelClass.quantityOfItem == 0 && ApplicationClass.selectedItemsList?.contains(
+                if (modelClass.quantityOfItem == 0 && ApplicationClass.menucategorylist?.contains(
                         modelClass
                     )!!
                 ) {
 
-                    (ApplicationClass.selectedItemsList as MutableList).remove(modelClass)
+                    (ApplicationClass.menucategorylist as MutableList).remove(modelClass)
                 }
 
                 notifyItemChanged(adapterPosition)
@@ -91,7 +91,7 @@ class CategoriesEachRecyclerAdapter(
                 var modelClass = currentList[adapterPosition]
                 modelClass.quantityOfItem++
 
-                ApplicationClass.selectedItemsList?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
+                ApplicationClass.menucategorylist?.find { it.id == modelClass.id && it.groupId == modelClass.groupId }!!.quantityOfItem =
                     modelClass.quantityOfItem
 
                 notifyItemChanged(adapterPosition)

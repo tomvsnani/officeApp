@@ -12,18 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
-import com.example.myfirstofficeappecommerce.Adapters.CategoryViewPagerAdapter
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.MainActivity
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.Utils
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
 
 class CategoriesFragment(
@@ -45,7 +40,7 @@ class CategoriesFragment(
 
     var toolbar: Toolbar? = null
     var selectedItemsList: MutableList<CategoriesModelClass> =
-        ApplicationClass.selectedItemsList as MutableList<CategoriesModelClass>
+        ApplicationClass.menucategorylist as MutableList<CategoriesModelClass>
     var cate: CategoriesModelClass? = null
     var selectedItemDisplayCardView: CardView? = null
     var itemSelectedCountTextView: TextView? = null

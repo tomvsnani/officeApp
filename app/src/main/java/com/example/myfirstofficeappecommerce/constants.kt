@@ -17,6 +17,9 @@ package com.example.myfirstofficeappecommerce
        const val CATEGORY_CUSTOM="CUSTOM"
        const val GUEST_SIGN_IN="GUESTSIGNIN"
        const val NORMAL_SIGN_IN="NORMALSIGNIN"
+       const val MESSAGE_STATUS_SENT="SENT"
+       const val MESSAGE_STATUS_NOT_SENT="NOT_SENT"
+       const val MESSAGE_STATUS_DELIVERED="DELIVERED"
    }
 
 

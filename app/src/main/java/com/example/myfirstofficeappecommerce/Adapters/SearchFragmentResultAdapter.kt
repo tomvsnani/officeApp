@@ -165,11 +165,11 @@ class SearchFragmentResultAdapter(
 
                     addRemoveLinearLayout!!.visibility = View.VISIBLE
 
-                    if (ApplicationClass.selectedItemsList?.contains(currentList[adapterPosition])!!)
-                        ApplicationClass.selectedItemsList!!.find {
+                    if (ApplicationClass.menucategorylist?.contains(currentList[adapterPosition])!!)
+                        ApplicationClass.menucategorylist!!.find {
                             currentList[adapterPosition].groupId == it.groupId && currentList[adapterPosition].id == it.id
                         }!!.quantityOfItem = currentList[adapterPosition].quantityOfItem
-                    else (ApplicationClass.selectedItemsList as MutableList).add(currentList[adapterPosition])
+                    else (ApplicationClass.menucategorylist as MutableList).add(currentList[adapterPosition])
                     notifyItemChanged(adapterPosition)
                     (mainActivity as SearchFragment).showOrHideItemCountIndicator()
                 }
@@ -182,11 +182,11 @@ class SearchFragmentResultAdapter(
                 searchAddItemsQunatityImageView!!.setOnClickListener {
                     var modelClass = currentList[adapterPosition]
                     modelClass.quantityOfItem++
-                    if (ApplicationClass.selectedItemsList?.contains(modelClass)!!)
-                        ApplicationClass.selectedItemsList!!.find {
+                    if (ApplicationClass.menucategorylist?.contains(modelClass)!!)
+                        ApplicationClass.menucategorylist!!.find {
                             modelClass.groupId == it.groupId && modelClass.id == it.id
                         }!!.quantityOfItem = modelClass.quantityOfItem
-                    else (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+                    else (ApplicationClass.menucategorylist as MutableList).add(modelClass)
                     notifyItemChanged(adapterPosition)
                     (mainActivity as SearchFragment).showOrHideItemCountIndicator()
                 }
@@ -201,12 +201,12 @@ class SearchFragmentResultAdapter(
                     if (currentList[adapterPosition].quantityOfItem == 0) {
                         searchFragmentAddToCart!!.visibility = View.VISIBLE
                         addRemoveLinearLayout!!.visibility = View.GONE
-                        if (ApplicationClass.selectedItemsList!!.contains(currentList[adapterPosition]))
-                            (ApplicationClass.selectedItemsList as MutableList).remove(currentList[adapterPosition])
+                        if (ApplicationClass.menucategorylist!!.contains(currentList[adapterPosition]))
+                            (ApplicationClass.menucategorylist as MutableList).remove(currentList[adapterPosition])
                     } else {
                         currentList[adapterPosition].quantityOfItem--
-                        if (ApplicationClass.selectedItemsList!!.contains(currentList[adapterPosition]))
-                            ApplicationClass.selectedItemsList?.find {
+                        if (ApplicationClass.menucategorylist!!.contains(currentList[adapterPosition]))
+                            ApplicationClass.menucategorylist?.find {
                                 it.id == currentList[adapterPosition].id && it.groupId == currentList[adapterPosition].groupId
                             }!!.quantityOfItem =
                                 currentList[adapterPosition].quantityOfItem

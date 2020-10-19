@@ -48,7 +48,7 @@ class MainFragment() : Fragment() {
     private var searchEditText: EditText? = null
     var isScrollForward: Boolean = true
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
-    private var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.selectedItemsList
+    private var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.menucategorylist
     var navigationView: NavigationView? = null
     var a: MutableList<CategoriesModelClass> = ArrayList()
     private var binding: FragmentMainBinding? = null

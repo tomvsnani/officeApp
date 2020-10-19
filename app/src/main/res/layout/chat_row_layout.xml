@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+
+    android:orientation="vertical"
+   >
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatconstraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_background_drawable"
+        tools:context=".ChatScreenFragment">
+
+        <TextView
+            android:id="@+id/messageTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="8dp"
+            android:text="@string/hello_blank_fragment"
+            android:textColor="#e0e0e0"
+            app:layout_constraintEnd_toStartOf="@+id/timelinearlayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/timelinearlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/messageTextView">
+
+            <TextView
+                android:id="@+id/chatmessagesentreceivedtimetextview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="4dp"
+                android:text="8:20 AM"
+                android:textColor="#9c4dcc" />
+
+            <ImageView
+                android:id="@+id/messagestatusimagfeview"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_baseline_done_24" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
+

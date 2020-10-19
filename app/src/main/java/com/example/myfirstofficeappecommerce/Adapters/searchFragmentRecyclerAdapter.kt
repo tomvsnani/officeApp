@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.fragments.CategoriesFragment
+import com.example.myfirstofficeappecommerce.fragments.CategoryEachViewPagerFragment
 import com.example.myfirstofficeappecommerce.fragments.ProductFragment
 import com.example.myfirstofficeappecommerce.fragments.SearchFragment
 
@@ -134,7 +135,7 @@ class searchfragmentRecyclerAdapter(
 
                     mainActivity.activity!!.supportFragmentManager.beginTransaction()
 
-                        .replace(R.id.container, CategoriesFragment(currentList, adapterPosition))
+                        .replace(R.id.container, CategoryEachViewPagerFragment(currentList[absoluteAdapterPosition],{}))
                         .addToBackStack(null)
 
                         .commit()
@@ -181,11 +182,11 @@ class searchfragmentRecyclerAdapter(
 
                     addRemoveLinearLayout!!.visibility = View.VISIBLE
 
-                    if (ApplicationClass.selectedItemsList?.contains(currentList[adapterPosition])!!)
-                        ApplicationClass.selectedItemsList!!.find {
+                    if (ApplicationClass.menucategorylist?.contains(currentList[adapterPosition])!!)
+                        ApplicationClass.menucategorylist!!.find {
                             currentList[adapterPosition].groupId == it.groupId && currentList[adapterPosition].id == it.id
                         }!!.quantityOfItem = currentList[adapterPosition].quantityOfItem
-                    else (ApplicationClass.selectedItemsList as MutableList).add(currentList[adapterPosition])
+                    else (ApplicationClass.menucategorylist as MutableList).add(currentList[adapterPosition])
                     notifyItemChanged(adapterPosition)
                     (mainActivity as SearchFragment).showOrHideItemCountIndicator()
                 }
@@ -198,11 +199,11 @@ class searchfragmentRecyclerAdapter(
                 searchAddItemsQunatityImageView!!.setOnClickListener {
                     var modelClass = currentList[adapterPosition]
                     modelClass.quantityOfItem++
-                    if (ApplicationClass.selectedItemsList?.contains(modelClass)!!)
-                        ApplicationClass.selectedItemsList!!.find {
+                    if (ApplicationClass.menucategorylist?.contains(modelClass)!!)
+                        ApplicationClass.menucategorylist!!.find {
                             modelClass.groupId == it.groupId && modelClass.id == it.id
                         }!!.quantityOfItem = modelClass.quantityOfItem
-                    else (ApplicationClass.selectedItemsList as MutableList).add(modelClass)
+                    else (ApplicationClass.menucategorylist as MutableList).add(modelClass)
                     notifyItemChanged(adapterPosition)
                     (mainActivity as SearchFragment).showOrHideItemCountIndicator()
                 }
@@ -217,12 +218,12 @@ class searchfragmentRecyclerAdapter(
                     if (currentList[adapterPosition].quantityOfItem == 0) {
                         searchFragmentAddToCart!!.visibility = View.VISIBLE
                         addRemoveLinearLayout!!.visibility = View.GONE
-                        if (ApplicationClass.selectedItemsList!!.contains(currentList[adapterPosition]))
-                            (ApplicationClass.selectedItemsList as MutableList).remove(currentList[adapterPosition])
+                        if (ApplicationClass.menucategorylist!!.contains(currentList[adapterPosition]))
+                            (ApplicationClass.menucategorylist as MutableList).remove(currentList[adapterPosition])
                     } else {
                         currentList[adapterPosition].quantityOfItem--
-                        if (ApplicationClass.selectedItemsList!!.contains(currentList[adapterPosition]))
-                            ApplicationClass.selectedItemsList?.find {
+                        if (ApplicationClass.menucategorylist!!.contains(currentList[adapterPosition]))
+                            ApplicationClass.menucategorylist?.find {
                                 it.id == currentList[adapterPosition].id && it.groupId == currentList[adapterPosition].groupId
                             }!!.quantityOfItem =
                                 currentList[adapterPosition].quantityOfItem
