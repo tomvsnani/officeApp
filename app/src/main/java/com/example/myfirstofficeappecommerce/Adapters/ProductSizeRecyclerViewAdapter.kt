@@ -40,7 +40,7 @@ class ProductSizeRecyclerViewAdapter(var callback: (size: String) -> Unit) :
     override fun submitList(list: MutableList<VariantsModelClass>?) {
         val a: MutableList<VariantsModelClass> = ArrayList()
         for (i in list!!) {
-            Log.d("helloheyyy222", i.size + "  " + i.isSelected)
+
             a.add(i.copy())
         }
         super.submitList(a)
@@ -54,6 +54,8 @@ class ProductSizeRecyclerViewAdapter(var callback: (size: String) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: ProductSizeViewHolder, position: Int) {
+        Log.d("sizeeee",currentList[position].name.toString())
+        Log.d("sizeeee","  "+ currentList[position].size+" "+currentList[position].isVariantAvailable.toString())
         if (currentList[position].isSelected)
             holder.cardView.cardElevation = 20f
         else holder.cardView.cardElevation = 0f

@@ -268,7 +268,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
 
             //adding product model to selected items
-            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant != null) {
+            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant != null && selectedVariant!!.quantityOfItem >= 0) {
                 selectedVariant!!.quantityOfItem++
                 selectedVariant!!.isSelected = true
 
@@ -278,8 +278,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             }
 
             itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
-
-            startCartAnimation()
+            if (selectedVariant!!.quantityOfItem > 0)
+                startCartAnimation()
 
         }
 
@@ -419,6 +419,11 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                 val isVariantAvailable =
                     variantList!!.find { it.color == selectedVariant!!.color && it.size == sizee }
                 Log.d("variantlistselcetcolo", " " + selectedVariant!!.color + "  " + sizee)
+//                var a = variantList!!.filter {
+//                    it.isVariantAvailable = sizee == it.size
+//                    return@filter true
+//                }
+//                colorRecyclerAdapter!!.submitList(a.distinctBy { it.color } as MutableList<VariantsModelClass>)
 
                 if (isVariantAvailable != null) {
 
@@ -467,7 +472,26 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             val isVariantAvailable =
                 variantList!!.find { it.color == colorr && it.size == selectedVariant!!.size }
 
-            Log.d("variantlistselcetcolo", " " + colorr + "  " + selectedVariant!!.size)
+            var sizes = ArrayList<String>()
+            for (i in sizeRecyclerViewAdapter!!.currentList) {
+                sizes.add(i.size!!)
+            }
+
+
+            var a = variantList!!.filter {
+                Log.d("test", sizes.toString() + "  " + it.size)
+                Log.d("test", " " + colorr + "   " + it.color)
+                var a = it.copy()
+                a.isVariantAvailable = colorr == a.color
+
+                return@filter colorr == a.color
+
+            }
+
+            sizeRecyclerViewAdapter!!.submitList(a.filter { it.isVariantAvailable }
+                .distinctBy { it.size }
+                .sortedBy { it.size } as MutableList<VariantsModelClass>)
+
 
             if (isVariantAvailable != null) {
                 val isVariantavailableInApplicationClass =
@@ -482,17 +506,23 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                     addTocartButton!!.visibility = View.GONE
                     addOrRemoveItemsLinear!!.visibility = View.VISIBLE
                 }
-            } else
+            } else {
                 Toast.makeText(
                     context,
                     "selected color or size is not available",
                     Toast.LENGTH_SHORT
                 ).show()
+                selectedVariant!!.price = 0f
+                selectedVariant!!.quantityOfItem = -1
+                selectedVariant!!.id = ""
+                selectedVariant!!.parentProductId = ""
+                selectedVariant!!.color = colorr
+            }
 
-            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
+            itemQuantitiyTextView!!.text = selectedVariant?.quantityOfItem.toString()
 
             itemPriceTextView!!.text =
-                "MRP : ${activity!!.getString(R.string.Rs)} ${selectedVariant!!.price}"
+                "MRP : ${activity!!.getString(R.string.Rs)} ${selectedVariant?.price}"
 
 
         }
@@ -501,6 +531,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         colorRecyclerView!!.adapter = colorRecyclerAdapter
     }
+
 
     private fun setUpBottomSheet(view: View) {
         bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomsheeet.bottomsheet)
