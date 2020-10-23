@@ -119,8 +119,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         viewmodel.variantmutableLiveData!!.observe(this, Observer {
             if (it.size > 0) {
                 variantList = it.toList()
-                for (i in it)
-                    Log.d("variantlist", " " + i.color + " " + i.size)
+
                 getSelectedVariant()
                 assignDataToViews()
                 submitDataToSizeColorAdapters()
@@ -275,7 +274,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                 ApplicationClass.selectedVariantList!!.add(selectedVariant!!.copy())
                 addTocartButton!!.visibility = View.GONE
                 addOrRemoveItemsLinear!!.visibility = View.VISIBLE
-            }
+            } else
+                Toast.makeText(context, "Please choose a color or size", Toast.LENGTH_SHORT).show()
 
             itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
             if (selectedVariant!!.quantityOfItem > 0)
@@ -295,7 +295,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                 }!!.quantityOfItem =
                     selectedVariant!!.quantityOfItem
 
-
+                itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
             }
 
             if (selectedVariant!!.quantityOfItem == 0 && ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } != null) {
@@ -306,6 +306,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
 
             }
+
             showOrHideItemCountIndicator()
 
         }
@@ -327,8 +328,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         textView.setTypeface(Typeface.DEFAULT_BOLD, Typeface.BOLD)
 
         textView.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         )
         binding!!.root.coordinator.addView(textView)
 
@@ -517,6 +518,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                 selectedVariant!!.id = ""
                 selectedVariant!!.parentProductId = ""
                 selectedVariant!!.color = colorr
+                selectedVariant!!.size = ""
             }
 
             itemQuantitiyTextView!!.text = selectedVariant?.quantityOfItem.toString()
