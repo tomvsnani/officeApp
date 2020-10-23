@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/chat_background_drawable"
-        tools:context=".ChatScreenFragment">
+        tools:context=".fragments.ChatScreenFragment">
 
         <TextView
             android:id="@+id/messageTextView"

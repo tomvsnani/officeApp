@@ -23,7 +23,8 @@ data class VariantsModelClass(
     var name: String = "",
     var curserposition:String ="",
     var isRecent:Boolean=false,
-    var orderId:String=""
+    var orderId:String="",
+    var isVariantAvailable:Boolean=true
 
 
     ) {

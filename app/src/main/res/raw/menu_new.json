@@ -1,0 +1,230 @@
+{
+  "menu": [
+    {
+      "groupname": "General",
+      "items": [
+        {
+          "type": "general",
+          "id": "12345678",
+          "name": "Home",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/25/25694.svg",
+          "activity": "Home"
+        },
+        {
+          "type": "general",
+          "id": "1234",
+          "name": "Wishlist",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/868/868517.svg",
+          "activity": "Wishlist"
+        },
+        {
+          "type": "general",
+          "id": "12354",
+          "name": "Orders",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/3081/3081001.svg",
+          "activity": "Orders"
+        },
+        {
+          "type": "general",
+          "id": "123534",
+          "name": "Cart",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/premium-icon/icons/svg/3161/3161465.svg",
+          "activity": "Cart"
+        },
+        {
+          "type": "general",
+          "id": "12353224",
+          "name": "Myaccount",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/premium-icon/icons/svg/3161/3161465.svg",
+          "activity": "Myaccount"
+        },
+        {
+          "type": "general",
+          "id": "123532243",
+          "name": "Recently viewed",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/premium-icon/icons/svg/3161/3161465.svg",
+          "activity": "Recentlyviewed"
+        }
+      ]
+    },
+    {
+      "groupname": "Shop Now",
+      "items": [
+        {
+          "type": "collection",
+          "id": "123456789",
+          "name": "All Products",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+          "activity": "ProductsList",
+          "typeid": ""
+        },
+        {
+          "type": "collection",
+          "id": "123456789",
+          "name": "Clothing",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+          "activity": "ProductsList",
+          "typeid": "123456789"
+        },
+        {
+          "type": "collection",
+          "id": "123456789",
+          "name": "Shoes",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+          "activity": "ProductsList",
+          "typeid": "1234567890"
+        },
+        {
+          "type": "nested",
+          "id": "123456789",
+          "name": "Dresses",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+          "activity": "Nestedlist",
+          "nesteditems": [
+            {
+              "type": "collection",
+              "id": "121212",
+              "name": "shirts",
+              "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+              "activity": "ProductsList",
+              "text_align": "left",
+              "typeid": "123456789"
+            },
+            {
+              "type": "collection",
+              "id": "12121244",
+              "name": "Jeans",
+              "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+              "activity": "ProductsList",
+              "text_align": "left",
+              "typeid": "123456789"
+            },
+            {
+              "type": "collection",
+              "id": "1212124455",
+              "name": "hoodie",
+              "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+              "activity": "ProductsList",
+              "text_align": "left",
+              "typeid": "123456789"
+            }
+          ]
+        },
+        {
+          "type": "subcollection",
+          "id": "12345678933",
+          "name": "T-Shirts",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+          "activity": "subcollections",
+          "collection_items": [
+            {
+              "collection_id": "3123123213",
+              "collection_name": "Dresses",
+              "collection_image": ""
+            },
+            {
+              "collection_id": "312312321333",
+              "collection_name": "Shirts",
+              "collection_image": ""
+            },
+            {
+              "collection_id": "312312321333",
+              "collection_name": "Jeans",
+              "collection_image": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "groupname": "",
+      "items": [
+        {
+          "type": "general",
+          "id": "12353224223",
+          "name": "Support",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/premium-icon/icons/svg/3161/3161465.svg",
+          "activity": "Chat"
+        },
+        {
+          "type": "general",
+          "id": "12353224223",
+          "name": "About us",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/premium-icon/icons/svg/3161/3161465.svg",
+          "activity": "Webview",
+          "url": "google.com"
+        },
+        {
+          "type": "general",
+          "id": "12353224223",
+          "name": "Contact",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/premium-icon/icons/svg/3161/3161465.svg",
+          "activity": "Webview",
+          "url": "google.com"
+        },
+        {
+          "type": "general",
+          "id": "12353224223",
+          "name": "Blog",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/premium-icon/icons/svg/3161/3161465.svg",
+          "activity": "Blog"
+        },
+        {
+          "type": "nested",
+          "id": "123456789",
+          "name": "Pages",
+          "text_align": "left",
+          "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+          "activity": "Nestedlist",
+          "nesteditems": [
+            {
+              "type": "page",
+              "id": "121212",
+              "name": "About Us",
+              "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+              "activity": "Webview",
+              "text_align": "left",
+              "url": "google.com",
+              "typeid": "123456789"
+            },
+            {
+              "type": "page",
+              "id": "121212",
+              "name": "Terms and Conditions",
+              "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+              "activity": "Webview",
+              "text_align": "left",
+              "url": "google.com",
+              "typeid": "123456789"
+            },
+            {
+              "type": "blog",
+              "id": "121212",
+              "name": "News",
+              "icon": "https://www.flaticon.com/svg/static/icons/svg/901/901533.svg",
+              "activity": "Webview",
+              "text_align": "left",
+              "url": "google.com",
+              "typeid": "123456789"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

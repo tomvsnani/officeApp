@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.view.Menu
 import android.view.animation.*
 import android.webkit.WebView
 import android.widget.*
@@ -118,6 +119,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         viewmodel.variantmutableLiveData!!.observe(this, Observer {
             if (it.size > 0) {
                 variantList = it.toList()
+                for (i in it)
+                    Log.d("variantlist", " " + i.color + " " + i.size)
                 getSelectedVariant()
                 assignDataToViews()
                 submitDataToSizeColorAdapters()
@@ -265,7 +268,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
 
             //adding product model to selected items
-                if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant != null) {
+            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant != null) {
                 selectedVariant!!.quantityOfItem++
                 selectedVariant!!.isSelected = true
 
@@ -415,7 +418,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
                 val isVariantAvailable =
                     variantList!!.find { it.color == selectedVariant!!.color && it.size == sizee }
-
+                Log.d("variantlistselcetcolo", " " + selectedVariant!!.color + "  " + sizee)
 
                 if (isVariantAvailable != null) {
 
@@ -457,10 +460,14 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
     private fun setUpProductColorRecyclerView() {
 
+
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
+
 
             val isVariantAvailable =
                 variantList!!.find { it.color == colorr && it.size == selectedVariant!!.size }
+
+            Log.d("variantlistselcetcolo", " " + colorr + "  " + selectedVariant!!.size)
 
             if (isVariantAvailable != null) {
                 val isVariantavailableInApplicationClass =

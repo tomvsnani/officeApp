@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.myfirstofficeappecommerce.Adapters.ExpandableMenuListViewAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.databinding.ActivityMainBinding
 import com.example.myfirstofficeappecommerce.fragments.*
@@ -21,6 +22,11 @@ import com.shopify.buy3.GraphResponse
 import com.shopify.buy3.Storefront
 import com.shopify.graphql.support.ID
 import com.shopify.graphql.support.Input
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity() : AppCompatActivity() {
@@ -33,6 +39,10 @@ class MainActivity() : AppCompatActivity() {
     var parentfragment: CheckOutMainWrapperFragment? = null
     var binding: ActivityMainBinding? = null
     var DISCOUNT = "FIRSTDISCOUNT"
+    var navList: MutableList<Item> = ArrayList()
+    var expandable_menu_adapter: ExpandableMenuListViewAdapter? = null
+    var menudata: List<com.example.myfirstofficeappecommerce.Menu> = ArrayList()
+
 
     companion object {
         var applyCoupon: Boolean = false
@@ -65,11 +75,96 @@ class MainActivity() : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerlayout)
         navigationView = findViewById(R.id.navigationview)
 
-        var a = navigationView!!.menu.addSubMenu(0, 1, 1, "Categories")
 
-        for (i in list?.indices!!) {
-            a.add(1, i, 0, list!![i].itemName)
-        }
+//        val text = resources.openRawResource(R.raw.menu_new)
+//            .bufferedReader().use { it.readText() }
+
+
+        var retrofit = Retrofit.Builder().apply {
+       //     baseUrl("https://my-json-server.typicode.com/tomvsnani/testfakerestapi/")
+            baseUrl("http://127.0.0.1:8080/storage/downloads/")
+            addConverterFactory(GsonConverterFactory.create())
+
+        }.build()
+        var call = retrofit.create(RetrofitInterface::class.java)
+        call.getRestData().enqueue(object : Callback<MenuJson> {
+            override fun onResponse(call: Call<MenuJson>, response: Response<MenuJson>) {
+                var navmenu = navigationView!!.menu
+                menudata = (response.body() as MenuJson).menu
+                var hashMap: HashMap<com.example.myfirstofficeappecommerce.Menu, List<Item>> =
+                    HashMap()
+
+                for (i in menudata.indices) {
+                    //     var menu = navmenu.addSubMenu(i, i, i, menudata[i].groupname)
+                    hashMap[menudata[i]] = menudata[i].items
+
+
+
+                    for (j in menudata[i].items.indices) {
+
+
+                        menudata[i].items[j].parentIndexId = i
+                        menudata[i].items[j].indexid = j
+
+                        navList.add(menudata[i].items[j])
+                        when (menudata[i].items[j].type) {
+//                            "general", "collection" ->
+//                            //menu.add(i, j, j, menudata[i].items[j].name)
+////                                .apply {
+////
+////                                Log.d("rawjsonactivity", menudata[i].items[j].activity)
+////
+////                                if (menudata[i].items[j].icon.isNotEmpty())
+////                                    Glide.with(applicationContext)
+////                                        .asBitmap()
+////                                        .load(menudata[i].items[j].icon)
+////                                        .into(object : CustomTarget<Bitmap>() {
+////                                            override fun onResourceReady(
+////                                                resource: Bitmap,
+////                                                transition: Transition<in Bitmap>?
+////                                            ) {
+////                                                icon = BitmapDrawable(resources, resource)
+////                                            }
+////
+////                                            override fun onLoadCleared(placeholder: Drawable?) {
+////
+////                                            }
+////                                        })
+////
+////                            }
+//
+//
+////                            "nested" -> {
+////                                //  var nestedmenu = menu.add(i, j, j, menudata[i].items[j].name)
+////                                //           nestedmenu.actionView=layoutInflater.inflate(R.layout.menu_actionview_layout,null,false)
+////                                //   menu.setHeaderIcon(resources.getDrawable(R.drawable.ic_baseline_add_24))
+////                                //    menu.setIcon(resources.getDrawable(R.drawable.ic_baseline_add_24))
+////                                //  for(k in menudata[i].items[j].nesteditems.indices)
+//////                               nestedmenu.subMenu.add(0,1,2,"ok")
+////                            }
+                        }
+
+
+                    }
+                }
+                expandable_menu_adapter =
+                    ExpandableMenuListViewAdapter(menudata, hashMap, this@MainActivity)
+                binding!!.menuexpandablelist.setAdapter(expandable_menu_adapter)
+                for (s in 0 until expandable_menu_adapter!!.groupCount) binding!!.menuexpandablelist.expandGroup(
+                    s
+                )
+            }
+
+            override fun onFailure(call: Call<MenuJson>, t: Throwable) {
+                Log.d("rawjson", t.message.toString())
+                call.clone().enqueue(this)
+            }
+        })
+
+
+//        for (i in list?.indices!!) {
+//            a.add(1, i, 0, list!![i].itemName)
+//        }
 
         binding!!.mainactivityprogressbar.visibility = View.GONE
 
@@ -81,101 +176,170 @@ class MainActivity() : AppCompatActivity() {
         )
             .commit()
 
-        navigationView?.setNavigationItemSelectedListener { menuItem ->
-            if (drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
-                drawerLayout?.closeDrawer(GravityCompat.START)
-            } else {
-                drawerLayout?.openDrawer(GravityCompat.START)
-            }
-
-            when {
-                menuItem.itemId == R.id.chatscreen -> {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(
-                            R.id.container,
-                            ChatScreenFragment()
-                        ).addToBackStack(null)
-                        .commit()
-                    return@setNavigationItemSelectedListener true
-                }
-
-                menuItem.itemId == R.id.ordersmenu -> {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(
-                            R.id.container,
-                            OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
-                                it.isOrdered
-                            })
-                        ).addToBackStack(null)
-                        .commit()
-                    return@setNavigationItemSelectedListener true
-                }
-                menuItem.itemId == R.id.recentmenu -> {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(
-                            R.id.container,
-                            RecentsFragment(ApplicationClass.recentsList!!.filter {
-                                it.isRecent
-                            })
-                        ).addToBackStack(null)
-                        .commit()
-                    return@setNavigationItemSelectedListener true
+        binding!!.menuexpandablelist.setOnGroupClickListener { parent, v, groupPosition, id ->
+            return@setOnGroupClickListener true
+        }
 
 
-                }
-                menuItem.itemId == R.id.wishlistmenu -> {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(
-                            R.id.container,
-                            WishListFragment()
-                        ).addToBackStack(null)
-                        .commit()
+        binding!!.menuexpandablelist.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            Log.d(
+                "clicked",
+                menudata[groupPosition].items[childPosition].type
+            )
 
-                    return@setNavigationItemSelectedListener true
-                }
-                menuItem.groupId == 1 -> {
-                    ApplicationClass.selectedTab = menuItem.itemId
-                    supportFragmentManager.beginTransaction()
-                        .replace(
+            opencloseDrawerLayout()
+
+            if (menudata[groupPosition].items[childPosition].type == "general") {
+
+                when (menudata[groupPosition].items[childPosition].name) {
+                    "Chat" -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.container,
+                                ChatScreenFragment()
+                            ).addToBackStack(null)
+                            .commit()
+                        return@setOnChildClickListener true
+                    }
+
+                    "Orders" -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.container,
+                                OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
+                                    it.isOrdered
+                                })
+                            ).addToBackStack(null)
+                            .commit()
+                        return@setOnChildClickListener true
+                    }
+                    "Recently viewed" -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.container,
+                                RecentsFragment(ApplicationClass.recentsList!!.filter {
+                                    it.isRecent
+                                })
+                            ).addToBackStack(null)
+                            .commit()
+                        return@setOnChildClickListener true
+
+                    }
+                    "Wishlist" -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.container,
+                                WishListFragment()
+                            ).addToBackStack(null)
+                            .commit()
+
+                        return@setOnChildClickListener true
+                    }
+
+
+                    "Home" -> {
+
+                        supportFragmentManager.beginTransaction().replace(
                             R.id.container,
-                            CategoryEachViewPagerFragment(list?.get(menuItem.itemId), {})
+                            MainFragment()
                         )
-                        .addToBackStack(null)
+                            .commit()
+                        return@setOnChildClickListener true
 
+                    }
+                    "Myaccount" -> {
+                        supportFragmentManager.beginTransaction().replace(
+                            R.id.container,
+                            ProfileFragment(Constants.NORMAL_SIGN_IN)
+                        ).addToBackStack(null)
+                            .commit()
+                        return@setOnChildClickListener true
+
+                    }
+                    "Cart" -> {
+                        supportFragmentManager.beginTransaction().replace(
+                            R.id.container,
+                            CartFragment(ApplicationClass.selectedVariantList)
+                        ).addToBackStack(null)
+                            .commit()
+
+                        return@setOnChildClickListener true
+                    }
+
+                    "Webview" -> {
+
+                        supportFragmentManager.beginTransaction().replace(
+                            R.id.container,
+                            WebViewFragment(
+                                menudata[groupPosition].items[childPosition].url,
+                                ""
+                            )
+                        ).addToBackStack(null)
+                            .commit()
+                        return@setOnChildClickListener true
+                    }
+
+
+                    else -> return@setOnChildClickListener true
+
+                }
+
+
+            } else if (menudata[groupPosition].items[childPosition].type == "collection") {
+
+                Log.d(
+                    "clicked",
+                    " ok1"
+                )
+
+                if (menudata[groupPosition].items[childPosition].typeid.isNotEmpty()) {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(
+                            R.id.container,
+                            CategoryEachViewPagerFragment(
+                                CategoriesModelClass(
+                                    id = menudata[groupPosition].items[childPosition].typeid
+                                )
+                            ) {}
+                        ).addToBackStack(null)
                         .commit()
 
-                    return@setNavigationItemSelectedListener true
-                }
-                menuItem.itemId == R.id.homemenu -> {
+                } else {
 
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.container,
-                        MainFragment()
-                    )
-                        .commit()
-                    return@setNavigationItemSelectedListener true
 
-                }
-                menuItem.itemId == R.id.profilemenu -> {
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.container,
-                        ProfileFragment(Constants.NORMAL_SIGN_IN)
-                    ).addToBackStack(null)
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(
+                            R.id.container,
+                            CategoryEachViewPagerFragment(ApplicationClass.menucategorylist[0]) {}
+                        ).addToBackStack(null)
                         .commit()
 
-                    return@setNavigationItemSelectedListener true
+
                 }
-                else -> return@setNavigationItemSelectedListener true
             }
-
-
+            else{
+                supportFragmentManager.beginTransaction().replace(R.id.container,SubCategoryFragment(menudata[groupPosition]
+                    .items[childPosition].collection_items)).commit()
+            }
+            return@setOnChildClickListener true
         }
 
     }
+
+    fun opencloseDrawerLayout() {
+        if (drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
+            drawerLayout?.closeDrawer(GravityCompat.START)
+        } else {
+            drawerLayout?.openDrawer(GravityCompat.START)
+        }
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbarmenu, menu)

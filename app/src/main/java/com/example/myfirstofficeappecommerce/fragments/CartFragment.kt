@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.view.Menu
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ProgressBar

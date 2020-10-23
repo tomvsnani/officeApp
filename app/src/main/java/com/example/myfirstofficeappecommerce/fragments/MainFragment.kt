@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
+import android.view.Menu
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.EditText
 import android.widget.ImageView

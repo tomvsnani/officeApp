@@ -3,6 +3,7 @@ package com.example.myfirstofficeappecommerce.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.Menu
 import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
@@ -35,11 +36,11 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
     var adapterr: CategoriesEachRecyclerAdapter? = null
     var productList: MutableList<CategoriesModelClass> = ArrayList()
     var progressbar: ProgressBar? = null
-    var value = get!!.itemName
+
     var recyclerviewLastLayout: ConstraintLayout? = null
     var itemSelectedCountTextView: TextView? = null
     var checkoutButton: Button? = null
-    var menu:Menu?=null
+    var menu: Menu?=null
     var selectedItemDisplayCardView: CardView? = null
 
 

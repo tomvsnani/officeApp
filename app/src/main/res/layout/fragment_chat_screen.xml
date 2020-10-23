@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="#071820"
     android:fitsSystemWindows="true"
-    tools:context=".ChatScreenFragment">
+    tools:context=".fragments.ChatScreenFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout5"

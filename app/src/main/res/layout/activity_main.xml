@@ -31,16 +31,28 @@
                 android:fitsSystemWindows="true"
                 android:theme="@style/NavigationView"
                 app:headerLayout="@layout/navigation_header"
-                app:itemTextColor="#6b6b6b"
-                app:menu="@menu/navigationmenu" />
+                app:itemTextColor="#6b6b6b">
+
+                <ExpandableListView
+                    android:id="@+id/menuexpandablelist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="50dp"
+                    android:childDivider="@android:color/transparent"
+
+                    android:groupIndicator="@null"
+                    android:layoutDirection="rtl"
+
+                    />
+            </com.google.android.material.navigation.NavigationView>
         </androidx.drawerlayout.widget.DrawerLayout>
 
 
     </LinearLayout>
+
     <ProgressBar
+        android:id="@+id/mainactivityprogressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/mainactivityprogressbar"
-        android:layout_gravity="center"
-        />
+        android:layout_gravity="center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

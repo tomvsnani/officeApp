@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.myfirstofficeappecommerce.ChatScreenFragment
+import com.example.myfirstofficeappecommerce.fragments.ChatScreenFragment
 import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.Models.ChatModel
 import com.example.myfirstofficeappecommerce.R

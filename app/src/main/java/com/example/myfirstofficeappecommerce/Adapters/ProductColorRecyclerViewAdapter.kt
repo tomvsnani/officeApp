@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
@@ -23,7 +24,7 @@ class ProductColorRecyclerViewAdapter(
 
 
     inner class ProductColorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var imageView: ImageView = itemView.findViewById(R.id.productcolorrowTextview)
+        var imageView: TextView = itemView.findViewById(R.id.productcolorrowTextview)
         var cardView: CardView = itemView.findViewById(R.id.cardviewcolor)
 
         init {
@@ -74,58 +75,51 @@ class ProductColorRecyclerViewAdapter(
         } else
             holder.cardView.cardElevation = 0f
 
+        holder.imageView.text = modelClass.color!!
+        if (modelClass.isVariantAvailable)
+            holder.imageView.setTextColor(Color.BLACK)
+        else
+            holder.imageView.setTextColor(Color.GRAY)
+
         //Log.d("modelclasscolor",modelClass.color.toString())
-        when {
-            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
-                holder.imageView.setBackgroundColor(Color.RED)
-
-
-            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "b" -> {
-
-                if (modelClass.color!!.toLowerCase(Locale.ROOT) .contains( "black"))
-                    holder.imageView.setBackgroundColor(Color.BLACK)
-                else
-                    holder.imageView.setBackgroundColor(Color.BLUE)
-
-            }
-            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "g" -> {
-                Log.d("modelclasscolorre",  modelClass.color!!.toLowerCase(Locale.ROOT))
-                if (modelClass.color!!.toLowerCase(Locale.ROOT) .contains( "green"))
-                    holder.imageView.setBackgroundColor(Color.GREEN)
-                else holder.imageView.setBackgroundColor(Color.GRAY)
-            }
-
-
-            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "w" ->
-                holder.imageView.setBackgroundColor(Color.WHITE)
-
-
-            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "p" ->
-                holder.imageView.setBackgroundColor(Color.rgb(255, 192, 203))
-
-
-            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "y" -> holder.imageView.setBackgroundColor(
-                Color.YELLOW
-            )
-            else -> {
-                holder.imageView.visibility = View.GONE
-            }
-
+//        when {
 //            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
 //                holder.imageView.setBackgroundColor(Color.RED)
-//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
-//                holder.imageView.setBackgroundColor(Color.RED)
-//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
-//                holder.imageView.setBackgroundColor(Color.RED)
-//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
-//                holder.imageView.setBackgroundColor(Color.RED)
-//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
-//                holder.imageView.setBackgroundColor(Color.RED)
-//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
-//                holder.imageView.setBackgroundColor(Color.RED)
-//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "r" ->
-//                holder.imageView.setBackgroundColor(Color.RED)
-        }
+//
+//
+//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "b" -> {
+//
+//                if (modelClass.color!!.toLowerCase(Locale.ROOT) .contains( "black"))
+//                    holder.imageView.setBackgroundColor(Color.BLACK)
+//                else
+//                    holder.imageView.setBackgroundColor(Color.BLUE)
+//
+//            }
+//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "g" -> {
+//                Log.d("modelclasscolorre",  modelClass.color!!.toLowerCase(Locale.ROOT))
+//                if (modelClass.color!!.toLowerCase(Locale.ROOT) .contains( "green"))
+//                    holder.imageView.setBackgroundColor(Color.GREEN)
+//                else holder.imageView.setBackgroundColor(Color.GRAY)
+//            }
+//
+//
+//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "w" ->
+//                holder.imageView.setBackgroundColor(Color.WHITE)
+//
+//
+//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "p" ->
+//                holder.imageView.setBackgroundColor(Color.rgb(255, 192, 203))
+//
+//
+//            modelClass.color!!.toLowerCase(Locale.ROOT)[0].toString() == "y" -> holder.imageView.setBackgroundColor(
+//                Color.YELLOW
+//            )
+//            else -> {
+//                holder.imageView.visibility = View.GONE
+//            }
+
+//
+        //   }
     }
 
 

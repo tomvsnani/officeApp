@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce.Viewmodel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
@@ -162,57 +163,61 @@ class CategoriesViewModel(var id: String) : ViewModel() {
         calldata!!.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
             override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
                 Log.d("iscalled", "hey")
+                if (!response.hasErrors() && response.data() != null) {
+                    var storefront: Storefront.Collection =
+                        response.data()!!.node as Storefront.Collection
 
-                var storefront: Storefront.Collection =
-                    response.data()!!.node as Storefront.Collection
+                    for (productEdge in storefront.products.edges) {
 
-                for (productEdge in storefront.products.edges) {
+                        var productImageSrcList: MutableList<UserDetailsModelClass> = ArrayList()
 
-                    var productImageSrcList: MutableList<UserDetailsModelClass> = ArrayList()
+                        // adding aa images to product imagelist
+                        for (imageedge in productEdge.node.images.edges)
+                            productImageSrcList.add(UserDetailsModelClass(imageUrl = imageedge.node.src))
 
-                    // adding aa images to product imagelist
-                    for (imageedge in productEdge.node.images.edges)
-                        productImageSrcList.add(UserDetailsModelClass(imageUrl = imageedge.node.src))
+                        var variantList: MutableList<VariantsModelClass> = ArrayList()
 
-                    var variantList: MutableList<VariantsModelClass> = ArrayList()
-
-                    //adding all variant data to product variant list
-                    for (variantEdge in productEdge.node.variants.edges) {
-                        var sizeIndex = 2;
-                        if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name == "Size")
-                            sizeIndex = 1
-                        variantList.add(
-                            VariantsModelClass(
-                                variantEdge.node.id.toString(),
-                                productEdge.node.id.toString(),
-                                if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
-                                if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
-                                variantEdge.node.price.toFloat(),
-                                name = productEdge.node.title,
-                                imgSrc = variantEdge?.node?.image?.src
-                                    ?: productImageSrcList[0].imageUrl
+                        //adding all variant data to product variant list
+                        for (variantEdge in productEdge.node.variants.edges) {
+                            var sizeIndex = 2;
+                            if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name == "Size")
+                                sizeIndex = 1
+                            variantList.add(
+                                VariantsModelClass(
+                                    variantEdge.node.id.toString(),
+                                    productEdge.node.id.toString(),
+                                    if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
+                                    if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
+                                    variantEdge.node.price.toFloat(),
+                                    name = productEdge.node.title,
+                                    imgSrc = variantEdge?.node?.image?.src
+                                        ?: productImageSrcList[0].imageUrl
 
 
+                                )
                             )
+                        }
+                        var productmodelclass = CategoriesModelClass(
+                            id = productEdge.node.id.toString(),
+                            itemName = productEdge.node.title,
+                            itemDescriptionText = productEdge.node.descriptionHtml,
+                            imageSrcOfVariants = productImageSrcList,
+                            realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
+                            variantsList = variantList,
+                            groupId = storefront.id.toString(),
+                            cursor = productEdge.cursor ?: null,
+                            hasNextPage = if (storefront.products.pageInfo == null) false else storefront.products.pageInfo.hasNextPage
                         )
-                    }
-                    var productmodelclass = CategoriesModelClass(
-                        id = productEdge.node.id.toString(),
-                        itemName = productEdge.node.title,
-                        itemDescriptionText = productEdge.node.descriptionHtml,
-                        imageSrcOfVariants = productImageSrcList,
-                        realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
-                        variantsList = variantList,
-                        groupId = storefront.id.toString(),
-                        cursor = productEdge.cursor ?: null,
-                        hasNextPage = if (storefront.products.pageInfo == null) false else storefront.products.pageInfo.hasNextPage
-                    )
 
-                    Log.d("istrue", productmodelclass.hasNextPage.toString())
-                    productListBasedOnCollectionId.add(productmodelclass)
+                        Log.d("istrue", productmodelclass.hasNextPage.toString())
+                        productListBasedOnCollectionId.add(productmodelclass)
+                    }
+                    mutableLiveData!!.postValue(productListBasedOnCollectionId.distinctBy { it.id } as MutableList<CategoriesModelClass>)
+                } else {
+                    Log.d("collectionretrieveerror", response.errors().get(0).message().toString())
                 }
-                mutableLiveData!!.postValue(productListBasedOnCollectionId.distinctBy { it.id } as MutableList<CategoriesModelClass>)
             }
+
             override fun onFailure(error: GraphError) {
                 Log.e("graphvalueerror", error.toString())
             }
