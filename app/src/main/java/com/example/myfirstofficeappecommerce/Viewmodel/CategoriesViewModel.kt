@@ -12,15 +12,16 @@ import com.shopify.buy3.*
 import com.shopify.graphql.support.ID
 
 class CategoriesViewModel(var id: String) : ViewModel() {
-    var mutableLiveData: MutableLiveData<MutableList<CategoriesModelClass>>? = MutableLiveData()
-    var productListBasedOnCollectionId: MutableList<CategoriesModelClass> = ArrayList()
+    private var mutableLiveData: MutableLiveData<MutableList<CategoriesModelClass>>? =
+        MutableLiveData()
+    private var productListBasedOnCollectionId: MutableList<CategoriesModelClass> = ArrayList()
 
-    var variantmutableLiveData: MutableLiveData<MutableList<VariantsModelClass>>? =
+    private var variantmutableLiveData: MutableLiveData<MutableList<VariantsModelClass>>? =
         MutableLiveData()
 
-    var variantListBasedOnProductId: MutableList<VariantsModelClass> = ArrayList()
+    private var variantListBasedOnProductId: MutableList<VariantsModelClass> = ArrayList()
 
-    fun getProductDataBasedOnColletionId() {
+    fun getProductDataBasedOnColletionId(): MutableLiveData<MutableList<CategoriesModelClass>> {
         val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
             rootQuery.node(ID(id)) { _queryBuilderr ->
                 _queryBuilderr.onCollection { _queryBuilder ->
@@ -81,7 +82,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                 }
             }
         }
-        fetchDataByQuery(query1)
+        return fetchDataByQuery(query1)
 
     }
 
@@ -154,9 +155,9 @@ class CategoriesViewModel(var id: String) : ViewModel() {
     }
 
 
-    private fun fetchDataByQuery(query1: Storefront.QueryRootQuery?) {
+    private fun fetchDataByQuery(query1: Storefront.QueryRootQuery?): MutableLiveData<MutableList<CategoriesModelClass>> {
         var calldata: QueryGraphCall? = null
-        //  if (productList.isEmpty()) {
+
 
         calldata = CategoriesDataProvider.graphh!!.queryGraph(query1)
 
@@ -222,11 +223,11 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                 Log.e("graphvalueerror", error.toString())
             }
         })
-
+        return mutableLiveData!!
     }
 
 
-    fun getVariantData() {
+    fun getVariantData(): MutableLiveData<MutableList<VariantsModelClass>> {
         var query = Storefront.query { _queryBuilder ->
             _queryBuilder.node(ID(id)) { _queryBuilder ->
                 _queryBuilder.onProduct {
@@ -248,11 +249,11 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                 }
             }
         }
-        fetchVariantDataQuery(query)
+        return fetchVariantDataQuery(query)
     }
 
 
-    private fun fetchVariantDataQuery(query: Storefront.QueryRootQuery?) {
+    private fun fetchVariantDataQuery(query: Storefront.QueryRootQuery?): MutableLiveData<MutableList<VariantsModelClass>> {
         var calldata: QueryGraphCall? = null
         //  if (productList.isEmpty()) {
 
@@ -283,7 +284,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
             }
         })
-
+        return variantmutableLiveData!!
     }
 
 

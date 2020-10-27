@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.WishlistAdapter
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Constants
-import com.example.myfirstofficeappecommerce.MainActivity
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.R
 
 

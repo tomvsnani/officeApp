@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.myfirstofficeappecommerce.*
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
+import com.example.myfirstofficeappecommerce.Models.Item
+import com.example.myfirstofficeappecommerce.Models.Nesteditem
 
 class ExpandableInnerMenuListViewAdapter(
     var groupNameList: List<Item>,

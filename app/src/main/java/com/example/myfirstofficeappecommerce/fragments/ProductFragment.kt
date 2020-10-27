@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myfirstofficeappecommerce.*
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Adapters.HorizontalScrollViewPagerAdapter
 import com.example.myfirstofficeappecommerce.Adapters.ProductColorRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Adapters.ProductSizeRecyclerViewAdapter
@@ -116,7 +117,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             CategoriesViewModel::class.java
         )
         viewmodel.getVariantData()
-        viewmodel.variantmutableLiveData!!.observe(this, Observer {
+      .observe(this, Observer {
             if (it.size > 0) {
                 variantList = it.toList()
 

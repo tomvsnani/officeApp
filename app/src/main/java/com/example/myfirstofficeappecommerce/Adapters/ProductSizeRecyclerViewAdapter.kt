@@ -24,8 +24,8 @@ class ProductSizeRecyclerViewAdapter(var callback: (size: String) -> Unit) :
 
         init {
             cardView.setOnClickListener {
-
-                callback(currentList[adapterPosition].size!!)
+                if (currentList[absoluteAdapterPosition].size != null)
+                    callback(currentList[adapterPosition].size!!)
                 currentList.filter {
                     it.isSelected = false
                     return@filter true
@@ -54,8 +54,11 @@ class ProductSizeRecyclerViewAdapter(var callback: (size: String) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: ProductSizeViewHolder, position: Int) {
-        Log.d("sizeeee",currentList[position].name.toString())
-        Log.d("sizeeee","  "+ currentList[position].size+" "+currentList[position].isVariantAvailable.toString())
+        Log.d("sizeeee", currentList[position].name.toString())
+        Log.d(
+            "sizeeee",
+            "  " + currentList[position].size + " " + currentList[position].isVariantAvailable.toString()
+        )
         if (currentList[position].isSelected)
             holder.cardView.cardElevation = 20f
         else holder.cardView.cardElevation = 0f

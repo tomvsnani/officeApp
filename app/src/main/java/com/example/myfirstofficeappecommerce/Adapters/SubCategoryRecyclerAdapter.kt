@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.myfirstofficeappecommerce.CollectionItem
+import com.example.myfirstofficeappecommerce.Models.CollectionItem
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.SubCategoriesRowLayoutBinding

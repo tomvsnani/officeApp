@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
-import com.example.myfirstofficeappecommerce.MainActivity
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding

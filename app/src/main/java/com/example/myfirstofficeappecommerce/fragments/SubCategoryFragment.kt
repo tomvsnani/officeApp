@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.SubCategoryRecyclerAdapter
-import com.example.myfirstofficeappecommerce.CollectionItem
+import com.example.myfirstofficeappecommerce.Models.CollectionItem
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentSubCategoryBinding
 

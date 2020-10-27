@@ -14,13 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.OrdersAdaptes
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Constants
-import com.example.myfirstofficeappecommerce.MainActivity
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.buy3.Storefront.CustomerQuery.OrdersArguments
-import com.shopify.graphql.support.ID
 
 
 class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {

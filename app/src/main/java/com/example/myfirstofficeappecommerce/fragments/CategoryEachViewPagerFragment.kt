@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.*
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Adapters.CategoriesEachRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModel
 import com.example.myfirstofficeappecommerce.Viewmodel.CategoriesViewModelFactory
@@ -40,9 +41,8 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
     var recyclerviewLastLayout: ConstraintLayout? = null
     var itemSelectedCountTextView: TextView? = null
     var checkoutButton: Button? = null
-    var menu: Menu?=null
+    var menu: Menu? = null
     var selectedItemDisplayCardView: CardView? = null
-
 
 
     override fun onCreateView(
@@ -55,7 +55,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
             false
         )
         setHasOptionsMenu(true)
-        Log.d("clicked","came")
+        Log.d("clicked", "came")
         itemSelectedCountTextView = view.findViewById(R.id.numberOfItemSelectedTextVieweach)
         checkoutButton = view.findViewById(R.id.checkoutButtoneachfrag)
         selectedItemDisplayCardView = view.findViewById(R.id.itemsselectedindicatorcardvieweachfrag)
@@ -76,7 +76,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
         recyclerviewLastLayout = view.findViewById(R.id.loadingconstraint)
         progressbar = view.findViewById(R.id.eachcategoryfragprogressbar)
         progressbar!!.visibility = View.GONE
-        adapterr = CategoriesEachRecyclerAdapter( this)
+        adapterr = CategoriesEachRecyclerAdapter(this)
         (recyclerView as RecyclerView).layoutManager =
             GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
         (recyclerView as RecyclerView).adapter = adapterr
@@ -88,14 +88,14 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
                 .get(CategoriesViewModel::class.java)
         progressbar!!.visibility = View.VISIBLE
         categoriesDataProvider.getProductDataBasedOnColletionId()
-        categoriesDataProvider.mutableLiveData?.observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-            adapterr!!.submitList(it)
-            CoroutineScope(Dispatchers.Main).launch {
-                recyclerviewLastLayout!!.visibility = View.GONE
-                progressbar!!.visibility = View.GONE
-            }
-        })
+                adapterr!!.submitList(it)
+                CoroutineScope(Dispatchers.Main).launch {
+                    recyclerviewLastLayout!!.visibility = View.GONE
+                    progressbar!!.visibility = View.GONE
+                }
+            })
 
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -120,9 +120,9 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("clicked","hello")
+        Log.d("clicked", "hello")
         if (item.itemId == android.R.id.home) {
-            Log.d("clicked","hello")
+            Log.d("clicked", "hello")
             if ((activity as MainActivity).drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
                 (activity as MainActivity).drawerLayout?.closeDrawer(GravityCompat.START)
             } else {
@@ -132,19 +132,20 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
 
 
         }
-        if(item.itemId==R.id.search_menu){
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container,SearchFragment()).addToBackStack(null).commit()
+        if (item.itemId == R.id.search_menu) {
+            activity!!.supportFragmentManager.beginTransaction()
+                .replace(R.id.container, SearchFragment()).addToBackStack(null).commit()
             return true
         }
 
-       if( item.itemId == R.id.profilemenu ) {
-           activity!!.supportFragmentManager.beginTransaction().replace(
-               R.id.container,
-               ProfileFragment(Constants.NORMAL_SIGN_IN,fragment = this)
-           ).addToBackStack(null)
-               .commit()
+        if (item.itemId == R.id.profilemenu) {
+            activity!!.supportFragmentManager.beginTransaction().replace(
+                R.id.container,
+                ProfileFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+            ).addToBackStack(null)
+                .commit()
 
-       }
+        }
         return super.onOptionsItemSelected(item)
     }
 

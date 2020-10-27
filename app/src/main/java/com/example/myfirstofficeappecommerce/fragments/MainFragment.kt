@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.*
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Adapters.CategoriesEachRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Adapters.CollectionsAdapter
 import com.example.myfirstofficeappecommerce.Adapters.DifferentProductsCategoriesRecyclerViewAdapter

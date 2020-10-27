@@ -11,9 +11,9 @@ import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
         var next: String = params.key ?: isFirstRequest!!
         viewModel.getProductDataBasedOnColletionId()
         var list: MutableList<CategoriesModelClass>? = ArrayList()
-        viewModel.mutableLiveData!!.observeForever {
-            list!!.addAll(it)
-        }
+//        viewModel.mutableLiveData!!.observeForever {
+//            list!!.addAll(it)
+//        }
         return LoadResult.Page(list!!, prev, next)
     }
 

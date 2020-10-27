@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.*
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Adapters.searchfragmentRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
@@ -115,8 +116,8 @@ open class SearchFragment() : Fragment() {
                                         VariantsModelClass(
                                             variantEdge.node.id.toString(),
                                             productEdge.node.id.toString(),
-                                            if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
-                                            if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
+                                            if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value ?: "nulll" else "nulll",
+                                            if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value ?: "null" else "nulll",
                                             variantEdge.node.price.toFloat(),
                                             name = productEdge.node.title
 

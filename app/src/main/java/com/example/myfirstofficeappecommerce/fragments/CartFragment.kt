@@ -20,16 +20,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.*
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Adapters.CartItemRecommendedAdapter
 import com.example.myfirstofficeappecommerce.Adapters.CartItemsSelectedRecyclerViewAdapter
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.databinding.FragmentCartBinding
-import com.shopify.buy3.GraphCall
-import com.shopify.buy3.GraphError
-import com.shopify.buy3.GraphResponse
-import com.shopify.buy3.Storefront
-import com.shopify.buy3.Storefront.*
-import com.shopify.graphql.support.ID
 
 
 class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {

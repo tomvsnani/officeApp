@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.*
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.databinding.FragmentProfile2Binding
 import com.google.android.material.textfield.TextInputEditText
 import com.shopify.buy3.GraphCall
