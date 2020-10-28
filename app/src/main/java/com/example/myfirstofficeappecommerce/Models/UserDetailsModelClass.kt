@@ -16,7 +16,8 @@ data class UserDetailsModelClass(
     var state:String="",
     var hnum:String="",
     var country:String="",
-    var shippingPrice:String=""
+    var shippingPrice:String="",
+    var email:String=""
 
 ) {
     companion object {

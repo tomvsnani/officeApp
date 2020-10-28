@@ -3,6 +3,7 @@ package com.example.myfirstofficeappecommerce.fragments
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,13 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
     var newAddressLayoutBinding: NewAddressLayoutBinding? = null
     var webUrl: String = ""
     var addressList = ArrayList<UserDetailsModelClass>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
+    }
 
 
     override fun onCreateView(

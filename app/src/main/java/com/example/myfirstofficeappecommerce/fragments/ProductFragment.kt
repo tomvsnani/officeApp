@@ -2,6 +2,7 @@ package com.example.myfirstofficeappecommerce.fragments
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -194,6 +195,7 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     }
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun assignDataToViews() {
 
         if (selectedVariant!!.quantityOfItem > 0) {
@@ -208,10 +210,10 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         itemNameTextView!!.text = modelClass.itemName
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            webview!!.getSettings().setBuiltInZoomControls(true);
+            webview!!.settings.builtInZoomControls = true;
 
-            webview!!.getSettings().setJavaScriptEnabled(true);
-            webview!!.getSettings().setLoadWithOverviewMode(true);
+            webview!!.settings.javaScriptEnabled = true;
+            webview!!.settings.loadWithOverviewMode = true;
 
             webview!!.loadDataWithBaseURL(
                 null,
@@ -465,12 +467,10 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         sizeRecyclerView!!.adapter = sizeRecyclerViewAdapter
     }
 
+
+
     private fun setUpProductColorRecyclerView() {
-
-
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
-
-
             val isVariantAvailable =
                 variantList!!.find { it.color == colorr && it.size == selectedVariant!!.size }
 

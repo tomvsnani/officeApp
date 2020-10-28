@@ -20,6 +20,7 @@ package com.example.myfirstofficeappecommerce
        const val MESSAGE_STATUS_SENT="SENT"
        const val MESSAGE_STATUS_NOT_SENT="NOT_SENT"
        const val MESSAGE_STATUS_DELIVERED="DELIVERED"
+       const val LOGGED_IN_TOKEN="token"
    }
 
 

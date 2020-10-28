@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="8dp"
-    app:cardCornerRadius="20dp"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardBackgroundColor="#fff"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,14 +31,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:padding="4dp"
             android:text="hello"
-            android:textSize="18sp"
             android:textColor="#000"
+            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/recentItemImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -74,10 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:textColor="#6b6b6b"
             android:text="Quantity : 3 pieces"
+            android:textColor="#6b6b6b"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view3" />
 
@@ -86,8 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="#6b6b6b"
             android:text="Ordered On : 07/09/2020"
+            android:textColor="#6b6b6b"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/recentQunatityTextView"
             app:layout_constraintTop_toBottomOf="@+id/recentQunatityTextView" />
 
@@ -95,9 +94,10 @@
             android:id="@+id/recentTotalAmountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:text="Total Amount : 300"
-            android:textColor="#6b6b6b"
+            android:textColor="@color/red"
             app:layout_constraintStart_toStartOf="@+id/recentDateTextView"
             app:layout_constraintTop_toBottomOf="@+id/recentDateTextView" />
 
@@ -112,7 +112,6 @@
             app:layout_constraintTop_toBottomOf="@+id/recentTotalAmountTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.cardview.widget.CardView>

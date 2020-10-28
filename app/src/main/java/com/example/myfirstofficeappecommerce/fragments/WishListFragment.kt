@@ -50,10 +50,8 @@ class WishListFragment() : Fragment() {
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
             activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, ProfileFragment(
-                Constants.NORMAL_SIGN_IN))
+                Constants.NORMAL_SIGN_IN,fragment = this))
              .commit()
-        } else {
-
         }
         super.onStart()
     }

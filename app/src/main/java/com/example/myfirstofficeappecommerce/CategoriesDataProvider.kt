@@ -209,7 +209,7 @@ object CategoriesDataProvider {
             .accessToken(context.getString(R.string.storefront_api_key))
             .shopDomain(context.getString(R.string.shopify_domain))
             .httpCache(File(context.applicationContext.cacheDir, "/http"), 10 * 1024 * 1024)
-            .defaultHttpCachePolicy(HttpCachePolicy.CACHE_FIRST.expireAfter(5, TimeUnit.MINUTES))
+//            .defaultHttpCachePolicy(HttpCachePolicy.CACHE_FIRST.expireAfter(1, TimeUnit.MINUTES))
             .build()
 
         Log.d("connection", "started")
@@ -269,7 +269,6 @@ object CategoriesDataProvider {
     }
 
 
-
     fun getMillies(): Long {
 
 
@@ -284,7 +283,6 @@ object CategoriesDataProvider {
 
 
     }
-
 
 
 }

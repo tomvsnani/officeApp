@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 
-@Database(entities = [VariantsModelClass::class],version = 1,exportSchema = false)
+@Database(entities = [VariantsModelClass::class],version = 2,exportSchema = false)
 abstract class MyDatabase :RoomDatabase(){
 
     abstract fun dao(): MyDao

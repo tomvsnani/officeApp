@@ -309,6 +309,15 @@ class ProfileFragment(
 
                             .commit()
 
+                        is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
+
+                            .replace(
+                                R.id.container,
+                                fragment!!
+                            )
+
+                            .commit()
+
                         else -> activity!!.supportFragmentManager.beginTransaction()
 
                             .replace(R.id.container, MainFragment())
