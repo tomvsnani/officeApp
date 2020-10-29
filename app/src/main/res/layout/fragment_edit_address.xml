@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout3"
@@ -60,6 +66,7 @@
             android:id="@+id/nameEditText"
             style="@style/textInputEditTextStyle"
             android:layout_width="match_parent"
+            app:backgroundTint="#e0e0e0"
             android:layout_height="wrap_content"
             android:hint=" first Name" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -69,6 +76,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:textColorHint="#6b6b6b"
         android:theme="@style/textInputEditTextStyle"
@@ -82,11 +90,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="PhoneNumber (Enter  country code)"
-            android:inputType="phone" />
+            android:inputType="phone"
+            app:backgroundTint="#e0e0e0" />
     </com.google.android.material.textfield.TextInputLayout>
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/expireMonthTextWRapper"
+        android:id="@+id/emailEditTextWrapper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -100,11 +108,36 @@
         app:layout_constraintTop_toBottomOf="@+id/phnEditTextWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textPassword"
+            app:backgroundTint="#e0e0e0" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/expireMonthTextWRapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColorHint="#6b6b6b"
+        android:theme="@style/textInputEditTextStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditTextWrapper">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cityEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="city"
-            android:inputType="textPassword" />
+
+            app:backgroundTint="#e0e0e0" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -127,7 +160,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="state"
-            android:inputType="textPassword" />
+
+            app:backgroundTint="#e0e0e0" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -147,11 +181,12 @@
         app:layout_constraintTop_toBottomOf="@+id/expireYearTextWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cvvEditText"
+            android:id="@+id/zipEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="zip"
-            android:inputType="textPassword" />
+
+            app:backgroundTint="#e0e0e0" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -175,9 +210,9 @@
             style="@style/textInputEditTextStyle"
             android:layout_width="match_parent"
 
-
             android:layout_height="wrap_content"
-            android:hint="Last Name" />
+            android:hint="Last Name"
+            app:backgroundTint="#e0e0e0" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -199,9 +234,9 @@
             style="@style/textInputEditTextStyle"
             android:layout_width="match_parent"
 
-
             android:layout_height="wrap_content"
-            android:hint="Country" />
+            android:hint="Country"
+            app:backgroundTint="#e0e0e0" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -221,3 +256,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

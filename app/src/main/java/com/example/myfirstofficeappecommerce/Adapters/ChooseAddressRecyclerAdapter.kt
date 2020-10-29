@@ -233,7 +233,7 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
         holder.radioButton!!.isChecked = userDetailsModelClass.isSelectedAddress
         holder.ItemNameTextView?.text = userDetailsModelClass.title
 
-        holder.LocationNameTextView?.text = userDetailsModelClass.hnum+" "+userDetailsModelClass.city+" \n"+userDetailsModelClass.state+" "+userDetailsModelClass.pinCode
+        holder.LocationNameTextView?.text = userDetailsModelClass.hnum+" ,"+userDetailsModelClass.city+" \n\n"+userDetailsModelClass.state+" , "+userDetailsModelClass.pinCode
 
         holder.phnNumTextView?.text = userDetailsModelClass.phoneNumber
 

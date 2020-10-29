@@ -52,6 +52,8 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
                 newAddressLayoutBinding!!.zipEditText.text.toString().isNotBlank() &&
                 newAddressLayoutBinding!!.lastnameEditText.text.toString().isNotBlank() &&
                 newAddressLayoutBinding!!.countryEditText.text.toString().isNotBlank()
+                &&
+                newAddressLayoutBinding!!.emailEditText.text.toString().contains("@")
             ) {
                 getTheShippingRatesBasedOnSelectedAddress(
                     newAddressLayoutBinding!!.cityEditText.text.toString(),
@@ -91,6 +93,8 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
             .setZip(zip)
             .setLastName(lname)
             .setCountry(country)
+
+
 
 
         val modelClass = UserDetailsModelClass(

@@ -88,14 +88,14 @@ class CheckoutOverViewFragment(
         binding.chooseAddressPhoneNumber.text =
             userDetailsModelClass.phoneNumber
         binding.chooseAddressaddressTextView.text =
-            userDetailsModelClass.hnum + " " + userDetailsModelClass.city + " " + userDetailsModelClass.state + " " + " " + userDetailsModelClass.pinCode + " " + userDetailsModelClass.country
+            userDetailsModelClass.hnum + " ," + userDetailsModelClass.city + ", " + userDetailsModelClass.state + " " + " \n" + userDetailsModelClass.pinCode + " ," + userDetailsModelClass.country
 
         binding.checkoutoverviewrecyclerview.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         adapter = CheckoutOverViewItemsAdapter(context!!)
 
         binding.checkoutoverviewrecyclerview.adapter = adapter
-        binding.checkoutoverviewrecyclerview.addItemDecoration(DividerItemDecoration(context!!,RecyclerView.VERTICAL))
+      //  binding.checkoutoverviewrecyclerview.addItemDecoration(DividerItemDecoration(context!!,RecyclerView.VERTICAL))
         adapter!!.submitList(list)
 
 

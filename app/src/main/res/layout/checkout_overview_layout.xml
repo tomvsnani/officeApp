@@ -57,10 +57,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:background="#e0e0e0"
+                android:background="#F5F6F8"
                 android:padding="16dp"
                 android:text="Delivery Address"
-                android:textColor="#6b6b6b"
+                android:textColor="#000"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="TextView"
+                android:textColor="#000"
                 app:layout_constraintStart_toStartOf="@+id/chooseAddressPhoneNumber"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -107,7 +108,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@null"
                 android:text="Change or Add Address"
-android:textColor="@color/red"
+                android:textColor="@color/red"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +127,7 @@ android:textColor="@color/red"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout1">
 
 
             <TextView
@@ -168,12 +169,12 @@ android:textColor="@color/red"
                 android:id="@+id/textView13"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="#e0e0e0"
+                android:background="#F5F6F8"
                 android:padding="16dp"
                 android:paddingHorizontal="16dp"
 
                 android:text="Price"
-                android:textColor="#6b6b6b"
+                android:textColor="#000"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -224,35 +225,30 @@ android:textColor="@color/red"
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:visibility="visible"
-            app:cardBackgroundColor="#fff"
-
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addressroot">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_drawable">
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:id="@+id/constraintLayout1"
+                android:visibility="visible"
+                android:background="@drawable/border_drawable"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addressroot"
+               >
 
                 <TextView
                     android:id="@+id/textVieww"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:background="#e0e0e0"
+                    android:background="#F5F6F8"
                     android:padding="16dp"
                     android:text="Items"
-                    android:textColor="#6b6b6b"
+                    android:textColor="#000"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -270,7 +266,6 @@ android:textColor="@color/red"
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/checkoutOverViewContinueButton"
@@ -301,7 +296,7 @@ android:textColor="@color/red"
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView1"
             android:layout_width="0dp"
-            android:layout_height="227dp"
+            android:layout_height="wrap_content"
             android:layout_margin="16dp"
 
             android:layout_marginTop="8dp"
@@ -315,7 +310,7 @@ android:textColor="@color/red"
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/border_drawable">
 
                 <TextView
@@ -323,10 +318,10 @@ android:textColor="@color/red"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:background="#e0e0e0"
+                    android:background="#F5F6F8"
                     android:padding="16dp"
                     android:text="Payment methods"
-                    android:textColor="#6b6b6b"
+                    android:textColor="#000"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -336,13 +331,14 @@ android:textColor="@color/red"
                 <LinearLayout
                     android:id="@+id/paymentmethodlinear"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="14dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView91">
+                    app:layout_constraintTop_toBottomOf="@+id/textView91"
+                    app:layout_constraintVertical_bias="0.0">
 
                     <TextView
                         android:id="@+id/creditcardpaymenttextview"

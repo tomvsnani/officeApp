@@ -14,6 +14,7 @@ import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.databinding.FragmentEditAddressBinding
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
@@ -22,7 +23,7 @@ import com.shopify.graphql.support.ID
 
 class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fragment() {
 
-    var newAddressLayoutBinding: NewAddressLayoutBinding? = null
+    var newAddressLayoutBinding: FragmentEditAddressBinding? = null
     private var toolbar: Toolbar? = null
 
     override fun onCreateView(
@@ -31,7 +32,7 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fr
         savedInstanceState: Bundle?
     ): View? {
         var v = inflater.inflate(R.layout.fragment_edit_address, container, false);
-        newAddressLayoutBinding = NewAddressLayoutBinding.bind(v)
+        newAddressLayoutBinding = FragmentEditAddressBinding.bind(v)
         (activity as MainActivity).lockDrawer()
 
         toolbar = v?.findViewById(R.id.newaddressToolbar)
@@ -47,8 +48,9 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fr
         newAddressLayoutBinding!!.zipEditText.setText(userDetailsModelClass.pinCode)
         newAddressLayoutBinding!!.lastnameEditText.setText(userDetailsModelClass.subTitle)
         newAddressLayoutBinding!!.countryEditText.setText(userDetailsModelClass.country)
+        newAddressLayoutBinding!!.emailEditText.setText(userDetailsModelClass.email)
 
-        newAddressLayoutBinding!!.addAddressButton.setOnClickListener {
+        newAddressLayoutBinding!!.addCardButton.setOnClickListener {
 
             if (newAddressLayoutBinding!!.cityEditText.text.toString().isNotBlank() &&
                 newAddressLayoutBinding!!.cityEditText.text.toString().isNotBlank() &&
@@ -56,7 +58,8 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fr
                 newAddressLayoutBinding!!.provinceEditText.text.toString().isNotBlank() &&
                 newAddressLayoutBinding!!.zipEditText.text.toString().isNotBlank() &&
                 newAddressLayoutBinding!!.lastnameEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.countryEditText.text.toString().isNotBlank()
+                newAddressLayoutBinding!!.countryEditText.text.toString().isNotBlank() &&
+                newAddressLayoutBinding!!.emailEditText.text.toString().contains("@")
             ) {
 
                 val input = MailingAddressInput()
@@ -68,6 +71,7 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fr
                     .setZip(newAddressLayoutBinding!!.zipEditText.text.toString())
                     .setLastName(newAddressLayoutBinding!!.lastnameEditText.text.toString())
                     .setCountry(newAddressLayoutBinding!!.countryEditText.text.toString())
+
                 Log.d(
                     "customerq", activity!!.getPreferences(Activity.MODE_PRIVATE)
                         .getString("checkoutid", "")!!

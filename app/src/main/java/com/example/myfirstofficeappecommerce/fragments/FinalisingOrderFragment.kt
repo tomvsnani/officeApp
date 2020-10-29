@@ -53,7 +53,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
         if (addressList.isNotEmpty())
             addressList.clear()
-
+        setHasOptionsMenu(true)
         initialzeViews(v)
 
         if (ApplicationClass.signInType == Constants.NORMAL_SIGN_IN) {
@@ -61,9 +61,12 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
             retrieve_all_the_addresses()
 
             binding!!.addAddressButton.visibility = View.GONE
+            binding!!.noaddresstextview.visibility = View.GONE
+
         } else {
             binding!!.addAddressButton.visibility = View.VISIBLE
             binding!!.viewmoreaddressesbutton.visibility = View.GONE
+            binding!!.noaddresstextview.visibility = View.VISIBLE
         }
 
 
@@ -74,9 +77,12 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
     private fun initializeClickListeners() {
         binding!!.viewmoreaddressesbutton.setOnClickListener {
-            adapter!!.submitList(addressList)
-            it.visibility = View.GONE
-            binding!!.addAddressButton.visibility = View.VISIBLE
+//            adapter!!.submitList(addressList)
+//            it.visibility = View.GONE
+//            binding!!.addAddressButton.visibility = View.VISIBLE
+            var a = BottomSheetFragment()
+
+            a.show(parentFragment!!.childFragmentManager, "")
         }
 
         binding!!.addAddressButton.setOnClickListener {
@@ -87,10 +93,9 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         }
         binding!!.deliveroThisAddressButton.setOnClickListener {
 
-            binding!!.finalisingcheckoutfragmentprogressbar.visibility = View.VISIBLE
 
             var a = adapter!!.currentList.find { it.isSelectedAddress }
-            if (a != null)
+            if (a != null) {
                 getTheShippingRatesBasedOnSelectedAddress(
                     a!!.hnum,
                     a!!.city,
@@ -101,7 +106,8 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                     a.pinCode,
                     a.country
                 )
-            else
+                binding!!.finalisingcheckoutfragmentprogressbar.visibility = View.VISIBLE
+            } else
                 Toast.makeText(
                     context,
                     "Please select an address or add an address",

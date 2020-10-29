@@ -157,15 +157,9 @@ class MainActivity() : AppCompatActivity() {
                     }
 
                     "Orders" -> {
-                        supportFragmentManager
-                            .beginTransaction()
-                            .replace(
-                                R.id.container,
-                                OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
-                                    it.isOrdered
-                                })
-                            ).addToBackStack(null)
-                            .commit()
+                        var a= BottomSheetFragment()
+
+                        a.show(supportFragmentManager,"")
                         return@setOnChildClickListener true
                     }
                     "Recently viewed" -> {

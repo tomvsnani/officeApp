@@ -1,85 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".fragments.FinalisingOrderFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".fragments.FinalisingOrderFragment">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/finalsingToolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/finalsingToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="?actionBarSize"
+                    android:layout_marginRight="?actionBarSize"
+                    android:gravity="center"
+                    android:text="Checkout"
+                    android:textColor="#212121"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <include
+            android:id="@+id/addressstepsinclude"
+            layout="@layout/order_processing_steps_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
+
+        <LinearLayout
+            android:id="@+id/addressroot"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:layout_marginTop="8dp"
+
+            android:orientation="vertical"
+
+            app:layout_constraintBottom_toTopOf="@+id/addAddressButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addressstepsinclude"
+            app:layout_constraintVertical_bias="0.0">
+
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="?actionBarSize"
-                android:layout_marginRight="?actionBarSize"
-                android:gravity="center"
-                android:text="Your Orders"
-                android:textColor="#212121"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+                android:background="@drawable/border_drawable"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-    <include
-        android:id="@+id/addressstepsinclude"
-        layout="@layout/order_processing_steps_layout" />
+                    android:background="#F5F6F8"
+                    android:padding="16dp"
+                    android:text="Delivery Address"
 
-    <LinearLayout
-        android:id="@+id/step1orderlinearlayout"
+                    android:textColor="#000"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/chooseaddressrecyclerview"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/chooseaddressrecyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/hello_blank_fragment"
+                    app:layout_constraintBottom_toTopOf="@+id/viewmoreaddressesbutton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView8" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="Other Addresses "
-            android:textColor="#000"
-            android:textStyle="bold" />
+                <Button
+                    android:id="@+id/viewmoreaddressesbutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/background_border_drawable"
+                    android:text="View more or add an address"
+                    android:textColor="#6b6b6b"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chooseaddressrecyclerview"
+                    app:layout_constraintVertical_bias="0.0" />
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:orientation="vertical">
-          <androidx.recyclerview.widget.RecyclerView
-              android:id="@+id/chooseaddressrecyclerview"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/hello_blank_fragment" />
-          <Button
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="View more or add an address"
-              android:id="@+id/viewmoreaddressesbutton"
-              android:layout_gravity="center"
-              android:textColor="#fff"
-              android:background="@color/red"/>
-      </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Currently you have no addresses"
+                    android:id="@+id/noaddresstextview"
+                    android:layout_margin="16dp"
+                    android:textSize="18sp"
+                    />
+                <Button
+                    android:id="@+id/addAddressButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Add New Address"
+                    android:background="@drawable/background_border_drawable"
+                    android:textColor="#000"
+                    app:layout_constraintBottom_toTopOf="@+id/deliveroThisAddressButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </LinearLayout>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/addAddressButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Add New Address"
-            android:textColor="#000" />
+
+
 
         <Button
             android:id="@+id/deliveroThisAddressButton"
@@ -88,16 +151,19 @@
             android:layout_gravity="bottom"
             android:background="@color/red"
             android:text="Deliver to Current address"
-            android:textColor="#fff" />
-    </LinearLayout>
+            android:textColor="#fff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ProgressBar
+        android:id="@+id/finalisingcheckoutfragmentprogressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:indeterminateTint="@color/red"
-        android:id="@+id/finalisingcheckoutfragmentprogressbar"
-        android:visibility="gone"
-        android:layout_gravity="center"/>
+        android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
