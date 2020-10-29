@@ -171,7 +171,7 @@ open class SearchFragment() : Fragment() {
         if( item.itemId == R.id.profilemenu ) {
             activity!!.supportFragmentManager.beginTransaction().replace(
                 R.id.container,
-                ProfileFragment(Constants.NORMAL_SIGN_IN)
+                loginFragment(Constants.NORMAL_SIGN_IN)
             ).addToBackStack(null)
                 .commit()
 

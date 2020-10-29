@@ -86,7 +86,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                 activity!!.supportFragmentManager.beginTransaction()
                     .replace(
                         R.id.container,
-                        ProfileFragment(Constants.GUEST_SIGN_IN, fragment = this)
+                        loginFragment(Constants.GUEST_SIGN_IN, fragment = this)
                     )
                     .commit()
 

@@ -43,6 +43,7 @@ class EditUserDetailsFragment : Fragment() {
     ): View? {
         var view = inflater.inflate(R.layout.fragment_edit_user_details, container, false)
         binding = FragmentEditUserDetailsBinding.bind(view)
+        (activity as MainActivity).lockDrawer()
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(binding!!.editprofileToolbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -60,8 +61,8 @@ class EditUserDetailsFragment : Fragment() {
         binding!!.errortextview.text = ""
         var inputMethodManager: InputMethodManager =
             activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding!!.root.focusedChild.windowToken, 0)
-        binding!!.root.focusedChild.clearFocus()
+        inputMethodManager.hideSoftInputFromWindow(binding!!.root?.focusedChild?.windowToken, 0)
+        binding!!.root?.focusedChild?.clearFocus()
         var customerUpdateInput = Storefront.CustomerUpdateInput()
         when {
             binding!!.firstnameedittext.text.toString()
@@ -146,7 +147,7 @@ class EditUserDetailsFragment : Fragment() {
         var call1 = CategoriesDataProvider.graphh!!.queryGraph(retrieveUserDetailsQuery)
         call1.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
             override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
-                if (response.data() != null) {
+                if (response.data() != null && response.data()!!.customer!=null) {
                     Log.d("updated", response.errors().size.toString())
                     activity?.runOnUiThread {
                         binding!!.firstnameedittext.setText(response.data()!!.customer.firstName.toString())

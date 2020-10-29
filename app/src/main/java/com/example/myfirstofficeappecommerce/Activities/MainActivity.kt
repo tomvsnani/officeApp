@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity() : AppCompatActivity() {
 
-    private var toolbar: androidx.appcompat.widget.Toolbar? = null
     private var navigationView: NavigationView? = null
     var drawerLayout: DrawerLayout? = null
     var actionBarToggle: ActionBarDrawerToggle? = null
@@ -44,10 +43,15 @@ class MainActivity() : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        if (supportFragmentManager.backStackEntryCount == 0)
+        if (supportFragmentManager.backStackEntryCount == 0) {
+
             finish()
-        else
-            super.onBackPressed()
+        } else {
+            if (supportFragmentManager.findFragmentById(R.id.container) is MainFragment)
+                finish()
+            else
+                super.onBackPressed()
+        }
     }
 
 
@@ -66,7 +70,9 @@ class MainActivity() : AppCompatActivity() {
         setContentView(binding!!.root)
 
         initializeViews()
-
+        supportFragmentManager.addOnBackStackChangedListener {
+            Log.d("backpressedstack", supportFragmentManager.backStackEntryCount.toString())
+        }
 
         getMenuData()
 
@@ -190,14 +196,16 @@ class MainActivity() : AppCompatActivity() {
 
                     "Home" -> {
 
-                        inflateMainFragment()
+                        opencloseDrawerLayout()
                         return@setOnChildClickListener true
 
                     }
                     "Myaccount" -> {
+                        var fragment = MyAccountFragment()
+
                         supportFragmentManager.beginTransaction().replace(
                             R.id.container,
-                            MyAccountFragment()
+                            fragment
                         ).addToBackStack(null)
                             .commit()
                         return@setOnChildClickListener true
@@ -281,7 +289,9 @@ class MainActivity() : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(
             R.id.container,
             MainFragment()
+
         )
+
             .commit()
     }
 
@@ -297,8 +307,9 @@ class MainActivity() : AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        Log.d("menucreatedact", "yes")
         menuInflater.inflate(R.menu.toolbarmenu, menu)
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     fun createCheckout(signinType: String) {

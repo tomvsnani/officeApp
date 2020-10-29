@@ -112,6 +112,7 @@ class MainFragment() : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
         binding = FragmentMainBinding.bind(view)
+
         linearlayoutFlipFront = binding!!.flipinclude.cardflipfront
         textViewFlipFront = binding!!.flipinclude.textfront
         linearlayoutFlipBack = binding!!.flipinclude.cardflipback
@@ -146,6 +147,10 @@ class MainFragment() : Fragment() {
 
 
     override fun onResume() {
+        Log.d(
+            "backpressedfragenter",
+            (activity as MainActivity).supportFragmentManager.backStackEntryCount.toString()
+        )
 
         setUpVerticalBannerTimer()
 
@@ -340,13 +345,15 @@ class MainFragment() : Fragment() {
     private fun setUpToolbar(view: View) {
         toolbar = view.findViewById(R.id.maintoolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = null
-        (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
+        //(activity as AppCompatActivity).supportActionBar?.title = null
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as MainActivity).actionBarToggle = ActionBarDrawerToggle(
+        var toggle=ActionBarDrawerToggle(
             activity, (activity as MainActivity).drawerLayout, R.string.openDrawerLayout,
             R.string.closeDrawerLayout
         )
+        (activity as MainActivity).actionBarToggle = toggle
+
+
     }
 
     private fun setUpScrollingBanners(view: View) {
@@ -508,13 +515,17 @@ class MainFragment() : Fragment() {
         if (item.itemId == R.id.profilemenu) {
             activity?.supportFragmentManager?.beginTransaction()?.replace(
                 R.id.container,
-                ProfileFragment(Constants.NORMAL_SIGN_IN)
+                loginFragment(Constants.NORMAL_SIGN_IN)
             )?.addToBackStack(null)
                 ?.commit()
-
+            return true
         }
         if (item.itemId == android.R.id.home) {
-            if ((activity as MainActivity).drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
+            Log.d(
+                "backpressedfrag",
+                (activity as MainActivity).supportFragmentManager.backStackEntryCount.toString()
+            )
+            if ((activity as MainActivity).drawerLayout!!.isDrawerOpen(GravityCompat.START)!!) {
                 (activity as MainActivity).drawerLayout?.closeDrawer(GravityCompat.START)
             } else {
                 (activity as MainActivity).drawerLayout?.openDrawer(GravityCompat.START)
@@ -536,6 +547,7 @@ class MainFragment() : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Log.d("menucreatedfrag", "yes")
 
         this.menu = menu
         menu.findItem(R.id.cartmenu).actionView.findViewById<ImageView>(R.id.cartmenuitem)
@@ -563,5 +575,9 @@ class MainFragment() : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        Log.d("onpreparemainfrag", "yess")
+        super.onPrepareOptionsMenu(menu)
+    }
 
 }

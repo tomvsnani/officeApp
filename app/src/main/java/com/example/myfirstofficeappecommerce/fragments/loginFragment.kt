@@ -1,15 +1,17 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.transition.TransitionInflater
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
@@ -22,7 +24,7 @@ import com.shopify.buy3.Storefront
 import com.shopify.buy3.Storefront.*
 
 
-class ProfileFragment(
+class loginFragment(
     var signInType: String,
     var checkoutId: String = "",
     var totalTax: Float = 0f,
@@ -46,6 +48,8 @@ class ProfileFragment(
     ): View? {
         var view = inflater.inflate(R.layout.fragment_profile2, container, false)
         binding = FragmentProfile2Binding.bind(view)
+        (activity as MainActivity).lockDrawer()
+        setHasOptionsMenu(true)
         nameInputTxetView = binding!!.nameEditText
         phnInputTxetView = binding!!.PhonenumberEditText
         emailInputTxetView = binding!!.emailEditText
@@ -54,18 +58,16 @@ class ProfileFragment(
         signInButton = binding!!.signInButton
         progressbar = binding!!.profileProgressBar
 
+        (activity as AppCompatActivity).setSupportActionBar(binding!!.loginToolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (signInType == Constants.GUEST_SIGN_IN)
             binding!!.guestsigninTextView.visibility = View.VISIBLE
         else
             binding!!.guestsigninTextView.visibility = View.GONE
 
         binding!!.registrationSubmitButton2.setOnClickListener {
-            binding!!.phnEditTextWrapper.visibility = View.VISIBLE
-            binding!!.nameEditTextWrapper.visibility = View.VISIBLE
-            createAccountButton!!.visibility = View.VISIBLE
-            binding!!.textView6.visibility = View.VISIBLE
-            binding!!.registrationSubmitButton2.visibility = View.GONE
-            binding!!.view5.visibility = View.VISIBLE
+
             it.visibility = View.GONE
 
         }
@@ -79,76 +81,105 @@ class ProfileFragment(
 
         signInButton!!.setOnClickListener {
 
-            binding!!.phnEditTextWrapper.visibility = View.GONE
-            binding!!.nameEditTextWrapper.visibility = View.GONE
-            createAccountButton!!.visibility = View.GONE
-            binding!!.textView6.visibility = View.GONE
-            binding!!.registrationSubmitButton2.visibility = View.VISIBLE
-            binding!!.view5.visibility = View.GONE
+            if (signInButton!!.text.toString().toLowerCase().contains("create")) {
 
-
-            progressbar!!.visibility = View.VISIBLE
-            if (emailInputTxetView!!.text.toString()
-                    .isNotBlank() && passwordInputTxetView!!.text.toString().isNotBlank()
-            ) {
-                login(
-                    emailInputTxetView!!.text.toString(),
-                    passwordInputTxetView!!.text.toString()
-                )
-
+                binding!!.phnEditTextWrapper.visibility = View.VISIBLE
+                binding!!.nameEditTextWrapper.visibility = View.VISIBLE
+                createAccountButton!!.visibility = View.VISIBLE
+                binding!!.textView6.visibility = View.VISIBLE
+                binding!!.registrationSubmitButton2.visibility = View.GONE
+                binding!!.view5.visibility = View.VISIBLE
+                signInButton!!.text = "log in"
+                createAccountButton!!.text = "Create Account"
             } else {
-                progressbar!!.visibility = View.GONE
-                Toast.makeText(
-                    context,
-                    getString(R.string.loginErrorMessgae),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
+                signInButton!!.text = "Create Account"
+                createAccountButton!!.text = "sign in"
+                binding!!.phnEditTextWrapper.visibility = View.GONE
+                binding!!.nameEditTextWrapper.visibility = View.GONE
+
+                binding!!.textView6.visibility = View.GONE
+
 
             }
 
         }
         createAccountButton!!.setOnClickListener {
+            if (createAccountButton!!.text.toString().toLowerCase().contains("sign")) {
 
-            when {
-                nameInputTxetView!!.text.toString().isBlank() -> nameInputTxetView!!.error =
-                    getString(R.string.nameEmpty)
-                emailInputTxetView!!.text.toString().isBlank() -> emailInputTxetView!!.error =
-                    getString(R.string.emailempty)
-                passwordInputTxetView!!.text.toString().isBlank() -> passwordInputTxetView!!.error =
-                    getString(R.string.passwordEmpty)
-                phnInputTxetView!!.text.toString().isBlank() -> phnInputTxetView!!.error =
-                    getString(R.string.phoneEmptyError)
+                startSignInFlow()
+            } else {
 
+                startRegistrationFlow()
 
-                !emailInputTxetView!!.text.toString().contains("@") -> emailInputTxetView!!.error =
-                    getString(R.string.EnterValidEmail)
-                passwordInputTxetView!!.text.toString().length < 5 -> passwordInputTxetView!!.error =
-                    getString(R.string.PasswordLengthisLess)
-                phnInputTxetView!!.text.toString().length < 13 -> phnInputTxetView!!.error =
-                    getString(R.string.EnterPhoneNumWithCountryCode)
-
-                else -> {
-                    createAccountButton!!.isClickable = false
-                    signInButton!!.isClickable = false
-                    createAccount()
-                    var a = object : CountDownTimer(2000, 1) {
-                        override fun onTick(p0: Long) {
-
-                        }
-
-                        override fun onFinish() {
-                            createAccountButton!!.isClickable = true
-                            signInButton!!.isClickable = true
-                        }
-
-                    }.start()
-
-                }
             }
         }
 
         return view
+    }
+
+    private fun startRegistrationFlow() {
+        when {
+            nameInputTxetView!!.text.toString().isBlank() -> nameInputTxetView!!.error =
+                getString(R.string.nameEmpty)
+            emailInputTxetView!!.text.toString().isBlank() -> emailInputTxetView!!.error =
+                getString(R.string.emailempty)
+            passwordInputTxetView!!.text.toString()
+                .isBlank() -> passwordInputTxetView!!.error =
+                getString(R.string.passwordEmpty)
+            phnInputTxetView!!.text.toString().isBlank() -> phnInputTxetView!!.error =
+                getString(R.string.phoneEmptyError)
+
+
+            !emailInputTxetView!!.text.toString()
+                .contains("@") -> emailInputTxetView!!.error =
+                getString(R.string.EnterValidEmail)
+            passwordInputTxetView!!.text.toString().length < 5 -> passwordInputTxetView!!.error =
+                getString(R.string.PasswordLengthisLess)
+            phnInputTxetView!!.text.toString().length < 13 -> phnInputTxetView!!.error =
+                getString(R.string.EnterPhoneNumWithCountryCode)
+
+            else -> {
+                createAccountButton!!.isClickable = false
+                signInButton!!.isClickable = false
+                createAccount()
+                var a = object : CountDownTimer(2000, 1) {
+                    override fun onTick(p0: Long) {
+
+                    }
+
+                    override fun onFinish() {
+                        createAccountButton!!.isClickable = true
+                        signInButton!!.isClickable = true
+                    }
+
+                }.start()
+
+            }
+        }
+    }
+
+    private fun startSignInFlow() {
+
+
+        progressbar!!.visibility = View.VISIBLE
+        if (emailInputTxetView!!.text.toString()
+                .isNotBlank() && passwordInputTxetView!!.text.toString().isNotBlank()
+        ) {
+            login(
+                emailInputTxetView!!.text.toString(),
+                passwordInputTxetView!!.text.toString()
+            )
+
+        } else {
+            progressbar!!.visibility = View.GONE
+            Toast.makeText(
+                context,
+                getString(R.string.loginErrorMessgae),
+                Toast.LENGTH_LONG
+            )
+                .show()
+
+        }
     }
 
 
@@ -279,13 +310,14 @@ class ProfileFragment(
                     }
 
                     when (fragment) {
+
                         is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack(null)
+                            .addToBackStack("login")
                             .replace(R.id.container, MainFragment())
 
                             .commit()
                         is OrdersFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack(null)
+                            .addToBackStack("login")
                             .replace(
                                 R.id.container,
                                 OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
@@ -296,12 +328,12 @@ class ProfileFragment(
                             .commit()
 
                         is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
-
+                            .addToBackStack("login")
                             .replace(R.id.container, WishListFragment())
 
                             .commit()
                         is CartFragment -> activity!!.supportFragmentManager.beginTransaction()
-
+                            .addToBackStack("login")
                             .replace(
                                 R.id.container,
                                 CheckOutMainWrapperFragment(checkoutId, totalTax)
@@ -310,13 +342,32 @@ class ProfileFragment(
                             .commit()
 
                         is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
-
+                            .addToBackStack("login")
                             .replace(
                                 R.id.container,
                                 fragment!!
                             )
 
                             .commit()
+
+                        is EditUserDetailsFragment -> activity!!.supportFragmentManager.beginTransaction()
+                            .addToBackStack("login")
+                            .replace(
+                                R.id.container,
+                                fragment!!
+                            )
+
+                            .commit()
+
+                        is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
+                            .addToBackStack("login")
+                            .replace(
+                                R.id.container,
+                                fragment!!
+                            )
+
+                            .commit()
+
 
                         else -> activity!!.supportFragmentManager.beginTransaction()
 
@@ -343,6 +394,13 @@ class ProfileFragment(
         })
     }
 
+    override fun onStop() {
+        super.onStop()
+        var inputMethodManager: InputMethodManager =
+            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding!!.root?.focusedChild?.windowToken, 0)
+        binding!!.root?.focusedChild?.clearFocus()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
@@ -352,5 +410,24 @@ class ProfileFragment(
         super.onCreate(savedInstanceState)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId == android.R.id.home) {
+            (activity as MainActivity)?.supportFragmentManager.beginTransaction()
+                .replace(R.id.container, MainFragment())
+                .commit()
+
+            return true
+        }
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        Log.d("onprepareaccount", "yess")
+        for (i in 0..1) {
+            menu.getItem(i).isVisible = false
+        }
+        super.onPrepareOptionsMenu(menu)
+    }
 
 }

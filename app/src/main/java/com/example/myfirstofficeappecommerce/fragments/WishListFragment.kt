@@ -49,7 +49,7 @@ class WishListFragment() : Fragment() {
         var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, ProfileFragment(
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, loginFragment(
                 Constants.NORMAL_SIGN_IN,fragment = this))
              .commit()
         }

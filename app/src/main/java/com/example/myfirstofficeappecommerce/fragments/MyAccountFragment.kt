@@ -6,8 +6,8 @@ import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.EditUserDetailsFragment
@@ -24,10 +24,22 @@ class MyAccountFragment : Fragment() {
     ): View? {
         var view = inflater.inflate(R.layout.fragment_my_account, container, false)
         binding = FragmentMyAccountBinding.bind(view)
+
         setHasOptionsMenu(true)
-        toolbar = view.findViewById(R.id.myaccountToolbar)
+        toolbar = binding!!.myaccountToolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity).lockDrawer()
+        Log.d("onprepareaccount", "oncreateview")
+        if ((activity!!.application as ApplicationClass).getCustomerToken(
+                activity = activity as MainActivity
+            ).isBlank()
+        )
+            activity!!.supportFragmentManager.beginTransaction().replace(
+                R.id.container,
+                loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+            )
+                .commit()
         return view
     }
 
@@ -46,6 +58,8 @@ class MyAccountFragment : Fragment() {
         }
 
         binding!!.ordersconstraint.setOnClickListener {
+
+
             activity!!.supportFragmentManager.beginTransaction().replace(
                 R.id.container,
                 OrdersFragment(ApplicationClass.selectedVariantList!!)
@@ -54,6 +68,7 @@ class MyAccountFragment : Fragment() {
         }
 
         binding!!.profileconstraint.setOnClickListener {
+
             activity!!.supportFragmentManager.beginTransaction().replace(
                 R.id.container,
                 EditUserDetailsFragment()
@@ -71,8 +86,7 @@ class MyAccountFragment : Fragment() {
         binding!!.signoutbutton.setOnClickListener {
             activity!!.getPreferences(Activity.MODE_PRIVATE).edit()
                 .remove(Constants.LOGGED_IN_TOKEN).apply()
-            activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment()).commit()
+            activity!!.supportFragmentManager.popBackStackImmediate()
         }
 
     }
@@ -82,23 +96,28 @@ class MyAccountFragment : Fragment() {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
+        Log.d("onprepareaccount", "oncreate")
         super.onCreate(savedInstanceState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("clicked","back")
+        Log.d("onprepareaccount", "yess")
         if (item.itemId == android.R.id.home) {
-            activity?.onBackPressed()
-            Log.d("clicked","back1")
+            (activity as MainActivity)?.supportFragmentManager.popBackStackImmediate()
+
+            return true
         }
         return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
+        Log.d("onprepareaccount", "yess")
         for (i in 0..1) {
             menu.getItem(i).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)
     }
+
+
 
 }

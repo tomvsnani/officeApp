@@ -141,7 +141,7 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
         if (item.itemId == R.id.profilemenu) {
             activity!!.supportFragmentManager.beginTransaction().replace(
                 R.id.container,
-                ProfileFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+                loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
             ).addToBackStack(null)
                 .commit()
 

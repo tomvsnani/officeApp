@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.fragments.CartFragment
 import com.example.myfirstofficeappecommerce.fragments.CheckOutMainWrapperFragment
-import com.example.myfirstofficeappecommerce.fragments.ProfileFragment
+import com.example.myfirstofficeappecommerce.fragments.loginFragment
 import com.shopify.buy3.GraphCall
 import com.shopify.buy3.GraphError
 import com.shopify.buy3.GraphResponse
@@ -93,7 +93,7 @@ class RunGraphQLQuery {
                                         .replace(
                                             R.id.container,
 
-                                            ProfileFragment(
+                                            loginFragment(
                                                 Constants.NORMAL_SIGN_IN,
                                                 fragment = CheckOutMainWrapperFragment(
                                                     checkoutId, response.data()!!.checkoutCreate

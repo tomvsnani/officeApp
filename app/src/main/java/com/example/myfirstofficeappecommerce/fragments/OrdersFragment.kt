@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.OrdersAdaptes
@@ -54,7 +55,8 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
             activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.container,  ProfileFragment(Constants.NORMAL_SIGN_IN,fragment = this))
+                .replace(R.id.container,  loginFragment(Constants.NORMAL_SIGN_IN,fragment = this))
+
                 .commit()
         } else {
             getOrders(token)
@@ -154,7 +156,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home)
-            activity?.onBackPressed()
+            activity?.supportFragmentManager!!.popBackStackImmediate()
         return super.onOptionsItemSelected(item)
     }
 
