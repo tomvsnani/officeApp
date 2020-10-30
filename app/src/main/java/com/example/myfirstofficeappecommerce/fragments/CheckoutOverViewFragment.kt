@@ -159,7 +159,7 @@ class CheckoutOverViewFragment(
                 Storefront.CheckoutShippingLineUpdatePayloadQueryDefinition { update: Storefront.CheckoutShippingLineUpdatePayloadQuery ->
 
                     update.userErrors { errors: Storefront.UserErrorQuery ->
-                        errors.field().message()
+                         errors.field().message()
                     }.checkout { _queryBuilder ->
                         _queryBuilder.webUrl()
                     }

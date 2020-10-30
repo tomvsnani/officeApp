@@ -87,7 +87,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
                     .replace(
                         R.id.container,
                         loginFragment(Constants.GUEST_SIGN_IN, fragment = this)
-                    )
+                    ).addToBackStack(null)
                     .commit()
 
 

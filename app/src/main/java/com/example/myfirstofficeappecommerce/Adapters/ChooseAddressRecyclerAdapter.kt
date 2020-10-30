@@ -11,20 +11,25 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.fragments.FinalisingOrderFragment
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.fragments.BottomSheetFragment
 import com.example.myfirstofficeappecommerce.fragments.EditAddressFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.Checkout
 import com.shopify.buy3.Storefront.QueryRoot
 import com.shopify.graphql.support.ID
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
 
 
 class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String) :
-    ListAdapter<UserDetailsModelClass, ChooseAddressRecyclerAdapter.ChooseAddressViewHolder>(UserDetailsModelClass.DIFF_UTIL) {
+    ListAdapter<UserDetailsModelClass, ChooseAddressRecyclerAdapter.ChooseAddressViewHolder>(
+        UserDetailsModelClass.DIFF_UTIL
+    ) {
     inner class ChooseAddressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var ItemNameTextView: TextView? = itemView.findViewById(R.id.chooseAddressnameTextView)
         var LocationNameTextView: TextView? =
@@ -39,21 +44,24 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
 
             editButton?.setOnClickListener {
 
-                (context as FinalisingOrderFragment).parentFragment!!.childFragmentManager.beginTransaction()
-                    .replace(R.id.container1,EditAddressFragment(currentList[absoluteAdapterPosition]))
-                    .addToBackStack(null).commit()
+
+                EditAddressFragment(currentList[absoluteAdapterPosition]).show(
+                    (context as BottomSheetFragment).parentFragment!!.childFragmentManager,
+                    ""
+                )
+
 
             }
 
             radioButton!!.setOnClickListener {
-                var modelclass=currentList[absoluteAdapterPosition]
+                var modelclass = currentList[absoluteAdapterPosition]
                 var list = ArrayList(currentList)
                 currentList.filter {
                     if (it.isSelectedAddress)
                         it.isSelectedAddress = false
                     return@filter true
                 }
-              modelclass.isSelectedAddress = true
+                modelclass.isSelectedAddress = true
                 notifyDataSetChanged()
 
                 val input = Storefront.MailingAddressInput()
@@ -142,7 +150,6 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
                         )
 
 
-
                     }
 
                     override fun onFailure(error: GraphError) {
@@ -150,15 +157,6 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
                     }
 
                 })
-
-
-
-
-
-
-
-
-
 
 
             }
@@ -223,6 +221,7 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
     }
 
     override fun submitList(list: MutableList<UserDetailsModelClass>?) {
+
         super.submitList(list!!.toList())
 
     }
@@ -233,10 +232,18 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
         holder.radioButton!!.isChecked = userDetailsModelClass.isSelectedAddress
         holder.ItemNameTextView?.text = userDetailsModelClass.title
 
-        holder.LocationNameTextView?.text = userDetailsModelClass.hnum+" ,"+userDetailsModelClass.city+" \n\n"+userDetailsModelClass.state+" , "+userDetailsModelClass.pinCode
+        holder.LocationNameTextView?.text =
+            userDetailsModelClass.hnum + " ," + userDetailsModelClass.city + " \n\n" + userDetailsModelClass.state + " , " + userDetailsModelClass.pinCode
 
         holder.phnNumTextView?.text = userDetailsModelClass.phoneNumber
+        Log.d(
+            "applicationaddresssize",
+            currentList.size.toString()
+        )
 
+    }
 
+    override fun getItemCount(): Int {
+        return max(0,currentList.size)
     }
 }

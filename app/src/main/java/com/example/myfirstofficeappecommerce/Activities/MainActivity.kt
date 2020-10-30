@@ -41,16 +41,28 @@ class MainActivity() : AppCompatActivity() {
         var applyCoupon: Boolean = false
     }
 
+    override fun onStart() {
+        super.onStart()
+        if ((application as ApplicationClass)!!.getCustomerToken(this).isNotEmpty())
+            RunGraphQLQuery.retrieve_all_the_addresses(this)
+    }
+
     override fun onBackPressed() {
 
         if (supportFragmentManager.backStackEntryCount == 0) {
 
             finish()
+
         } else {
+
             if (supportFragmentManager.findFragmentById(R.id.container) is MainFragment)
+
                 finish()
+
             else
+
                 super.onBackPressed()
+
         }
     }
 
@@ -157,9 +169,11 @@ class MainActivity() : AppCompatActivity() {
                     }
 
                     "Orders" -> {
-                        var a= BottomSheetFragment()
-
-                        a.show(supportFragmentManager,"")
+                        supportFragmentManager.beginTransaction().replace(
+                            R.id.container,
+                            OrdersFragment(ApplicationClass.selectedVariantList!!)
+                        ).addToBackStack(null)
+                            .commit()
                         return@setOnChildClickListener true
                     }
                     "Recently viewed" -> {

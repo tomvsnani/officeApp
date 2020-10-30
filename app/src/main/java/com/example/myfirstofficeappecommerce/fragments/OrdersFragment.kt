@@ -56,7 +56,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
             activity!!.supportFragmentManager.beginTransaction()
                 .replace(R.id.container,  loginFragment(Constants.NORMAL_SIGN_IN,fragment = this))
-
+                .addToBackStack(null)
                 .commit()
         } else {
             getOrders(token)

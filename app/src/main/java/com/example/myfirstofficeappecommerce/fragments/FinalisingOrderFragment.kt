@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
@@ -34,7 +33,8 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
     private var toolbar: Toolbar? = null
     var newAddressLayoutBinding: NewAddressLayoutBinding? = null
     var webUrl: String = ""
-    var addressList = ArrayList<UserDetailsModelClass>()
+    var addressList = ApplicationClass.addressList
+    var bottomsheetFragment: BottomSheetFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,19 +51,20 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
         var v = inflater.inflate(R.layout.fragment_finalising_order, container, false)
 
-        if (addressList.isNotEmpty())
-            addressList.clear()
         setHasOptionsMenu(true)
         initialzeViews(v)
 
         if (ApplicationClass.signInType == Constants.NORMAL_SIGN_IN) {
 
-            retrieve_all_the_addresses()
+            //retrieve_all_the_addresses()
+            binding!!.addressconstraint.visibility = View.VISIBLE
+            displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
 
             binding!!.addAddressButton.visibility = View.GONE
             binding!!.noaddresstextview.visibility = View.GONE
 
         } else {
+            binding!!.addressconstraint.visibility = View.GONE
             binding!!.addAddressButton.visibility = View.VISIBLE
             binding!!.viewmoreaddressesbutton.visibility = View.GONE
             binding!!.noaddresstextview.visibility = View.VISIBLE
@@ -75,26 +76,35 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         return v
     }
 
+    fun displaySelectedAddressDetails(defaultAdress: MailingAddress) {
+        binding!!.chooseAddressnameTextView.text = defaultAdress?.name
+        binding!!.chooseAddressPhoneNumber.text = defaultAdress?.phone
+        binding!!.chooseAddressaddressTextView.text =
+            defaultAdress?.city + " , " + defaultAdress?.province + " \n" + defaultAdress?.zip + " , " + defaultAdress?.country
+    }
+
     private fun initializeClickListeners() {
         binding!!.viewmoreaddressesbutton.setOnClickListener {
-//            adapter!!.submitList(addressList)
-//            it.visibility = View.GONE
-//            binding!!.addAddressButton.visibility = View.VISIBLE
-            var a = BottomSheetFragment()
 
-            a.show(parentFragment!!.childFragmentManager, "")
+            bottomsheetFragment = BottomSheetFragment(totalTax, checkoutId, webUrl, this)
+
+            bottomsheetFragment!!.show(parentFragment!!.childFragmentManager, "")
         }
 
         binding!!.addAddressButton.setOnClickListener {
-            parentFragment!!.childFragmentManager.beginTransaction()
-                .replace(R.id.container1, NewAddressFragment(checkoutId, webUrl, totalTax))
-                .addToBackStack(null).commit()
+            bottomsheetFragment = BottomSheetFragment(totalTax, checkoutId, webUrl, this)
 
+            bottomsheetFragment!!.show(parentFragment!!.childFragmentManager, "")
         }
+
+
         binding!!.deliveroThisAddressButton.setOnClickListener {
 
 
-            var a = adapter!!.currentList.find { it.isSelectedAddress }
+            var a =
+                addressList.find { it.isSelectedAddress }
+
+                    ?: addressList.find { it.id == ApplicationClass.defaultAdress?.id.toString() }
             if (a != null) {
                 getTheShippingRatesBasedOnSelectedAddress(
                     a!!.hnum,
@@ -283,9 +293,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding = FragmentFinalisingOrderBinding.bind(v)
         adapter = ChooseAddressRecyclerAdapter(this, checkoutId)
-        recyclerView = v.findViewById(R.id.chooseaddressrecyclerview)
-        recyclerView!!.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        recyclerView!!.adapter = adapter
+
     }
 
     private fun retrieve_all_the_addresses() {

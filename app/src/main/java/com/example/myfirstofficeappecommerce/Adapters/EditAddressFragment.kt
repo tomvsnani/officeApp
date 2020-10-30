@@ -1,11 +1,13 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -16,12 +18,16 @@ import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentEditAddressBinding
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
 
 
-class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fragment() {
+class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) :
+    BottomSheetDialogFragment() {
 
     var newAddressLayoutBinding: FragmentEditAddressBinding? = null
     private var toolbar: Toolbar? = null
@@ -34,11 +40,8 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fr
         var v = inflater.inflate(R.layout.fragment_edit_address, container, false);
         newAddressLayoutBinding = FragmentEditAddressBinding.bind(v)
         (activity as MainActivity).lockDrawer()
-
-        toolbar = v?.findViewById(R.id.newaddressToolbar)
         setHasOptionsMenu(true)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
 
 
         newAddressLayoutBinding!!.cityEditText.setText(userDetailsModelClass.city)
@@ -124,5 +127,21 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) : Fr
         }
 
         return v
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        bottomSheetDialog.setOnShowListener { dia ->
+            val dialog = dia as BottomSheetDialog
+            val bottomSheet =
+
+                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).state =
+                BottomSheetBehavior.STATE_EXPANDED
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).skipCollapsed = true
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).isHideable = true
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).peekHeight = 0
+        }
+        return bottomSheetDialog
     }
 }

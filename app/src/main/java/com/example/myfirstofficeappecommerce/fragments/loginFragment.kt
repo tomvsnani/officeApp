@@ -104,11 +104,11 @@ class loginFragment(
 
         }
         createAccountButton!!.setOnClickListener {
+
             if (createAccountButton!!.text.toString().toLowerCase().contains("sign")) {
 
                 startSignInFlow()
             } else {
-
                 startRegistrationFlow()
 
             }
@@ -139,16 +139,22 @@ class loginFragment(
                 getString(R.string.EnterPhoneNumWithCountryCode)
 
             else -> {
+
                 createAccountButton!!.isClickable = false
+
                 signInButton!!.isClickable = false
+
                 createAccount()
+
                 var a = object : CountDownTimer(2000, 1) {
                     override fun onTick(p0: Long) {
 
                     }
 
                     override fun onFinish() {
+
                         createAccountButton!!.isClickable = true
+
                         signInButton!!.isClickable = true
                     }
 
@@ -162,8 +168,11 @@ class loginFragment(
 
 
         progressbar!!.visibility = View.VISIBLE
+
         if (emailInputTxetView!!.text.toString()
+
                 .isNotBlank() && passwordInputTxetView!!.text.toString().isNotBlank()
+
         ) {
             login(
                 emailInputTxetView!!.text.toString(),
@@ -196,31 +205,18 @@ class loginFragment(
         tempPassword = passwordInputTxetView!!.text.toString()
 
 
-        val mutationQuery = mutation { mutation: MutationQuery ->
-            mutation
-                .customerCreate(
-                    input
-                ) { query: CustomerCreatePayloadQuery ->
-                    query
-                        .customer { customer: CustomerQuery ->
-                            customer
+        val mutationQuery = customerCreationMutation(input)
 
-                                .email()
-                                .firstName()
+        createCustomer(mutationQuery)
 
-                        }
-                        .userErrors { userError: UserErrorQuery ->
-                            userError
-                                .field()
-                                .message()
-                        }
-                }
-        }
 
+    }
+
+    private fun createCustomer(mutationQuery: MutationQuery?) {
         var calldata = CategoriesDataProvider.graphh!!.mutateGraph(mutationQuery)
 
 
-        calldata.enqueue(object : GraphCall.Callback<Storefront.Mutation> {
+        calldata.enqueue(object : GraphCall.Callback<Mutation> {
             override fun onResponse(response: GraphResponse<Mutation>) {
                 var a = response.data()!!.customerCreate
 
@@ -257,9 +253,9 @@ class loginFragment(
 
             }
         })
-
-
     }
+
+
 
     private fun login(email: String, password: String) {
         activity!!.runOnUiThread {
@@ -267,7 +263,57 @@ class loginFragment(
         }
         ApplicationClass.signInType = Constants.NORMAL_SIGN_IN
         val input = CustomerAccessTokenCreateInput(email, password)
-        val mutationQuery = mutation { mutation: MutationQuery ->
+        val mutationQuery = getLoginMutation(input)
+
+        var calldata = CategoriesDataProvider.graphh!!.mutateGraph(mutationQuery)
+
+
+        calldata.enqueue(object : GraphCall.Callback<Storefront.Mutation> {
+            override fun onResponse(response: GraphResponse<Mutation>) {
+                var a = response.data()!!.customerAccessTokenCreate.userErrors.isNullOrEmpty()
+                if (a) {
+                    doOnResponseSuccessTask(response)
+
+                } else {
+                    doOnErrorTask(response)
+                }
+            }
+
+
+            override fun onFailure(error: GraphError) {
+
+            }
+        })
+    }
+
+
+    private fun customerCreationMutation(input: CustomerCreateInput?): MutationQuery? {
+        return mutation { mutation: MutationQuery ->
+            mutation
+                .customerCreate(
+                    input
+                ) { query: CustomerCreatePayloadQuery ->
+                    query
+                        .customer { customer: CustomerQuery ->
+                            customer
+
+                                .email()
+                                .firstName()
+
+                        }
+                        .userErrors { userError: UserErrorQuery ->
+                            userError
+                                .field()
+                                .message()
+                        }
+                }
+        }
+    }
+
+
+
+    private fun getLoginMutation(input: CustomerAccessTokenCreateInput): MutationQuery? {
+        return mutation { mutation: MutationQuery ->
             mutation
                 .customerAccessTokenCreate(
                     input
@@ -285,113 +331,106 @@ class loginFragment(
                         }
                 }
         }
+    }
 
-        var calldata = CategoriesDataProvider.graphh!!.mutateGraph(mutationQuery)
+    private fun doOnResponseSuccessTask(response: GraphResponse<Mutation>) {
+        activity!!.runOnUiThread {
+            Toast.makeText(
+                context,
+                getString(R.string.YouHaveLoggedInToast),
+                Toast.LENGTH_LONG
+            )
+                .show()
 
+            var sharedPref = activity!!.getPreferences(Activity.MODE_PRIVATE)
+            sharedPref.edit().putString(
+                "token",
+                response.data()!!.customerAccessTokenCreate.customerAccessToken.accessToken
+            ).apply()
 
-        calldata.enqueue(object : GraphCall.Callback<Storefront.Mutation> {
-            override fun onResponse(response: GraphResponse<Mutation>) {
-                var a = response.data()!!.customerAccessTokenCreate.userErrors.isNullOrEmpty()
-                if (a) {
-                    activity!!.runOnUiThread {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.YouHaveLoggedInToast),
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
+        }
 
-                        var sharedPref = activity!!.getPreferences(Activity.MODE_PRIVATE)
-                        sharedPref.edit().putString(
-                            "token",
-                            response.data()!!.customerAccessTokenCreate.customerAccessToken.accessToken
-                        ).apply()
+        openCorrespondingFragment()
+    }
 
-                    }
-
-                    when (fragment) {
-
-                        is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack("login")
-                            .replace(R.id.container, MainFragment())
-
-                            .commit()
-                        is OrdersFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack("login")
-                            .replace(
-                                R.id.container,
-                                OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
-                                    it.isOrdered
-                                })
-                            )
-
-                            .commit()
-
-                        is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack("login")
-                            .replace(R.id.container, WishListFragment())
-
-                            .commit()
-                        is CartFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack("login")
-                            .replace(
-                                R.id.container,
-                                CheckOutMainWrapperFragment(checkoutId, totalTax)
-                            )
-
-                            .commit()
-
-                        is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack("login")
-                            .replace(
-                                R.id.container,
-                                fragment!!
-                            )
-
-                            .commit()
-
-                        is EditUserDetailsFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack("login")
-                            .replace(
-                                R.id.container,
-                                fragment!!
-                            )
-
-                            .commit()
-
-                        is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
-                            .addToBackStack("login")
-                            .replace(
-                                R.id.container,
-                                fragment!!
-                            )
-
-                            .commit()
-
-
-                        else -> activity!!.supportFragmentManager.beginTransaction()
-
-                            .replace(R.id.container, MainFragment())
-                            .commit()
-                    }
-
-                } else {
-                    activity!!.runOnUiThread { progressbar!!.visibility = View.GONE }
-                    for (i in response.data()!!.customerAccessTokenCreate.userErrors)
-                        activity!!.runOnUiThread {
-                            Toast.makeText(
-                                context,
-                                "There is some problem logging you in . \n ${i.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                }
+    fun doOnErrorTask(response: GraphResponse<Mutation>) {
+        activity!!.runOnUiThread { progressbar!!.visibility = View.GONE }
+        for (i in response.data()!!.customerAccessTokenCreate.userErrors)
+            activity!!.runOnUiThread {
+                Toast.makeText(
+                    context,
+                    "There is some problem logging you in . \n ${i.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
+    }
 
-            override fun onFailure(error: GraphError) {
+    private fun openCorrespondingFragment() {
+        when (fragment) {
 
-            }
-        })
+            is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
+                .addToBackStack("login")
+                .replace(R.id.container, MainFragment())
+
+                .commit()
+            is OrdersFragment -> activity!!.supportFragmentManager.beginTransaction()
+                .addToBackStack("login")
+                .replace(
+                    R.id.container,
+                    OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
+                        it.isOrdered
+                    })
+                )
+
+                .commit()
+
+            is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
+                .addToBackStack("login")
+                .replace(R.id.container, WishListFragment())
+
+                .commit()
+            is CartFragment -> activity!!.supportFragmentManager.beginTransaction()
+                .addToBackStack("login")
+                .replace(
+                    R.id.container,
+                    CheckOutMainWrapperFragment(checkoutId, totalTax)
+                )
+
+                .commit()
+
+            is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
+                .addToBackStack("login")
+                .replace(
+                    R.id.container,
+                    fragment!!
+                )
+
+                .commit()
+
+            is EditUserDetailsFragment -> activity!!.supportFragmentManager.beginTransaction()
+                .addToBackStack("login")
+                .replace(
+                    R.id.container,
+                    fragment!!
+                )
+
+                .commit()
+
+            is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
+                .addToBackStack("login")
+                .replace(
+                    R.id.container,
+                    fragment!!
+                )
+
+                .commit()
+
+
+            else -> activity!!.supportFragmentManager.beginTransaction()
+
+                .replace(R.id.container, MainFragment())
+                .commit()
+        }
     }
 
     override fun onStop() {
@@ -413,9 +452,7 @@ class loginFragment(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == android.R.id.home) {
-            (activity as MainActivity)?.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment())
-                .commit()
+            (activity as MainActivity)?.onBackPressed()
 
             return true
         }
