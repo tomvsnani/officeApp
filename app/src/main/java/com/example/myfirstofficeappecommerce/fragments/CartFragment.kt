@@ -31,13 +31,13 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
     var toolbar: Toolbar? = null
     private var slecetdItemsRecycler: RecyclerView? = null
-    private var recommendedItemsRecycler: RecyclerView? = null
+  //  private var recommendedItemsRecycler: RecyclerView? = null
     private var itemsSelectedAdapter: CartItemsSelectedRecyclerViewAdapter? = null
     private var recommendedAdapter: CartItemRecommendedAdapter? = null
     private var proceedTextViewCart: TextView? = null
     var list: MutableList<VariantsModelClass> = ArrayList()
     var emptycartlayout: ConstraintLayout? = null
-    var cartNestedScroll: NestedScrollView? = null
+    var cartNestedScroll: ConstraintLayout? = null
     var progressbar: ProgressBar? = null
     var discountApplyButton: Button? = null
     var binding: FragmentCartBinding? = null
@@ -96,28 +96,28 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
         }
-        discountApplyButton!!.setOnClickListener {
-            binding!!.applycoupontextview.clearFocus()
-            var view = binding!!.applycoupontextview
-            var inputManager: InputMethodManager =
-                activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputManager.hideSoftInputFromWindow(view.windowToken, 0)
-
-            MainActivity.applyCoupon = true
-            if (binding!!.applycoupontextview.text.toString().isNotBlank())
-                (activity as MainActivity).DISCOUNT = binding!!.applycoupontextview.text.toString()
-            else
-                Toast.makeText(context!!, "Please enter a coupon code", Toast.LENGTH_SHORT).show()
-            (activity as MainActivity).createCheckout(Constants.GUEST_SIGN_IN)
-
-
-        }
+//        discountApplyButton!!.setOnClickListener {
+//            binding!!.applycoupontextview.clearFocus()
+//            var view = binding!!.applycoupontextview
+//            var inputManager: InputMethodManager =
+//                activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+//
+//            MainActivity.applyCoupon = true
+//            if (binding!!.applycoupontextview.text.toString().isNotBlank())
+//                (activity as MainActivity).DISCOUNT = binding!!.applycoupontextview.text.toString()
+//            else
+//                Toast.makeText(context!!, "Please enter a coupon code", Toast.LENGTH_SHORT).show()
+//            (activity as MainActivity).createCheckout(Constants.GUEST_SIGN_IN)
+//
+//
+//        }
 
     }
 
     private fun setUpRecommendedItemsRecyclerView() {
-        recommendedItemsRecycler!!.layoutManager =
-            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+//        recommendedItemsRecycler!!.layoutManager =
+//            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
 
 
@@ -147,7 +147,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
         }
-        recommendedItemsRecycler!!.adapter = recommendedAdapter
+        //recommendedItemsRecycler!!.adapter = recommendedAdapter
         recommendedAdapter!!.submitList(
             CategoriesDataProvider.getRecommendedData() as MutableList<VariantsModelClass>
         )
@@ -174,10 +174,12 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
         emptycartlayout = view.findViewById(R.id.emptycartlayout)
         slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
-        recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
+        //recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
         proceedTextViewCart = view.findViewById(R.id.proceedTextViewCart)
-        cartNestedScroll = view.findViewById(R.id.include2)
-        discountApplyButton = view.findViewById(R.id.discountapplybutton)
+        cartNestedScroll = view.findViewById(R.id.constraint)
+        //discountApplyButton = view.findViewById(R.id.discountapplybutton)
+
+
     }
 
     private fun setUpToolBar(view: View) {

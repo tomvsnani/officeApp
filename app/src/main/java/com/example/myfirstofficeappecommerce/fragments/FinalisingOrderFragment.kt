@@ -58,6 +58,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
             //retrieve_all_the_addresses()
             binding!!.addressconstraint.visibility = View.VISIBLE
+            if(ApplicationClass.defaultAdress!=null)
             displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
 
             binding!!.addAddressButton.visibility = View.GONE
@@ -80,7 +81,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         binding!!.chooseAddressnameTextView.text = defaultAdress?.name
         binding!!.chooseAddressPhoneNumber.text = defaultAdress?.phone
         binding!!.chooseAddressaddressTextView.text =
-            defaultAdress?.city + " , " + defaultAdress?.province + " \n" + defaultAdress?.zip + " , " + defaultAdress?.country
+            defaultAdress?.city + " - " + defaultAdress?.zip + " \n \n" + defaultAdress?.province + " , " + defaultAdress?.country
     }
 
     private fun initializeClickListeners() {

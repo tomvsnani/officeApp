@@ -148,11 +148,11 @@ class RunGraphQLQuery {
                                             response.data()
                                             !!.checkoutDiscountCodeApply.checkout.totalPrice.toString()
                                         )
-                                        (f as CartFragment?)?.binding!!.applycoupontextview.setText(
-                                            ""
-                                        )
-                                        (f as CartFragment?)?.binding!!.applycoupontextview.hint =
-                                            "Discount Applied"
+//                                        (f as CartFragment?)?.binding!!.applycoupontextview.setText(
+//                                            ""
+//                                        )
+//                                        (f as CartFragment?)?.binding!!.applycoupontextview.hint =
+//                                            "Discount Applied"
                                     }
 
                                 }

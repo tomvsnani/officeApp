@@ -287,7 +287,7 @@ class MainActivity() : AppCompatActivity() {
                         menudata[groupPosition]
                             .items[childPosition].collection_items
                     )
-                ).commit()
+                ).addToBackStack(null).commit()
             }
             return@setOnChildClickListener true
         }

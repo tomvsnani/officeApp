@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.fragments.CartFragment
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.Utils
 import kotlinx.android.synthetic.main.fragment_cart.*
 
 class CartItemsSelectedRecyclerViewAdapter(
@@ -21,7 +24,7 @@ class CartItemsSelectedRecyclerViewAdapter(
     androidx.recyclerview.widget.ListAdapter<VariantsModelClass, CartItemsSelectedRecyclerViewAdapter.CardItemsSelectedViewHolder>(
         VariantsModelClass.diffUtil
     ) {
-    var totalSum: Int = 0
+    var totalSum: Float = 0f
 
     inner class CardItemsSelectedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cartItemnameTextView: TextView? = itemView.findViewById(R.id.cartSelectedItemName)
@@ -35,6 +38,7 @@ class CartItemsSelectedRecyclerViewAdapter(
             itemView.findViewById(R.id.removeitemsImageButton)
         private var cartItemaddItemImagebutton: ImageButton? =
             itemView.findViewById(R.id.additemsImageButton)
+        var itemImageView: ImageView = itemView.findViewById<ImageView>(R.id.cartImageView)
 
 
         init {
@@ -75,8 +79,7 @@ class CartItemsSelectedRecyclerViewAdapter(
 
 
                 }
-                cartFragment.binding!!.ptotalAmountTextViewCart.text =
-                    "  ${cartFragment.activity!!.getString(R.string.Rs)} $totalSum"
+                assignTotalAmountToTextView()
 
 
             }
@@ -89,8 +92,7 @@ class CartItemsSelectedRecyclerViewAdapter(
                 totalSum += (currentList[adapterPosition].price!!.toInt())
                 notifyItemChanged(adapterPosition)
 
-                cartFragment.binding!!.ptotalAmountTextViewCart.text =
-                    "  ${cartFragment.activity!!.getString(R.string.Rs)} ${totalSum}"
+                assignTotalAmountToTextView()
 
                 callback(currentList.toMutableList())
 
@@ -102,7 +104,7 @@ class CartItemsSelectedRecyclerViewAdapter(
 
     override fun submitList(list: MutableList<VariantsModelClass>?) {
 
-        totalSum = 0
+        totalSum = 0f
         list?.filter {
 
             totalSum += (it.quantityOfItem * it.price!!.toInt())
@@ -120,10 +122,18 @@ class CartItemsSelectedRecyclerViewAdapter(
             cartFragment.cartNestedScroll!!.visibility = View.VISIBLE
         }
         super.submitList(list?.toList())
-        cartFragment.binding!!.ptotalAmountTextViewCart.text =
-            "  ${cartFragment.activity!!.getString(R.string.Rs)} ${totalSum}"
+        assignTotalAmountToTextView()
 
         notifyDataSetChanged()
+    }
+
+    private fun assignTotalAmountToTextView() {
+        cartFragment.binding!!.ptotalAmountTextViewCart.text =
+            "  ${cartFragment.activity!!.getString(R.string.Rs)} $totalSum"
+        cartFragment.binding!!.cartOverViewTotalPriceTextView.text =
+            "  ${cartFragment.activity!!.getString(R.string.Rs)} $totalSum"
+        cartFragment.binding!!.totalitemstextview.text =
+            "ITEMS ( ${Utils.getItemCount()} )"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardItemsSelectedViewHolder {
@@ -139,6 +149,7 @@ class CartItemsSelectedRecyclerViewAdapter(
         holder.cartItemPriceTextView?.text =
             " MRP : ${cartFragment.getString(R.string.Rs)} ${modelclass.price}"
         holder.cartItemnameTextView?.text = modelclass.name
+        Glide.with(cartFragment).load(modelclass.imgSrc).into(holder.itemImageView)
 
     }
 }

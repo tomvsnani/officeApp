@@ -38,7 +38,7 @@ class MyAccountFragment : Fragment() {
             activity!!.supportFragmentManager.beginTransaction().replace(
                 R.id.container,
                 loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-            )
+            ).addToBackStack(null)
                 .commit()
         return view
     }
@@ -117,7 +117,6 @@ class MyAccountFragment : Fragment() {
         }
         super.onPrepareOptionsMenu(menu)
     }
-
 
 
 }

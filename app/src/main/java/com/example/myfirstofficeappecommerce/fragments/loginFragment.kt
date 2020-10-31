@@ -398,14 +398,7 @@ class loginFragment(
 
                 .commit()
 
-            is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
-                .addToBackStack("login")
-                .replace(
-                    R.id.container,
-                    fragment!!
-                )
 
-                .commit()
 
             is EditUserDetailsFragment -> activity!!.supportFragmentManager.beginTransaction()
                 .addToBackStack("login")
