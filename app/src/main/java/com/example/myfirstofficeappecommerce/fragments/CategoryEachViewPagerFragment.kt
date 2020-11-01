@@ -143,8 +143,9 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
 
         if (item.itemId == R.id.profilemenu) {
             loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-            activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
-
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.container, loginFragment(Constants.NORMAL_SIGN_IN, fragment = this))
+                ?.addToBackStack("ok")?.commit()
         }
         return super.onOptionsItemSelected(item)
     }

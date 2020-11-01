@@ -19,7 +19,7 @@ import com.example.myfirstofficeappecommerce.R
 
 
 class WishListFragment() : Fragment() {
-    private var toolbar: Toolbar? = null
+ var toolbar: Toolbar? = null
     private var recyclerView: RecyclerView? = null
     private var ordersAdapters: WishlistAdapter? = null
     var loginfrag:loginFragment?=null
@@ -55,7 +55,9 @@ class WishListFragment() : Fragment() {
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
             loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-            activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.container, loginFragment(Constants.NORMAL_SIGN_IN, fragment = this))
+               ?.addToBackStack("ok")?.commit()
 
              //  loginfrag!! .show(activity!!.supportFragmentManager,"")
         }

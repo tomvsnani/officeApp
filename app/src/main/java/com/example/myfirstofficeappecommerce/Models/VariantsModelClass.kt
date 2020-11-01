@@ -24,7 +24,9 @@ data class VariantsModelClass(
     var curserposition:String ="",
     var isRecent:Boolean=false,
     var orderId:String="",
-    var isVariantAvailable:Boolean=true
+    var isVariantAvailable:Boolean=true,
+    var variantName:String=""
+
 
 
     ) {

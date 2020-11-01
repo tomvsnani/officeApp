@@ -84,13 +84,15 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
             var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
             if (token == "") {
-                loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-                activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, loginFragment(Constants.GUEST_SIGN_IN, fragment = this))
+                    ?.addToBackStack("ok")?.commit()
 
 
 
-            } else
+            } else {
                 (activity as MainActivity).createCheckout(Constants.NORMAL_SIGN_IN)
+            }
 
 
         }

@@ -108,6 +108,9 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                                         _queryBuilder.title()
 
                                             .descriptionHtml()
+//                                            .options { _queryBuilder ->
+//                                                _queryBuilder.name()
+//                                            }
 
                                             .images({ args: Storefront.ProductQuery.ImagesArguments? ->
                                                 args!!.first(
@@ -177,7 +180,8 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                             productImageSrcList.add(UserDetailsModelClass(imageUrl = imageedge.node.src))
 
                         var variantList: MutableList<VariantsModelClass> = ArrayList()
-
+                        var variantparam0: String = ""
+                        var variantparam1: String = ""
                         //adding all variant data to product variant list
                         for (variantEdge in productEdge.node.variants.edges) {
                             var sizeIndex = 2;
@@ -197,6 +201,10 @@ class CategoriesViewModel(var id: String) : ViewModel() {
 
                                 )
                             )
+                            if (!variantEdge.node.selectedOptions[0].name.isNullOrEmpty()) variantparam0 =
+                                variantEdge.node.selectedOptions[0].name
+                            if (!variantEdge.node.selectedOptions[1].name.isNullOrEmpty())
+                                variantparam1 = variantEdge.node.selectedOptions[1].name
                         }
                         var productmodelclass = CategoriesModelClass(
                             id = productEdge.node.id.toString(),
@@ -204,11 +212,15 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                             itemDescriptionText = productEdge.node.descriptionHtml,
                             imageSrcOfVariants = productImageSrcList,
                             realTimeMrp = productEdge.node.variants.edges[0].node.price.precision(),
+
                             variantsList = variantList,
                             groupId = storefront.id.toString(),
                             cursor = productEdge.cursor ?: null,
-                            hasNextPage = if (storefront.products.pageInfo == null) false else storefront.products.pageInfo.hasNextPage
+                            hasNextPage = if (storefront.products.pageInfo == null) false else storefront.products.pageInfo.hasNextPage,
+                            variantparam0 = variantparam0,
+                            variantParam1 = variantparam1
                         )
+
 
                         Log.d("istrue", productmodelclass.hasNextPage.toString())
                         productListBasedOnCollectionId.add(productmodelclass)
@@ -242,7 +254,7 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                                     _queryBuilder.src().id()
                                 }.weight().title().selectedOptions { _queryBuilder ->
                                     _queryBuilder.name().value()
-                                }
+                                }.product { _queryBuilder -> _queryBuilder.title() }
                             }
                         }
                     })
@@ -263,17 +275,23 @@ class CategoriesViewModel(var id: String) : ViewModel() {
                 var storefront: Storefront.Product =
                     response.data()!!.node as Storefront.Product
                 for (variantEdge in storefront.variants.edges) {
-                    var sizeIndex = 2;
-                    if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name == "Shoe Size")
-                        sizeIndex = 1
+//                    var sizeIndex = 2;
+//                    if (variantEdge.node.selectedOptions.size > 1 && variantEdge.node.selectedOptions[1].name == "Shoe Size")
+//                        sizeIndex = 1
                     variantListBasedOnProductId.add(
                         VariantsModelClass(
                             variantEdge.node.id.toString(),
                             id,
-                            if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
-                            if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
-                            variantEdge.node.price.toFloat(),
-                            name = variantEdge.node.title, imgSrc = variantEdge.node.image.src
+                            size = variantEdge.node.selectedOptions[1].value,
+
+                            color = variantEdge.node.selectedOptions[0].value,
+
+//                            if (variantEdge.node.selectedOptions.size > 0) variantEdge.node.selectedOptions[0].value else null,
+//                            if (variantEdge.node.selectedOptions.size > 1 && sizeIndex < variantEdge.node.selectedOptions.size) variantEdge.node.selectedOptions[sizeIndex].value else null,
+                            price = variantEdge.node.price.toFloat(),
+                            imgSrc = variantEdge.node.image.src,
+                            variantName = variantEdge.node.title,
+                            name = variantEdge.node.product.title
                         )
                     )
                 }

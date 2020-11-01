@@ -38,8 +38,8 @@ class MyAccountFragment : Fragment() {
         )
         //  loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
             activity?.supportFragmentManager?.beginTransaction()
-                ?.add(R.id.container, loginFragment(Constants.NORMAL_SIGN_IN, fragment = this))
-                ?.hide(this)?.addToBackStack("ok")?.commit()
+                ?.replace(R.id.container, loginFragment(Constants.NORMAL_SIGN_IN, fragment = this))
+                ?.addToBackStack("ok")?.commit()
 
         return view
     }

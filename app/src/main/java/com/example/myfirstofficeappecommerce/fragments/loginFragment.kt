@@ -377,28 +377,28 @@ class loginFragment(
 
         when (fragment) {
 
-            is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
-                //  .addToBackStack("login")
-//                .replace(R.id.container, MainFragment())
-                .remove(this)
-                .commit()
-            is OrdersFragment -> activity!!.supportFragmentManager.beginTransaction()
-                //  .addToBackStack("login")
-//                .replace(
-//                    R.id.container,
-//                    OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
-//                        it.isOrdered
-//                    })
-//                )
-                .remove(this)
-                .commit()
+            is MainFragment ->    activity!!.runOnUiThread {
+                (activity as MainActivity).setSupportActionBar((fragment!! as MainFragment).toolbar)
+                activity!!.supportFragmentManager.popBackStackImmediate()
 
-            is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
-                //    .addToBackStack("login")
-                .replace(R.id.container, WishListFragment())
 
-                .commit()
-            is CartFragment -> { (activity as MainActivity).setSupportActionBar((fragment!! as MyAccountFragment).toolbar)
+            }
+            is OrdersFragment ->{
+                activity!!.runOnUiThread {
+                    (activity as MainActivity).setSupportActionBar((fragment!! as OrdersFragment).toolbar)
+                    activity!!.supportFragmentManager.popBackStackImmediate()
+
+
+        }
+    }
+            is WishListFragment -> {
+                activity!!.runOnUiThread {
+                    (activity as MainActivity).setSupportActionBar((fragment!! as WishListFragment).toolbar)
+                    activity!!.supportFragmentManager.popBackStackImmediate()
+
+                }
+            }
+            is CartFragment -> {
                 activity!!.runOnUiThread {
                     activity!!.supportFragmentManager.popBackStackImmediate()
 

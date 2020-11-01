@@ -25,7 +25,7 @@ import com.shopify.buy3.Storefront.CustomerQuery.OrdersArguments
 
 class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
 
-    private var toolbar: Toolbar? = null
+    var toolbar: Toolbar? = null
     private var recyclerView: RecyclerView? = null
     private var ordersAdapters: OrdersAdaptes? = null
     var loginfrag:loginFragment?=null
@@ -52,16 +52,23 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
     }
 
     override fun onStart() {
+
+        super.onStart()
+    }
+
+    override fun onResume() {
         var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
             loginfrag=loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-            activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
-
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.container, loginFragment(Constants.NORMAL_SIGN_IN, fragment = this))
+                ?.addToBackStack("ok")?.commit()
         } else {
             getOrders(token)
         }
-        super.onStart()
+
+        super.onResume()
     }
 
     private fun getOrders(token: String?) {

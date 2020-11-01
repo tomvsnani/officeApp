@@ -2,6 +2,7 @@ package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -185,5 +186,14 @@ class CheckoutOverViewFragment(
             }
 
         })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
+
+
+        super.onCreate(savedInstanceState)
     }
 }

@@ -50,7 +50,7 @@ class MainFragment() : Fragment() {
     var categoryMap: LinkedHashMap<String, List<CategoriesModelClass>>? = null;
     private var searchEditText: EditText? = null
     var isScrollForward: Boolean = true
-    private var toolbar: androidx.appcompat.widget.Toolbar? = null
+    var toolbar: androidx.appcompat.widget.Toolbar? = null
     private var selectedItemsList: List<CategoriesModelClass>? = ApplicationClass.menucategorylist
     var navigationView: NavigationView? = null
     var a: MutableList<CategoriesModelClass> = ArrayList()
@@ -517,7 +517,9 @@ class MainFragment() : Fragment() {
 
 
             loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-//            loginfrag!! .show(activity!!.supportFragmentManager,"")
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.container, loginFragment(Constants.NORMAL_SIGN_IN, fragment = this))
+                ?.addToBackStack("ok")?.commit()
             return true
         }
         if (item.itemId == android.R.id.home) {

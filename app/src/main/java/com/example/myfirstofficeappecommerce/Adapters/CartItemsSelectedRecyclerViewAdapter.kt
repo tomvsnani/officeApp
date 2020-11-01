@@ -38,6 +38,7 @@ class CartItemsSelectedRecyclerViewAdapter(
             itemView.findViewById(R.id.removeitemsImageButton)
         private var cartItemaddItemImagebutton: ImageButton? =
             itemView.findViewById(R.id.additemsImageButton)
+        var variantType:TextView=itemView.findViewById(R.id.itemvarianttype)
         var itemImageView: ImageView = itemView.findViewById<ImageView>(R.id.cartImageView)
 
 
@@ -149,6 +150,7 @@ class CartItemsSelectedRecyclerViewAdapter(
         holder.cartItemPriceTextView?.text =
             " MRP : ${cartFragment.getString(R.string.Rs)} ${modelclass.price}"
         holder.cartItemnameTextView?.text = modelclass.name
+        holder.variantType.text=modelclass.variantName
         Glide.with(cartFragment).load(modelclass.imgSrc).into(holder.itemImageView)
 
     }

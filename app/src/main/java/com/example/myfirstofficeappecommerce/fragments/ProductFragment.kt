@@ -14,6 +14,7 @@ import android.view.*
 import android.view.Menu
 import android.view.animation.*
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -110,6 +111,9 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         setUpClickListeners()
 
+        binding!!.textView2.text = modelClass.variantparam0
+        binding!!.textView4.text = modelClass.variantParam1
+
         return view
     }
 
@@ -118,17 +122,17 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             CategoriesViewModel::class.java
         )
         viewmodel.getVariantData()
-      .observe(this, Observer {
-            if (it.size > 0) {
-                variantList = it.toList()
+            .observe(this, Observer {
+                if (it.size > 0) {
+                    variantList = it.toList()
 
-                getSelectedVariant()
-                assignDataToViews()
-                submitDataToSizeColorAdapters()
-                binding!!.productfragmentprogressbar.visibility = View.GONE
-                binding!!.productfragmentouterlayout.visibility = View.VISIBLE
-            }
-        })
+                    getSelectedVariant()
+                    assignDataToViews()
+                    submitDataToSizeColorAdapters()
+                    binding!!.productfragmentprogressbar.visibility = View.GONE
+                    binding!!.productfragmentouterlayout.visibility = View.VISIBLE
+                }
+            })
     }
 
     private fun getSelectedVariant() {
@@ -214,7 +218,12 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
             webview!!.settings.javaScriptEnabled = true;
             webview!!.settings.loadWithOverviewMode = true;
-
+            webview!!.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    binding!!.bottomsheeet.productbottomsheetprogressbar.visibility = View.GONE
+                    super.onPageFinished(view, url)
+                }
+            }
             webview!!.loadDataWithBaseURL(
                 null,
                 modelClass.itemDescriptionText!!,
@@ -222,7 +231,17 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                 "utf-8",
                 null
             )
-
+webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
+    override fun onScrollChange(
+        v: View?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        TODO("Not yet implemented")
+    }
+})
 
         } else {
             Toast.makeText(
@@ -468,7 +487,6 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     }
 
 
-
     private fun setUpProductColorRecyclerView() {
         colorRecyclerAdapter = ProductColorRecyclerViewAdapter(this) { colorr ->
             val isVariantAvailable =
@@ -556,6 +574,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             }
         })
     }
+
+
 
     private fun initializeViews(view: View) {
 

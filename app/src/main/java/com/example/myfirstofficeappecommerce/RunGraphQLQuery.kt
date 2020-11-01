@@ -93,7 +93,7 @@ class RunGraphQLQuery {
                                               fragment = CheckOutMainWrapperFragment(
                                                   checkoutId, response.data()!!.checkoutCreate
                                                       .checkout.totalTax.toFloat()
-                                              ))).commit()
+                                              ))).addToBackStack(null).commit()
 
                             } else {
                                 mainActivity.supportFragmentManager.beginTransaction()

@@ -5,12 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
+
     app:cardBackgroundColor="#fff">
 
+    <ImageButton
+        android:id="@+id/cartItemCloseImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:layout_weight="0.3"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_baseline_close_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginEnd="32dp"
         android:orientation="horizontal"
         android:padding="16dp">
 
@@ -20,51 +34,48 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/download"
             android:minWidth="100dp"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/cartSelectedItemName"
-            app:layout_constraintVertical_bias="0.060000002" />
+            app:layout_constraintVertical_bias="0.100000024" />
 
         <TextView
             android:id="@+id/cartSelectedItemName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="16dp"
             android:gravity="clip_vertical"
+            android:maxLines="2"
             android:text="Samsung"
             android:textColor="#6b6b6b"
 
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cartImageView"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <ImageButton
-            android:id="@+id/cartItemCloseImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_close_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/cartSelectedItemName"
-            app:layout_constraintTop_toBottomOf="@+id/cartImageView">
+            app:layout_constraintTop_toBottomOf="@+id/cartitemPrice">
 
             <ImageButton
                 android:id="@+id/removeitemsImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="#fbe9e7"
+                android:background="#e0e0e0"
                 android:padding="8dp"
                 android:src="@drawable/ic_baseline_remove_24"
                 android:textColor="@color/red"
@@ -85,10 +96,10 @@
                 android:id="@+id/additemsImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="#fbe9e7"
+                android:background="#e0e0e0"
                 android:padding="8dp"
                 android:src="@drawable/ic_baseline_add_24"
-                android:textColor="@color/red"
+
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -100,9 +111,19 @@
             android:layout_marginTop="16dp"
             android:gravity="center_vertical"
             android:text="30"
-            android:textColor="@color/red"
+            android:textColor="#000"
             android:textSize="12sp"
             android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/cartSelectedItemName"
+            app:layout_constraintTop_toBottomOf="@+id/itemvarianttype" />
+
+        <TextView
+            android:id="@+id/itemvarianttype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="TextView"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/cartSelectedItemName"
             app:layout_constraintTop_toBottomOf="@+id/cartSelectedItemName" />
 

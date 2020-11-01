@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
@@ -58,5 +59,14 @@ class CheckOutMainWrapperFragment(var checkoutid: String, var totaltax: Float) :
             menu.getItem(i).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
+
+
+        super.onCreate(savedInstanceState)
     }
 }
