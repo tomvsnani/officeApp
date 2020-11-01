@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:gravity="center_horizontal"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkoutTextView1"
+        android:background="@drawable/circle_background_drawable_highlighted"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:text="1"
+        />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:id="@+id/checkoutview1"
+        android:layout_marginTop="8dp"
+        android:background="@color/red"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkoutTextView2"
+
+        android:background="@drawable/circle_background_drawable_highlighted"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="#fff"
+
+        />
+    <View
+        android:layout_width="100dp"
+        android:layout_height="1dp"
+        android:id="@+id/checkoutview2"
+        android:layout_marginTop="8dp"
+        android:background="#a4a4a4"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkoutTextView3"
+        android:background="@drawable/circle_background_drawable"
+        android:gravity="center"
+        android:text="3"
+        />
+
+
+</LinearLayout>

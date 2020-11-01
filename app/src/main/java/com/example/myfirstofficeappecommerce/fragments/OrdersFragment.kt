@@ -28,6 +28,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
     private var toolbar: Toolbar? = null
     private var recyclerView: RecyclerView? = null
     private var ordersAdapters: OrdersAdaptes? = null
+    var loginfrag:loginFragment?=null
 
 
     override fun onCreateView(
@@ -54,10 +55,8 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
         var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
-            activity!!.supportFragmentManager.beginTransaction()
-                .replace(R.id.container,  loginFragment(Constants.NORMAL_SIGN_IN,fragment = this))
-                .addToBackStack(null)
-                .commit()
+            loginfrag=loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+              loginfrag!!  .show(activity!!.supportFragmentManager,"")
         } else {
             getOrders(token)
         }
@@ -155,8 +154,11 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home)
+        if (item.itemId == android.R.id.home) {
             activity?.supportFragmentManager!!.popBackStackImmediate()
+            if(loginfrag!=null)
+                loginfrag!!.dismiss()
+        }
         return super.onOptionsItemSelected(item)
     }
 

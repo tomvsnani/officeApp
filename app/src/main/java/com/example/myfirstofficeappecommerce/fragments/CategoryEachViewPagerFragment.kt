@@ -32,6 +32,7 @@ import kotlinx.coroutines.*
 
 class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback: () -> Unit) :
     Fragment() {
+    private var loginfrag: loginFragment?=null
     var recyclerView: RecyclerView? = null
     var toolbar: Toolbar? = null
     var adapterr: CategoriesEachRecyclerAdapter? = null
@@ -122,6 +123,8 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d("clicked", "hello")
         if (item.itemId == android.R.id.home) {
+            if(loginfrag!=null)
+                loginfrag!!.dismiss()
             Log.d("clicked", "hello")
             if ((activity as MainActivity).drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
                 (activity as MainActivity).drawerLayout?.closeDrawer(GravityCompat.START)
@@ -139,12 +142,8 @@ class CategoryEachViewPagerFragment(var get: CategoriesModelClass?, var callback
         }
 
         if (item.itemId == R.id.profilemenu) {
-            activity!!.supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-            ).addToBackStack(null)
-                .commit()
-
+            loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+            loginfrag!! .show(activity!!.supportFragmentManager,"")
         }
         return super.onOptionsItemSelected(item)
     }

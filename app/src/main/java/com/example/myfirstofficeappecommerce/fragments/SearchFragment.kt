@@ -37,6 +37,7 @@ open class SearchFragment() : Fragment() {
     var searchfragmentRecyclerAdapter: searchfragmentRecyclerAdapter? = null
     var searchfragmentRecyclerAdapterSearch: searchfragmentRecyclerAdapter? = null
     var binding:FragmentSearchBinding?=null
+    var loginfrag:loginFragment?=null
 
     var menu: Menu? = null
     override fun onCreateView(
@@ -166,14 +167,13 @@ open class SearchFragment() : Fragment() {
         if (item.itemId == android.R.id.home) {
             showSoftwareKeyboard(true)
             activity!!.onBackPressed()
+            if(loginfrag!=null)
+                loginfrag!!.dismiss()
 
         }
         if( item.itemId == R.id.profilemenu ) {
-            activity!!.supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                loginFragment(Constants.NORMAL_SIGN_IN)
-            ).addToBackStack(null)
-                .commit()
+           loginfrag= loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+                loginfrag!!.show(activity!!.supportFragmentManager,"")
 
         }
         return super.onOptionsItemSelected(item)

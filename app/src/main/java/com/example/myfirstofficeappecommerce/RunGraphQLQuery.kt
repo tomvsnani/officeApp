@@ -86,9 +86,7 @@ class RunGraphQLQuery {
                                 )
                                     associateWithUserQuery(checkoutId, mainActivity)
                                 else
-                                    mainActivity.supportFragmentManager.beginTransaction()
-                                        .replace(
-                                            R.id.container,
+
 
                                             loginFragment(
                                                 Constants.NORMAL_SIGN_IN,
@@ -96,8 +94,8 @@ class RunGraphQLQuery {
                                                     checkoutId, response.data()!!.checkoutCreate
                                                         .checkout.totalTax.toFloat()
                                                 )
-                                            )
-                                        ).addToBackStack(null).commit()
+                                            ).show(mainActivity.supportFragmentManager,"")
+
                             } else {
                                 mainActivity.supportFragmentManager.beginTransaction()
                                     .replace(

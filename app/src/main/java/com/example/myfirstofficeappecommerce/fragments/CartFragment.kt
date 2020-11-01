@@ -29,6 +29,7 @@ import com.example.myfirstofficeappecommerce.databinding.FragmentCartBinding
 
 class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {
 
+    private var loginfrag: loginFragment?=null
     var toolbar: Toolbar? = null
     private var slecetdItemsRecycler: RecyclerView? = null
   //  private var recommendedItemsRecycler: RecyclerView? = null
@@ -83,12 +84,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
             var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
             if (token == "") {
-                activity!!.supportFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.container,
-                        loginFragment(Constants.GUEST_SIGN_IN, fragment = this)
-                    ).addToBackStack(null)
-                    .commit()
+                loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+                loginfrag!! .show(activity!!.supportFragmentManager,"")
 
 
             } else
@@ -194,6 +191,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
+            if(loginfrag!=null)
+                loginfrag!!.dismiss()
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)

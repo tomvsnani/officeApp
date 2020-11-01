@@ -49,6 +49,8 @@ class MainActivity() : AppCompatActivity() {
 
     override fun onBackPressed() {
 
+
+
         if (supportFragmentManager.backStackEntryCount == 0) {
 
             finish()
@@ -82,9 +84,6 @@ class MainActivity() : AppCompatActivity() {
         setContentView(binding!!.root)
 
         initializeViews()
-        supportFragmentManager.addOnBackStackChangedListener {
-            Log.d("backpressedstack", supportFragmentManager.backStackEntryCount.toString())
-        }
 
         getMenuData()
 

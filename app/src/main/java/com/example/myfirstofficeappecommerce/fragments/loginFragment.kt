@@ -1,6 +1,7 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -9,13 +10,18 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.databinding.FragmentProfile2Binding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.shopify.buy3.GraphCall
 import com.shopify.buy3.GraphError
@@ -29,7 +35,7 @@ class loginFragment(
     var checkoutId: String = "",
     var totalTax: Float = 0f,
     var fragment: Fragment? = null
-) : Fragment() {
+) : BottomSheetDialogFragment() {
 
     var nameInputTxetView: TextInputEditText? = null
     var phnInputTxetView: TextInputEditText? = null
@@ -50,6 +56,9 @@ class loginFragment(
         binding = FragmentProfile2Binding.bind(view)
         (activity as MainActivity).lockDrawer()
         setHasOptionsMenu(true)
+        isCancelable=false
+//        if((activity!!.application as ApplicationClass).getCustomerToken(activity = activity as MainActivity).isNotEmpty())
+//            activity!!.supportFragmentManager.popBackStackImmediate("login",FragmentManager.POP_BACK_STACK_INCLUSIVE)
         nameInputTxetView = binding!!.nameEditText
         phnInputTxetView = binding!!.PhonenumberEditText
         emailInputTxetView = binding!!.emailEditText
@@ -366,15 +375,17 @@ class loginFragment(
     }
 
     private fun openCorrespondingFragment() {
+        dismiss()
+
         when (fragment) {
 
             is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
-                .addToBackStack("login")
+              //  .addToBackStack("login")
                 .replace(R.id.container, MainFragment())
 
                 .commit()
             is OrdersFragment -> activity!!.supportFragmentManager.beginTransaction()
-                .addToBackStack("login")
+              //  .addToBackStack("login")
                 .replace(
                     R.id.container,
                     OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
@@ -385,12 +396,12 @@ class loginFragment(
                 .commit()
 
             is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
-                .addToBackStack("login")
+            //    .addToBackStack("login")
                 .replace(R.id.container, WishListFragment())
 
                 .commit()
             is CartFragment -> activity!!.supportFragmentManager.beginTransaction()
-                .addToBackStack("login")
+             //   .addToBackStack("login")
                 .replace(
                     R.id.container,
                     CheckOutMainWrapperFragment(checkoutId, totalTax)
@@ -401,7 +412,7 @@ class loginFragment(
 
 
             is EditUserDetailsFragment -> activity!!.supportFragmentManager.beginTransaction()
-                .addToBackStack("login")
+              //  .addToBackStack("login")
                 .replace(
                     R.id.container,
                     fragment!!
@@ -410,7 +421,7 @@ class loginFragment(
                 .commit()
 
             is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
-                .addToBackStack("login")
+               // .addToBackStack("login")
                 .replace(
                     R.id.container,
                     fragment!!
@@ -434,18 +445,19 @@ class loginFragment(
         binding!!.root?.focusedChild?.clearFocus()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
-        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
-
-        super.onCreate(savedInstanceState)
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        val inflater = TransitionInflater.from(requireContext())
+//        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+//        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
+//
+//        super.onCreate(savedInstanceState)
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == android.R.id.home) {
-            (activity as MainActivity)?.onBackPressed()
+          //  activity!!.supportFragmentManager.popBackStackImmediate()
+            dismiss()
 
             return true
         }
@@ -458,6 +470,22 @@ class loginFragment(
             menu.getItem(i).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)
+    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        bottomSheetDialog.setOnShowListener { dia ->
+            val dialog = dia as BottomSheetDialog
+            val bottomSheet =
+
+                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).state =
+                BottomSheetBehavior.STATE_EXPANDED
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).skipCollapsed = false
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).isHideable = true
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).peekHeight = 0
+            bottomSheet.layoutParams.height=resources.displayMetrics.heightPixels
+        }
+        return bottomSheetDialog
     }
 
 }

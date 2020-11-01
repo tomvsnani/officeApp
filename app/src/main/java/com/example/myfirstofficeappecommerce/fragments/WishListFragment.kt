@@ -22,6 +22,7 @@ class WishListFragment() : Fragment() {
     private var toolbar: Toolbar? = null
     private var recyclerView: RecyclerView? = null
     private var ordersAdapters: WishlistAdapter? = null
+    var loginfrag:loginFragment?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())
@@ -32,8 +33,12 @@ class WishListFragment() : Fragment() {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId==android.R.id.home)
+        if(item.itemId==android.R.id.home) {
             activity?.onBackPressed()
+            if(loginfrag!=null)
+                loginfrag!!.dismiss()
+
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -49,9 +54,8 @@ class WishListFragment() : Fragment() {
         var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
-            activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, loginFragment(
-                Constants.NORMAL_SIGN_IN,fragment = this))
-             .commit()
+          loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+               loginfrag!! .show(activity!!.supportFragmentManager,"")
         }
         super.onStart()
     }

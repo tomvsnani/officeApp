@@ -40,6 +40,7 @@ import kotlin.math.abs
 
 
 class MainFragment() : Fragment() {
+    private var loginfrag: loginFragment?=null
     private var millies: Long? = null
     private var recyclerView: RecyclerView? = null;
     private var adapterr: CollectionsAdapter? = null;
@@ -513,14 +514,15 @@ class MainFragment() : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == R.id.profilemenu) {
-            activity?.supportFragmentManager?.beginTransaction()?.replace(
-                R.id.container,
-                loginFragment(Constants.NORMAL_SIGN_IN)
-            )?.addToBackStack(null)
-                ?.commit()
+
+
+            loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+            loginfrag!! .show(activity!!.supportFragmentManager,"")
             return true
         }
         if (item.itemId == android.R.id.home) {
+            if(loginfrag!=null)
+                loginfrag!!.dismiss()
             Log.d(
                 "backpressedfrag",
                 (activity as MainActivity).supportFragmentManager.backStackEntryCount.toString()

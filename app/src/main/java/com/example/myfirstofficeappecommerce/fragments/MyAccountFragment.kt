@@ -18,6 +18,7 @@ import com.example.myfirstofficeappecommerce.databinding.FragmentMyAccountBindin
 class MyAccountFragment : Fragment() {
     var toolbar: androidx.appcompat.widget.Toolbar? = null
     var binding: FragmentMyAccountBinding? = null
+    var loginfrag:loginFragment?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,11 +36,8 @@ class MyAccountFragment : Fragment() {
                 activity = activity as MainActivity
             ).isBlank()
         )
-            activity!!.supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-            ).addToBackStack(null)
-                .commit()
+          loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+               loginfrag!! .show(activity!!.supportFragmentManager,"")
         return view
     }
 
@@ -103,6 +101,10 @@ class MyAccountFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d("onprepareaccount", "yess")
         if (item.itemId == android.R.id.home) {
+            if(loginfrag!=null) {
+
+                loginfrag!!.dismiss()
+            }
             (activity as MainActivity)?.supportFragmentManager.popBackStackImmediate()
 
             return true
