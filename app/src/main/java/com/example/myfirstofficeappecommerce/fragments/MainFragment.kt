@@ -517,12 +517,12 @@ class MainFragment() : Fragment() {
 
 
             loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-            loginfrag!! .show(activity!!.supportFragmentManager,"")
+//            loginfrag!! .show(activity!!.supportFragmentManager,"")
             return true
         }
         if (item.itemId == android.R.id.home) {
-            if(loginfrag!=null)
-                loginfrag!!.dismiss()
+//            if(loginfrag!=null)
+//                loginfrag!!.dismiss()
             Log.d(
                 "backpressedfrag",
                 (activity as MainActivity).supportFragmentManager.backStackEntryCount.toString()

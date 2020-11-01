@@ -167,13 +167,13 @@ open class SearchFragment() : Fragment() {
         if (item.itemId == android.R.id.home) {
             showSoftwareKeyboard(true)
             activity!!.onBackPressed()
-            if(loginfrag!=null)
-                loginfrag!!.dismiss()
-
-        }
+//            if(loginfrag!=null)
+//                loginfrag!!.dismiss()
+//
+       }
         if( item.itemId == R.id.profilemenu ) {
            loginfrag= loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-                loginfrag!!.show(activity!!.supportFragmentManager,"")
+            activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
 
         }
         return super.onOptionsItemSelected(item)

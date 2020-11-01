@@ -35,8 +35,8 @@ class WishListFragment() : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId==android.R.id.home) {
             activity?.onBackPressed()
-            if(loginfrag!=null)
-                loginfrag!!.dismiss()
+//            if(loginfrag!=null)
+                //loginfrag!!.dismiss()
 
         }
         return super.onOptionsItemSelected(item)
@@ -54,8 +54,10 @@ class WishListFragment() : Fragment() {
         var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
-          loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-               loginfrag!! .show(activity!!.supportFragmentManager,"")
+            loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+            activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
+
+             //  loginfrag!! .show(activity!!.supportFragmentManager,"")
         }
         super.onStart()
     }

@@ -49,7 +49,7 @@ class MainActivity() : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-
+Log.d("backcalled","mainac")
 
         if (supportFragmentManager.backStackEntryCount == 0) {
 
@@ -297,7 +297,7 @@ class MainActivity() : AppCompatActivity() {
             R.id.container,
             MainFragment()
 
-        )
+        ).addToBackStack("home")
 
             .commit()
     }

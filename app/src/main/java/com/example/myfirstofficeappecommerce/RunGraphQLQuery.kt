@@ -88,13 +88,12 @@ class RunGraphQLQuery {
                                 else
 
 
-                                            loginFragment(
-                                                Constants.NORMAL_SIGN_IN,
-                                                fragment = CheckOutMainWrapperFragment(
-                                                    checkoutId, response.data()!!.checkoutCreate
-                                                        .checkout.totalTax.toFloat()
-                                                )
-                                            ).show(mainActivity.supportFragmentManager,"")
+                                          mainActivity!!.supportFragmentManager.beginTransaction().add(R.id.container, loginFragment(
+                                              Constants.NORMAL_SIGN_IN,
+                                              fragment = CheckOutMainWrapperFragment(
+                                                  checkoutId, response.data()!!.checkoutCreate
+                                                      .checkout.totalTax.toFloat()
+                                              ))).commit()
 
                             } else {
                                 mainActivity.supportFragmentManager.beginTransaction()

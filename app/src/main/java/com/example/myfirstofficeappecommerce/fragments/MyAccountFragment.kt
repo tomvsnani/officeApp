@@ -18,7 +18,7 @@ import com.example.myfirstofficeappecommerce.databinding.FragmentMyAccountBindin
 class MyAccountFragment : Fragment() {
     var toolbar: androidx.appcompat.widget.Toolbar? = null
     var binding: FragmentMyAccountBinding? = null
-    var loginfrag:loginFragment?=null
+    var loginfrag: loginFragment? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,8 +36,11 @@ class MyAccountFragment : Fragment() {
                 activity = activity as MainActivity
             ).isBlank()
         )
-          loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-               loginfrag!! .show(activity!!.supportFragmentManager,"")
+        //  loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.add(R.id.container, loginFragment(Constants.NORMAL_SIGN_IN, fragment = this))
+                ?.hide(this)?.addToBackStack("ok")?.commit()
+
         return view
     }
 
@@ -99,12 +102,12 @@ class MyAccountFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("onprepareaccount", "yess")
+       // Log.d("onprepareaccount", "yess")
         if (item.itemId == android.R.id.home) {
-            if(loginfrag!=null) {
-
-                loginfrag!!.dismiss()
-            }
+//            if(loginfrag!=null) {
+            Log.d("backcalled", "accountbackcalled")
+//                loginfrag!!.dismiss()
+//            }
             (activity as MainActivity)?.supportFragmentManager.popBackStackImmediate()
 
             return true
@@ -113,7 +116,7 @@ class MyAccountFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        Log.d("onprepareaccount", "yess")
+      //  Log.d("onprepareaccount", "yess")
         for (i in 0..1) {
             menu.getItem(i).isVisible = false
         }

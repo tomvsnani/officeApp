@@ -85,7 +85,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
             var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
             if (token == "") {
                 loginfrag=  loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-                loginfrag!! .show(activity!!.supportFragmentManager,"")
+                activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
+
 
 
             } else
@@ -191,8 +192,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            if(loginfrag!=null)
-                loginfrag!!.dismiss()
+//            if(loginfrag!=null)
+//                loginfrag!!.dismiss()
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)

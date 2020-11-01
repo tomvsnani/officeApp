@@ -56,7 +56,8 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
         if (token == "") {
             Toast.makeText(context, "Please Login", Toast.LENGTH_SHORT).show()
             loginfrag=loginFragment(Constants.NORMAL_SIGN_IN, fragment = this)
-              loginfrag!!  .show(activity!!.supportFragmentManager,"")
+            activity!!.supportFragmentManager.beginTransaction().add(R.id.container,loginfrag!!).commit()
+
         } else {
             getOrders(token)
         }
@@ -156,8 +157,8 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             activity?.supportFragmentManager!!.popBackStackImmediate()
-            if(loginfrag!=null)
-                loginfrag!!.dismiss()
+//            if(loginfrag!=null)
+//                loginfrag!!.dismiss()
         }
         return super.onOptionsItemSelected(item)
     }

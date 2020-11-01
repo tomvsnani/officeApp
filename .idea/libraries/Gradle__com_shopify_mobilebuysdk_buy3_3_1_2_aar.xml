@@ -5,6 +5,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1912c46436895636e2954cc4986a448f/jetified-buy3-3.1.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1912c46436895636e2954cc4986a448f/jetified-buy3-3.1.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1912c46436895636e2954cc4986a448f/jetified-buy3-3.1.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d7b61d9193c53bc5faaef260d71bf4f8/jetified-buy3-3.1.2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d7b61d9193c53bc5faaef260d71bf4f8/jetified-buy3-3.1.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d7b61d9193c53bc5faaef260d71bf4f8/jetified-buy3-3.1.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.shopify.mobilebuysdk/buy3/3.1.2/48f749e38d3377895aed682031e6046d17938601/buy3-3.1.2-javadoc.jar!/" />

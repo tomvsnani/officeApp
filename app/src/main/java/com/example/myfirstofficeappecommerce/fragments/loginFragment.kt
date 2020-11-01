@@ -35,7 +35,7 @@ class loginFragment(
     var checkoutId: String = "",
     var totalTax: Float = 0f,
     var fragment: Fragment? = null
-) : BottomSheetDialogFragment() {
+) : Fragment() {
 
     var nameInputTxetView: TextInputEditText? = null
     var phnInputTxetView: TextInputEditText? = null
@@ -56,7 +56,7 @@ class loginFragment(
         binding = FragmentProfile2Binding.bind(view)
         (activity as MainActivity).lockDrawer()
         setHasOptionsMenu(true)
-        isCancelable=false
+        //isCancelable=false
 //        if((activity!!.application as ApplicationClass).getCustomerToken(activity = activity as MainActivity).isNotEmpty())
 //            activity!!.supportFragmentManager.popBackStackImmediate("login",FragmentManager.POP_BACK_STACK_INCLUSIVE)
         nameInputTxetView = binding!!.nameEditText
@@ -265,7 +265,6 @@ class loginFragment(
     }
 
 
-
     private fun login(email: String, password: String) {
         activity!!.runOnUiThread {
             progressbar!!.visibility = View.VISIBLE
@@ -318,7 +317,6 @@ class loginFragment(
                 }
         }
     }
-
 
 
     private fun getLoginMutation(input: CustomerAccessTokenCreateInput): MutationQuery? {
@@ -375,59 +373,65 @@ class loginFragment(
     }
 
     private fun openCorrespondingFragment() {
-        dismiss()
+        //dismiss()
 
         when (fragment) {
 
             is MainFragment -> activity!!.supportFragmentManager.beginTransaction()
-              //  .addToBackStack("login")
-                .replace(R.id.container, MainFragment())
-
+                //  .addToBackStack("login")
+//                .replace(R.id.container, MainFragment())
+                .remove(this)
                 .commit()
             is OrdersFragment -> activity!!.supportFragmentManager.beginTransaction()
-              //  .addToBackStack("login")
-                .replace(
-                    R.id.container,
-                    OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
-                        it.isOrdered
-                    })
-                )
-
+                //  .addToBackStack("login")
+//                .replace(
+//                    R.id.container,
+//                    OrdersFragment(ApplicationClass.selectedVariantList!!.filter {
+//                        it.isOrdered
+//                    })
+//                )
+                .remove(this)
                 .commit()
 
             is WishListFragment -> activity!!.supportFragmentManager.beginTransaction()
-            //    .addToBackStack("login")
+                //    .addToBackStack("login")
                 .replace(R.id.container, WishListFragment())
 
                 .commit()
-            is CartFragment -> activity!!.supportFragmentManager.beginTransaction()
-             //   .addToBackStack("login")
-                .replace(
-                    R.id.container,
-                    CheckOutMainWrapperFragment(checkoutId, totalTax)
-                )
+            is CartFragment -> { (activity as MainActivity).setSupportActionBar((fragment!! as MyAccountFragment).toolbar)
+                activity!!.runOnUiThread {
+                    activity!!.supportFragmentManager.popBackStackImmediate()
 
-                .commit()
+                }
+            }
 
 
+            is EditUserDetailsFragment -> { (activity as MainActivity).setSupportActionBar((fragment!! as EditUserDetailsFragment).binding!!.editprofileToolbar)
+                activity!!.runOnUiThread {
+                    activity!!.supportFragmentManager.popBackStackImmediate()
 
-            is EditUserDetailsFragment -> activity!!.supportFragmentManager.beginTransaction()
-              //  .addToBackStack("login")
-                .replace(
-                    R.id.container,
-                    fragment!!
-                )
+                }
+            }
 
-                .commit()
+            is MyAccountFragment -> {
+                (activity as MainActivity).setSupportActionBar((fragment!! as  MyAccountFragment).toolbar)
+                activity!!.runOnUiThread {
+                    activity!!.supportFragmentManager.popBackStackImmediate()
 
-            is MyAccountFragment -> activity!!.supportFragmentManager.beginTransaction()
-               // .addToBackStack("login")
-                .replace(
-                    R.id.container,
-                    fragment!!
-                )
+                }
 
-                .commit()
+                //  activity !!. supportFragmentManager .popBackStackImmediate()
+                //beginTransaction ()
+//               // .addToBackStack("login")
+////                .replace(
+////                    R.id.container,
+////                    fragment!!
+////                )
+
+
+//
+                //  .commit()
+            }
 
 
             else -> activity!!.supportFragmentManager.beginTransaction()
@@ -456,8 +460,16 @@ class loginFragment(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == android.R.id.home) {
-          //  activity!!.supportFragmentManager.popBackStackImmediate()
-            dismiss()
+            Log.d("backcalled", "loginbackcalled")
+//            if(isAdded)
+//                activity!!.supportFragmentManager.beginTransaction().remove(this).show(fragment!!).commit()
+            activity!!.supportFragmentManager.popBackStack(
+                activity!!.supportFragmentManager.getBackStackEntryAt(
+                    activity!!.supportFragmentManager.backStackEntryCount - 2
+                ).id, FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+
+            //dismiss()
 
             return true
         }
@@ -471,21 +483,21 @@ class loginFragment(
         }
         super.onPrepareOptionsMenu(menu)
     }
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        bottomSheetDialog.setOnShowListener { dia ->
-            val dialog = dia as BottomSheetDialog
-            val bottomSheet =
-
-                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).state =
-                BottomSheetBehavior.STATE_EXPANDED
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).skipCollapsed = false
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).isHideable = true
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).peekHeight = 0
-            bottomSheet.layoutParams.height=resources.displayMetrics.heightPixels
-        }
-        return bottomSheetDialog
-    }
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+//        bottomSheetDialog.setOnShowListener { dia ->
+//            val dialog = dia as BottomSheetDialog
+//            val bottomSheet =
+//
+//                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).state =
+//                BottomSheetBehavior.STATE_EXPANDED
+//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).skipCollapsed = false
+//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).isHideable = true
+//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).peekHeight = 0
+//            bottomSheet.layoutParams.height=resources.displayMetrics.heightPixels
+//        }
+//        return bottomSheetDialog
+//    }
 
 }
