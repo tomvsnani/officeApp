@@ -29,10 +29,9 @@ import com.example.myfirstofficeappecommerce.databinding.FragmentCartBinding
 
 class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment() {
 
-    private var loginfrag: loginFragment?=null
+
     var toolbar: Toolbar? = null
     private var slecetdItemsRecycler: RecyclerView? = null
-  //  private var recommendedItemsRecycler: RecyclerView? = null
     private var itemsSelectedAdapter: CartItemsSelectedRecyclerViewAdapter? = null
     private var recommendedAdapter: CartItemRecommendedAdapter? = null
     private var proceedTextViewCart: TextView? = null
@@ -48,14 +47,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
     ): View? {
 
         (activity as MainActivity).lockDrawer()
-        selectedItemsList = ApplicationClass.selectedVariantList
-        var view: View = inflater.inflate(
-            R.layout.fragment_cart,
-            container,
-            false
-        )
 
-        binding = FragmentCartBinding.bind(view)
+        val view: View = setUpbinding(inflater, container)
 
         setUpToolBar(view)
 
@@ -65,12 +58,27 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
         list = selectedItemsList!!.toMutableList()
 
-        setUpRecommendedItemsRecyclerView()
+        //      setUpRecommendedItemsRecyclerView()
 
 
         setUpOnClickListener()
 
 
+        return view
+    }
+
+    private fun setUpbinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): View {
+        selectedItemsList = ApplicationClass.selectedVariantList
+        var view: View = inflater.inflate(
+            R.layout.fragment_cart,
+            container,
+            false
+        )
+
+        binding = FragmentCartBinding.bind(view)
         return view
     }
 
@@ -85,14 +93,17 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
             var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")
             if (token == "") {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.container, loginFragment(Constants.GUEST_SIGN_IN, fragment = this))
+                    ?.replace(
+                        R.id.container,
+                        loginFragment(Constants.GUEST_SIGN_IN, fragment = this)
+                    )
                     ?.addToBackStack("ok")?.commit()
 
 
-
             } else {
-                (activity as MainActivity).binding!!.mainactivityprogressbar.visibility=View.VISIBLE
-                proceedTextViewCart!!.isClickable=false
+                (activity as MainActivity).binding!!.mainactivityprogressbar.visibility =
+                    View.VISIBLE
+                proceedTextViewCart!!.isClickable = false
                 (activity as MainActivity).createCheckout(Constants.NORMAL_SIGN_IN)
             }
 
@@ -122,7 +133,6 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 //            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
 
-
         recommendedAdapter = CartItemRecommendedAdapter(this) { modelClass ->
 
             modelClass.quantityOfItem++
@@ -139,7 +149,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
             } else {
-                Log.d("recommendedqu", modelClass.quantityOfItem.toString())
+
                 list.add(modelClass)
                 (ApplicationClass.selectedVariantList as MutableList).add(modelClass)
 
@@ -161,8 +171,6 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
             this.list = it as MutableList<VariantsModelClass>
 
         }
-
-
         slecetdItemsRecycler!!.itemAnimator = null
         slecetdItemsRecycler!!.adapter = itemsSelectedAdapter
         slecetdItemsRecycler!!.layoutManager =

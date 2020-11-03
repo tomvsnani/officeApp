@@ -257,45 +257,47 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
                 GraphCall.Callback<QueryRoot> {
                 @SuppressLint("UseCompatLoadingForDrawables")
                 override fun onResponse(response: GraphResponse<QueryRoot>) {
-                    val checkout = response.data()!!.node as Checkout
-                    Log.d("ratessffl", response.errors().toString())
-                    val shippingRates =
-                        checkout.availableShippingRates.shippingRates
-                    var c = 0f;
-                    var userDetailsModelList: MutableList<UserDetailsModelClass> = ArrayList()
-                    for (i in shippingRates) {
-                        var model = UserDetailsModelClass(
-                            title = i.title,
-                            subTitle = i.handle,
-                            shippingPrice = i.price.precision().toString()
-                        )
-                        userDetailsModelList.add(model)
-                        c += i.price.precision().toFloat()
-                    }
-
-
-
-                    activity!!.runOnUiThread {
-                        parentFragment!!.childFragmentManager.beginTransaction()
-                            .replace(
-                                R.id.container1,
-                                CheckoutOverViewFragment(
-                                    this@NewAddressFragment.webUrl,
-                                    c,
-                                    totalTax,
-                                    modelClass,
-                                    ApplicationClass.selectedVariantList!!,
-                                    userDetailsModelList,
-                                    checkoutId
-                                )
+                    if(!response.hasErrors() && response.data()!=null) {
+                        val checkout = response.data()!!.node as Checkout
+                        Log.d("ratessffl", response.errors().toString())
+                        val shippingRates =
+                            checkout.availableShippingRates.shippingRates
+                        var c = 0f;
+                        var userDetailsModelList: MutableList<UserDetailsModelClass> = ArrayList()
+                        for (i in shippingRates) {
+                            var model = UserDetailsModelClass(
+                                title = i.title,
+                                subTitle = i.handle,
+                                shippingPrice = i.price.precision().toString()
                             )
-                            .addToBackStack(null)
-                            .commit()
-                        Toast.makeText(
-                            context,
-                            "Address Added",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            userDetailsModelList.add(model)
+                            c += i.price.precision().toFloat()
+                        }
+
+
+
+                        activity!!.runOnUiThread {
+                            parentFragment!!.childFragmentManager.beginTransaction()
+                                .replace(
+                                    R.id.container1,
+                                    CheckoutOverViewFragment(
+                                        this@NewAddressFragment.webUrl,
+                                        userDetailsModelList,
+                                        userDetailsModelList[0].shippingPrice.toFloat(),
+                                        totalTax,
+                                        modelClass,
+
+                                        checkoutId
+                                    )
+                                )
+                                .addToBackStack(null)
+                                .commit()
+                            Toast.makeText(
+                                context,
+                                "Address Added",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
 

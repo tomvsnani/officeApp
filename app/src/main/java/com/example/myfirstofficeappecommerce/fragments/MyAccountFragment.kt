@@ -87,6 +87,10 @@ class MyAccountFragment : Fragment() {
         binding!!.signoutbutton.setOnClickListener {
             activity!!.getPreferences(Activity.MODE_PRIVATE).edit()
                 .remove(Constants.LOGGED_IN_TOKEN).apply()
+            ApplicationClass.selectedVariantList?.clear()
+            ApplicationClass.addressList?.clear()
+            ApplicationClass.recentsList?.clear()
+            ApplicationClass.shippingratesAddressList?.clear()
             activity!!.supportFragmentManager.popBackStackImmediate()
         }
 

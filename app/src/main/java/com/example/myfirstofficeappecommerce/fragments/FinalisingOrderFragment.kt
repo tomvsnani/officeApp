@@ -2,6 +2,7 @@ package com.example.myfirstofficeappecommerce.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
@@ -35,9 +37,16 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
     var webUrl: String = ""
     var addressList = ApplicationClass.addressList
     var bottomsheetFragment: BottomSheetFragment? = null
+    var userDetailsModelList: MutableList<UserDetailsModelClass> =
+        ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setUpAmination()
+    }
+
+    private fun setUpAmination() {
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
@@ -56,25 +65,36 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
         if (ApplicationClass.signInType == Constants.NORMAL_SIGN_IN) {
 
-            retrieve_all_the_addresses()
-            binding!!.addressconstraint.visibility = View.VISIBLE
-            if(ApplicationClass.defaultAdress!=null)
-            displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
-
-            binding!!.addAddressButton.visibility = View.GONE
-            binding!!.noaddresstextview.visibility = View.GONE
+            performSignedInTasks()
 
         } else {
-            binding!!.addressconstraint.visibility = View.GONE
-            binding!!.addAddressButton.visibility = View.VISIBLE
-            binding!!.viewmoreaddressesbutton.visibility = View.GONE
-            binding!!.noaddresstextview.visibility = View.VISIBLE
+
+            performNotSignedInTask()
         }
-
-
         initializeClickListeners()
 
         return v
+    }
+
+
+    private fun performNotSignedInTask() {
+        binding!!.addressconstraint.visibility = View.GONE
+        binding!!.addAddressButton.visibility = View.VISIBLE
+        binding!!.viewmoreaddressesbutton.visibility = View.GONE
+        binding!!.noaddresstextview.visibility = View.VISIBLE
+        binding!!.shippingaddresslinear.visibility = View.GONE
+    }
+
+    private fun performSignedInTasks() {
+        //   if (ApplicationClass.addressList.size == 0)
+        retrieve_all_the_addresses()
+        if (ApplicationClass.defaultAdress != null)
+            displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
+        binding!!.addressconstraint.visibility = View.VISIBLE
+
+        binding!!.addAddressButton.visibility = View.GONE
+        binding!!.noaddresstextview.visibility = View.GONE
+        binding!!.shippingaddresslinear.visibility = View.VISIBLE
     }
 
     fun displaySelectedAddressDetails(defaultAdress: MailingAddress) {
@@ -85,6 +105,15 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
     }
 
     private fun initializeClickListeners() {
+        binding!!.changeshippingratesimagebutton.setOnClickListener {
+            selectShippingProviders()
+        }
+
+        binding!!.shippingratespricetextview.text
+
+        binding!!.shippingratestitletextview.text
+
+
         binding!!.viewmoreaddressesbutton.setOnClickListener {
 
             bottomsheetFragment = BottomSheetFragment(totalTax, checkoutId, webUrl, this)
@@ -100,32 +129,77 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
 
         binding!!.deliveroThisAddressButton.setOnClickListener {
+            var a = addressList.find { it.isSelectedAddress }
 
+                ?: addressList.find { it.id == ApplicationClass.defaultAdress?.id.toString() }
+            if (a != null)
+                parentFragment!!.childFragmentManager.beginTransaction()
+                    ?.replace(
+                        R.id.container1,
+                        CheckoutOverViewFragment(
+                            webUrl,
+                            userDetailsModelList,
+                            binding!!.shippingratespricetextview.text.toString().toFloat(),
+                            totalTax,
+                            a!!,
+                            checkoutId
+                        )
+                    )
+                    .addToBackStack(null)
+                    .commit()
 
-            var a =
-                addressList.find { it.isSelectedAddress }
-
-                    ?: addressList.find { it.id == ApplicationClass.defaultAdress?.id.toString() }
-            if (a != null) {
-                getTheShippingRatesBasedOnSelectedAddress(
-                    a!!.hnum,
-                    a!!.city,
-                    a!!.title,
-                    a.subTitle,
-                    a.phoneNumber!!,
-                    a.state,
-                    a.pinCode,
-                    a.country
-                )
-                binding!!.finalisingcheckoutfragmentprogressbar.visibility = View.VISIBLE
-            } else
-                Toast.makeText(
-                    context,
-                    "Please select an address or add an address",
-                    Toast.LENGTH_SHORT
-                ).show()
         }
     }
+
+    private fun getShippingRates() {
+        var a =
+            addressList.find { it.isSelectedAddress }
+
+                ?: addressList.find { it.id == ApplicationClass.defaultAdress?.id.toString() }
+        if (a != null) {
+            getTheShippingRatesBasedOnSelectedAddress(
+                a!!.hnum,
+                a!!.city,
+                a!!.title,
+                a.subTitle,
+                a.phoneNumber!!,
+                a.state,
+                a.pinCode,
+                a.country
+            )
+            binding!!.finalisingcheckoutfragmentprogressbar.visibility = View.VISIBLE
+        } else
+            Toast.makeText(
+                context,
+                "Please select an address or add an address",
+                Toast.LENGTH_SHORT
+            ).show()
+    }
+
+    private fun selectShippingProviders(
+
+    ) {
+
+        SelectShippingRatesBottomFragment(
+            ApplicationClass.checkoutId,
+            userDetailsModelList
+        ) { i: Int ->
+            var model = userDetailsModelList[0]
+            displayShippingRates(model)
+
+
+        }.show(activity!!.supportFragmentManager, "")
+
+
+    }
+
+    private fun displayShippingRates(model: UserDetailsModelClass) {
+        //  ApplicationClass.shippingratesAddressList=model
+        binding!!.shippingratespricetextview.text = model.shippingPrice
+        binding!!.shippingratestitletextview.text = model.title
+        binding!!.finalisingcheckoutfragmentprogressbar.visibility = View.GONE
+    }
+
 
     private fun getTheShippingRatesBasedOnSelectedAddress(
         address1: String,
@@ -184,12 +258,13 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
 
             override fun onResponse(response: GraphResponse<Mutation>) {
-
+                ApplicationClass.checkoutId =
+                    response.data()?.checkoutShippingAddressUpdate?.checkout?.id?.toString()!!
 
                 val queryy = query { rootQuery ->
                     rootQuery
                         .node(
-                            ID(checkoutId)
+                            ID(ApplicationClass.checkoutId)
                         ) { nodeQuery ->
                             nodeQuery
                                 .onCheckout { checkoutQuery ->
@@ -218,11 +293,12 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                         @SuppressLint("UseCompatLoadingForDrawables")
                         override fun onResponse(response: GraphResponse<QueryRoot>) {
                             val checkout = response.data()!!.node as Checkout
+
+                            ApplicationClass.checkoutId = checkout?.id?.toString()!!
                             val shippingRates =
                                 checkout.availableShippingRates.shippingRates
                             var c = 0f;
-                            var userDetailsModelList: MutableList<UserDetailsModelClass> =
-                                ArrayList()
+                            userDetailsModelList.clear()
                             for (i in shippingRates) {
                                 var model = UserDetailsModelClass(
                                     title = i.title,
@@ -232,32 +308,17 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                                 userDetailsModelList.add(model)
                                 c += i.price.precision().toFloat()
                             }
+                            activity?.runOnUiThread { displayShippingRates(userDetailsModelList[0]) }
 
-
-
-                            activity?.runOnUiThread {
-                                parentFragment!!.childFragmentManager.beginTransaction()
-                                   ?.replace(
-                                        R.id.container1,
-                                        CheckoutOverViewFragment(
-                                            webUrl,
-                                            c,
-                                            totalTax,
-                                            modelClass,
-                                            ApplicationClass.selectedVariantList!!,
-                                            userDetailsModelList,
-                                            checkoutId
-                                        )
-                                    )
-                                    .addToBackStack(null)
-                                    .commit()
-                                Toast.makeText(
-                                    context,
-                                    "Address updated",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                            }
+//                            activity?.runOnUiThread {
+//
+//                                Toast.makeText(
+//                                    context,
+//                                    "Address updated",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//
+//                            }
                         }
 
                         override fun onFailure(error: GraphError) {
@@ -274,7 +335,8 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                         .build()
                 )
 
-                webUrl = response.data()!!.checkoutShippingAddressUpdate.checkout.webUrl
+                ApplicationClass.weburl =
+                    response.data()!!.checkoutShippingAddressUpdate.checkout.webUrl
 
             }
 
@@ -315,7 +377,8 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                             }
                         }
                     }).defaultAddress { _queryBuilder ->
-                        _queryBuilder!!.address1().phone()
+                        _queryBuilder!!.address1().phone().name().province().country().zip()
+                            .city().firstName()
                     }
                 }
         }
@@ -345,20 +408,27 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                         )
                     )
                 }
+                ApplicationClass.defaultAdress = response.data()!!.customer.defaultAddress
+
 
 
 
                 activity!!.runOnUiThread {
+                    if (ApplicationClass.defaultAdress != null) {
+                        displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
+                        getShippingRates()
+                    }
 
-                    var a =
-                        addressList.find { it.id == response.data()!!.customer.defaultAddress.id.toString() }
-                    if (a != null) {
-                        a!!.isSelectedAddress = true
-
-                        adapter!!.submitList(if (addressList.size > 0) mutableListOf(a) else null)
-
-                        adapter!!.notifyDataSetChanged()
-                    } else Toast.makeText(context!!, "Add an address", Toast.LENGTH_SHORT).show()
+//                        var a =
+//                            addressList.find { it.id == response.data()!!.customer.defaultAddress.id.toString() }
+//                        if (a != null) {
+//                            a!!.isSelectedAddress = true
+//
+//                            adapter!!.submitList(if (addressList.size > 0) mutableListOf(a) else null)
+//
+//                            adapter!!.notifyDataSetChanged()
+//                        } else Toast.makeText(context!!, "Add an address", Toast.LENGTH_SHORT)
+//                            .show()
 
 
                 }
@@ -367,7 +437,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
             }
 
             override fun onFailure(error: GraphError) {
-
+                Log.d("cameherefailed", error.message.toString())
             }
 
         },

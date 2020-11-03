@@ -25,16 +25,17 @@ import com.shopify.graphql.support.ID
 
 class CheckoutOverViewFragment(
     var webUrl: String,
+    var shippingList:MutableList<UserDetailsModelClass>,
     var shippingPrice: Float,
     var taxPrice: Float,
     var userDetailsModelClass: UserDetailsModelClass,
-    var list: MutableList<VariantsModelClass>,
-    var shippingList: List<UserDetailsModelClass>,
-    var checkoutId: String,
-    var shippingRatesAdapter: ShippingRatesAdapter? = null
+
+    var checkoutId: String
 
 ) : Fragment() {
+
     var adapter: CheckoutOverViewItemsAdapter? = null
+    var list=ApplicationClass.selectedVariantList
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,9 +59,7 @@ class CheckoutOverViewFragment(
 
 
 
-        binding.shippingAddresseditButton.setOnClickListener {
-            selectShippingProviders(binding, a)
-        }
+
 
 
         binding.checkoutOverViewPriceTextView.text =
@@ -95,36 +94,6 @@ class CheckoutOverViewFragment(
     }
 
 
-    private fun selectShippingProviders(
-        binding: CheckoutOverviewLayoutBinding,
-        a: Float
-    ) {
-        var alertDialog: AlertDialog = AlertDialog.Builder(context!!).create()
-        var view = LayoutInflater.from(context!!)
-            .inflate(R.layout.change_shipping_rates_layout, null, false)
-        var binding1 = ChangeShippingRatesLayoutBinding.bind(view)
-        alertDialog.setView(view)
-        shippingRatesAdapter = ShippingRatesAdapter(this, checkoutId) { clickedPos ->
-            var modelClass = shippingList[clickedPos]
-            binding.checkoutOverViewShippingCostTextView.text =
-                (modelClass.shippingPrice.toInt() + taxPrice).toString()
-            binding.checkoutOverViewTotalPriceTextView.text =
-                (a.toFloat() + modelClass.shippingPrice.toInt() + taxPrice).toString()
-        }
-        alertDialog.setButton(
-            AlertDialog.BUTTON_POSITIVE, "Continue"
-        ) { p0, p1 ->
-
-            shippingRatesAdapter!!.getNewWebAddressBasedOnShippingProvider(shippingRatesAdapter!!.currentList.find { it.isSelectedAddress }!!)
-        }
-
-        binding1.changeshippingaddressrecycler.adapter = shippingRatesAdapter
-        binding1.changeshippingaddressrecycler.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        shippingRatesAdapter!!.submitList(shippingList as MutableList<UserDetailsModelClass>)
-
-        alertDialog.show()
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

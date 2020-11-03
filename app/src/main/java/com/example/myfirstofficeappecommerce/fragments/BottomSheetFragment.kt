@@ -43,7 +43,10 @@ class BottomSheetFragment(
         recyclerView!!.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         recyclerView!!.adapter = adapter
         var addressList = ApplicationClass.addressList
-
+        if (addressList.size <= 0)
+            binding!!.chooseaddressrecyclerview.visibility = View.GONE
+        else
+            binding!!.chooseaddressrecyclerview.visibility = View.VISIBLE
         binding!!.confirmButton.setOnClickListener {
 
             finalisingFragment.displaySelectedAddressDetails(Storefront.MailingAddress().apply {

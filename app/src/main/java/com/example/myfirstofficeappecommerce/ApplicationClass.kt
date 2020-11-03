@@ -25,6 +25,7 @@ class ApplicationClass : Application() {
         var checkoutId: String = ""
         var addressList:MutableList<UserDetailsModelClass> =ArrayList()
         var defaultAdress:Storefront.MailingAddress?=null
+        var shippingratesAddressList:MutableList<UserDetailsModelClass>?=null
     }
 
 

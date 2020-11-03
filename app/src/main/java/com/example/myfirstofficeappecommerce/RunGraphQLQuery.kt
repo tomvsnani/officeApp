@@ -1,7 +1,6 @@
 package com.example.myfirstofficeappecommerce
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -20,49 +19,12 @@ import java.util.concurrent.TimeUnit
 class RunGraphQLQuery {
     companion object {
         fun getCheckoutData(mainActivity: MainActivity, signinType: String) {
+
             ApplicationClass.signInType = signinType
 
-            var checkoutLineItemInput: MutableList<Storefront.CheckoutLineItemInput>? = ArrayList()
+            val input = getCheckoutItemsFromSelectedItems()
 
-            for (i in ApplicationClass.selectedVariantList!!) {
-                checkoutLineItemInput?.add(
-                    Storefront.CheckoutLineItemInput(
-                        i.quantityOfItem,
-                        ID(i.id)
-                    )
-                )
-                i.isOrdered = true
-            }
-
-            val input = Storefront.CheckoutCreateInput()
-                .setLineItemsInput(
-                    Input.value(
-                        checkoutLineItemInput
-                    )
-                )
-
-            val query = Storefront.mutation { mutationQuery: Storefront.MutationQuery ->
-                mutationQuery
-
-                    .checkoutCreate(
-                        input
-                    ) { createPayloadQuery: Storefront.CheckoutCreatePayloadQuery ->
-                        createPayloadQuery
-                            .checkout { checkoutQuery: Storefront.CheckoutQuery ->
-                                checkoutQuery
-                                    .webUrl()
-                                    .totalTax()
-                                    .totalPrice()
-                                    .subtotalPrice()
-
-                            }
-                            .userErrors { userErrorQuery: Storefront.UserErrorQuery ->
-                                userErrorQuery
-                                    .field()
-                                    .message()
-                            }
-                    }
-            }
+            val query = checkoutCreateMutationQuery(input)
 
             CategoriesDataProvider.graphh!!.mutateGraph(query).enqueue(object :
                 GraphCall.Callback<Storefront.Mutation> {
@@ -76,42 +38,57 @@ class RunGraphQLQuery {
 
                         val checkoutId = response.data()!!.checkoutCreate.checkout.id.toString()
 
+                        when {
 
+                            shouldApplyCoupon() ->
 
-                        if (MainActivity.applyCoupon)
-                            applyDiscountQuery(checkoutId)
-                        else
-                            if (signinType == Constants.NORMAL_SIGN_IN) {
-                                if (mainActivity.getPreferences(Activity.MODE_PRIVATE)
-                                        ?.getString("token", "") != ""
-                                )
-                                    associateWithUserQuery(checkoutId, mainActivity)
-                                else
+                                applyDiscountQuery(checkoutId)
 
-
-                                    mainActivity!!.supportFragmentManager.beginTransaction().add(
-                                        R.id.container, loginFragment(
-                                            Constants.NORMAL_SIGN_IN,
-                                            fragment = CheckOutMainWrapperFragment(
-                                                checkoutId, response.data()!!.checkoutCreate
-                                                    .checkout.totalTax.toFloat()
-                                            )
-                                        )
-                                    ).addToBackStack(null).commit()
-
-                            } else {
-                                mainActivity.supportFragmentManager.beginTransaction()
-                                    .replace(
-                                        R.id.container,
-                                        CheckOutMainWrapperFragment(
-                                            checkoutId,
-                                            response.data()!!.checkoutCreate.checkout.totalTax.precision()
-                                                .toFloat()
-                                        )
-                                    ).addToBackStack(null).commit()
+                            signinType == Constants.NORMAL_SIGN_IN -> {
+                                doSignedInTask(checkoutId, response)
 
                             }
+
+                            else -> {
+                                doNotSignedInTask(checkoutId, response)
+
+                            }
+                        }
                     }
+                }
+
+                private fun doNotSignedInTask(
+                    checkoutId: String,
+                    response: GraphResponse<Storefront.Mutation>
+                ) {
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.container,
+                            CheckOutMainWrapperFragment(
+                                checkoutId,
+                                response.data()!!.checkoutCreate.checkout.totalTax.precision()
+                                    .toFloat()
+                            )
+                        ).addToBackStack(null).commit()
+                }
+
+                private fun doSignedInTask(
+                    checkoutId: String,
+                    response: GraphResponse<Storefront.Mutation>
+                ) {
+                    associateWithUserQuery(checkoutId, mainActivity)
+//                    else
+//
+//
+//                        mainActivity!!.supportFragmentManager.beginTransaction().add(
+//                            R.id.container, loginFragment(
+//                                Constants.NORMAL_SIGN_IN,
+//                                fragment = CheckOutMainWrapperFragment(
+//                                    checkoutId, response.data()!!.checkoutCreate
+//                                        .checkout.totalTax.toFloat()
+//                                )
+//                            )
+//                        ).addToBackStack(null).commit()
                 }
 
                 private fun applyDiscountQuery(checkoutId: String) {
@@ -140,7 +117,8 @@ class RunGraphQLQuery {
                                     mainActivity.supportFragmentManager.findFragmentById(R.id.container)
                                 if (f is CartFragment) {
                                     mainActivity.runOnUiThread {
-                                        mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE
+                                        mainActivity.binding!!.mainactivityprogressbar.visibility =
+                                            View.GONE
                                         Toast.makeText(
                                             mainActivity.applicationContext,
                                             "Discount Applied",
@@ -163,7 +141,8 @@ class RunGraphQLQuery {
                                 if (response.data()!!.checkoutDiscountCodeApply.userErrors.isNotEmpty())
                                     for (i in response.data()!!.checkoutDiscountCodeApply.userErrors)
                                         mainActivity.runOnUiThread {
-                                            mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE
+                                            mainActivity.binding!!.mainactivityprogressbar.visibility =
+                                                View.GONE
                                             Toast.makeText(
                                                 mainActivity.applicationContext,
                                                 i.message,
@@ -180,11 +159,61 @@ class RunGraphQLQuery {
                     MainActivity.applyCoupon = false
                 }
 
+                private fun shouldApplyCoupon() = MainActivity.applyCoupon
+
                 override fun onFailure(error: GraphError) {
 
                 }
             })
 
+        }
+
+        private fun checkoutCreateMutationQuery(input: Storefront.CheckoutCreateInput?): Storefront.MutationQuery? {
+            val query = Storefront.mutation { mutationQuery: Storefront.MutationQuery ->
+                mutationQuery
+
+                    .checkoutCreate(
+                        input
+                    ) { createPayloadQuery: Storefront.CheckoutCreatePayloadQuery ->
+                        createPayloadQuery
+                            .checkout { checkoutQuery: Storefront.CheckoutQuery ->
+                                checkoutQuery
+                                    .webUrl()
+                                    .totalTax()
+                                    .totalPrice()
+                                    .subtotalPrice()
+
+                            }
+                            .userErrors { userErrorQuery: Storefront.UserErrorQuery ->
+                                userErrorQuery
+                                    .field()
+                                    .message()
+                            }
+                    }
+            }
+            return query
+        }
+
+        private fun getCheckoutItemsFromSelectedItems(): Storefront.CheckoutCreateInput? {
+            var checkoutLineItemInput: MutableList<Storefront.CheckoutLineItemInput>? = ArrayList()
+
+            for (i in ApplicationClass.selectedVariantList!!) {
+                checkoutLineItemInput?.add(
+                    Storefront.CheckoutLineItemInput(
+                        i.quantityOfItem,
+                        ID(i.id)
+                    )
+                )
+                i.isOrdered = true
+            }
+
+            val input = Storefront.CheckoutCreateInput()
+                .setLineItemsInput(
+                    Input.value(
+                        checkoutLineItemInput
+                    )
+                )
+            return input
         }
 
 
@@ -211,11 +240,16 @@ class RunGraphQLQuery {
                 .enqueue(object :
                     GraphCall.Callback<Storefront.Mutation> {
                     override fun onResponse(response: GraphResponse<Storefront.Mutation>) {
-                        mainActivity.runOnUiThread {    mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE }
+                        mainActivity.runOnUiThread {
+                            mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE
+                        }
                         val checkoutIdd =
                             response.data()!!.checkoutCustomerAssociate.checkout.id.toString()
                         val checkoutWebUrl =
                             response.data()!!.checkoutCustomerAssociate.checkout.webUrl
+
+                        ApplicationClass.weburl=checkoutWebUrl
+
                         mainActivity.supportFragmentManager.beginTransaction()
                             .replace(
                                 R.id.container,
