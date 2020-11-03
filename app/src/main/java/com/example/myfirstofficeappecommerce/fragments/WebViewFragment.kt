@@ -47,7 +47,7 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
                     binding!!.stepinclude.checkoutTextView3.apply {
                         setTextColor(Color.WHITE)
                         setBackground(resources.getDrawable(R.drawable.circle_background_drawable_highlighted))
-                        var builder = AlertDialog.Builder(context)
+                        var builder = AlertDialog.Builder(context!!)
 
                         var alert = builder.create()
                         alert.setMessage("Your order has been placed successfully")
@@ -87,8 +87,11 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
         toolbar = binding!!.webviewToolbar
 
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
+        if (parentFragment!!.childFragmentManager.backStackEntryCount == 0) {
+            (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
+        } else
+            (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         (activity as AppCompatActivity).supportActionBar?.title =
             if (type == "checkout") "checkout" else ""
@@ -106,9 +109,16 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
 
                         webview!!.goBack()
                     } else {
-                        isEnabled = false
-                        activity?.onBackPressed()
+                        if (parentFragment!!.childFragmentManager.backStackEntryCount > 1) {
 
+                                parentFragment!!.childFragmentManager.popBackStackImmediate()
+
+                                isEnabled = false
+                                activity?.onBackPressed()
+
+                        }
+                        else
+                            isEnabled=false
                     }
                 }
 
@@ -126,6 +136,9 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
+//            if(parentFragment!!.childFragmentManager.backStackEntryCount>=0)
+//                parentFragment!!.childFragmentManager.popBackStackImmediate()
+//            else
             activity!!.onBackPressed()
         }
         return super.onOptionsItemSelected(item)

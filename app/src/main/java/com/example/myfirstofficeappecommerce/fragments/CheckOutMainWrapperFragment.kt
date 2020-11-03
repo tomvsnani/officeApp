@@ -21,8 +21,10 @@ class CheckOutMainWrapperFragment(var checkoutid: String, var totaltax: Float) :
         childFragmentManager.beginTransaction()
             .replace(R.id.container1, FinalisingOrderFragment(checkoutid, totaltax))
             .addToBackStack(null).commit()
+
         activity!!.onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                Log.d("wrapperdischargercalled","yes")
 
                 if (this@CheckOutMainWrapperFragment.isAdded && childFragmentManager.backStackEntryCount > 1) {
 

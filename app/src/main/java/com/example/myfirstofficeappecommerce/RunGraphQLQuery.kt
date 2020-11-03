@@ -3,6 +3,7 @@ package com.example.myfirstofficeappecommerce
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -88,12 +89,15 @@ class RunGraphQLQuery {
                                 else
 
 
-                                          mainActivity!!.supportFragmentManager.beginTransaction().add(R.id.container, loginFragment(
-                                              Constants.NORMAL_SIGN_IN,
-                                              fragment = CheckOutMainWrapperFragment(
-                                                  checkoutId, response.data()!!.checkoutCreate
-                                                      .checkout.totalTax.toFloat()
-                                              ))).addToBackStack(null).commit()
+                                    mainActivity!!.supportFragmentManager.beginTransaction().add(
+                                        R.id.container, loginFragment(
+                                            Constants.NORMAL_SIGN_IN,
+                                            fragment = CheckOutMainWrapperFragment(
+                                                checkoutId, response.data()!!.checkoutCreate
+                                                    .checkout.totalTax.toFloat()
+                                            )
+                                        )
+                                    ).addToBackStack(null).commit()
 
                             } else {
                                 mainActivity.supportFragmentManager.beginTransaction()
@@ -136,6 +140,7 @@ class RunGraphQLQuery {
                                     mainActivity.supportFragmentManager.findFragmentById(R.id.container)
                                 if (f is CartFragment) {
                                     mainActivity.runOnUiThread {
+                                        mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE
                                         Toast.makeText(
                                             mainActivity.applicationContext,
                                             "Discount Applied",
@@ -158,6 +163,7 @@ class RunGraphQLQuery {
                                 if (response.data()!!.checkoutDiscountCodeApply.userErrors.isNotEmpty())
                                     for (i in response.data()!!.checkoutDiscountCodeApply.userErrors)
                                         mainActivity.runOnUiThread {
+                                            mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE
                                             Toast.makeText(
                                                 mainActivity.applicationContext,
                                                 i.message,
@@ -168,7 +174,7 @@ class RunGraphQLQuery {
                         }
 
                         override fun onFailure(error: GraphError) {
-
+                            mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE
                         }
                     })
                     MainActivity.applyCoupon = false
@@ -205,6 +211,7 @@ class RunGraphQLQuery {
                 .enqueue(object :
                     GraphCall.Callback<Storefront.Mutation> {
                     override fun onResponse(response: GraphResponse<Storefront.Mutation>) {
+                        mainActivity.runOnUiThread {    mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE }
                         val checkoutIdd =
                             response.data()!!.checkoutCustomerAssociate.checkout.id.toString()
                         val checkoutWebUrl =

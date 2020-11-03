@@ -56,7 +56,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
         if (ApplicationClass.signInType == Constants.NORMAL_SIGN_IN) {
 
-            //retrieve_all_the_addresses()
+            retrieve_all_the_addresses()
             binding!!.addressconstraint.visibility = View.VISIBLE
             if(ApplicationClass.defaultAdress!=null)
             displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
@@ -235,9 +235,9 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
 
 
-                            activity!!.runOnUiThread {
+                            activity?.runOnUiThread {
                                 parentFragment!!.childFragmentManager.beginTransaction()
-                                    .replace(
+                                   ?.replace(
                                         R.id.container1,
                                         CheckoutOverViewFragment(
                                             webUrl,

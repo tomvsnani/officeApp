@@ -1,48 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:gravity="center_horizontal"
-    >
+    android:gravity="center_horizontal">
+
     <TextView
+        android:id="@+id/checkoutTextView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkoutTextView1"
         android:background="@drawable/circle_background_drawable_highlighted"
         android:gravity="center"
-        android:textColor="#fff"
         android:text="1"
-        />
+        android:textColor="#fff"
+        app:layout_constraintEnd_toStartOf="@+id/checkoutview1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
-        android:layout_width="100dp"
-        android:layout_height="1dp"
         android:id="@+id/checkoutview1"
-        android:layout_marginTop="8dp"
-        android:background="#a4a4a4"/>
+        android:layout_width="114dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/red"
+        app:layout_constraintEnd_toStartOf="@+id/checkoutTextView2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/checkoutTextView1"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
+        android:id="@+id/checkoutTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkoutTextView2"
-
-        android:background="@drawable/circle_background_drawable"
+        android:background="@drawable/circle_background_drawable_highlighted"
         android:gravity="center"
         android:text="2"
-        />
+        android:textColor="#fff"
+        app:layout_constraintEnd_toStartOf="@+id/checkoutview2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/checkoutview1"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
-        android:layout_width="100dp"
-        android:layout_height="1dp"
         android:id="@+id/checkoutview2"
-        android:layout_marginTop="8dp"
-        android:background="#a4a4a4"/>
+        android:layout_width="115dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/red"
+        app:layout_constraintEnd_toStartOf="@+id/checkoutTextView3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/checkoutTextView2"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
+        android:id="@+id/checkoutTextView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkoutTextView3"
         android:background="@drawable/circle_background_drawable"
         android:gravity="center"
         android:text="3"
-        />
+        android:textColor="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/checkoutview2" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

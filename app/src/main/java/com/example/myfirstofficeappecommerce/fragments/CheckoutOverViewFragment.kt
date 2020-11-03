@@ -45,29 +45,15 @@ class CheckoutOverViewFragment(
         var a = 0f;
         for (i in ApplicationClass.selectedVariantList!!)
             a += i.price!!
+        binding!!.backbuttonimage.setOnClickListener { parentFragment!!.childFragmentManager.popBackStackImmediate() }
 
-        binding.otherpaymenttextview.setOnClickListener {
-            if (ApplicationClass.weburl != null && ApplicationClass.weburl!!.isNotBlank() && ApplicationClass!!.weburl!!.isNotEmpty())
-                openWebView()
-            else {
-                if (shippingList.isNotEmpty())
-                    getNewWebAddressBasedOnShippingProvider(shippingList[0])
-
-
-            }
-        }
-
-
-
-        binding.creditcardpaymenttextview.setOnClickListener {
-
+        binding!!.continuetopaymentbutton.setOnClickListener {
             parentFragment!!.childFragmentManager.beginTransaction()
-                .replace(R.id.container1, CreditcardDetailsFragment())
-                .addToBackStack(null)
-                .commit()
-
-
+                .replace(R.id.container1, PaymentFragment(shippingList, checkoutId))
+                .addToBackStack(null).commit()
         }
+
+
 
 
 
@@ -89,14 +75,14 @@ class CheckoutOverViewFragment(
         binding.chooseAddressPhoneNumber.text =
             userDetailsModelClass.phoneNumber
         binding.chooseAddressaddressTextView.text =
-            userDetailsModelClass.hnum + " , " + userDetailsModelClass.city + " - " + userDetailsModelClass.pinCode+ " \n \n"  +userDetailsModelClass.state  + " , " + userDetailsModelClass.country
+            userDetailsModelClass.hnum + " , " + userDetailsModelClass.city + " - " + userDetailsModelClass.pinCode + " \n \n" + userDetailsModelClass.state + " , " + userDetailsModelClass.country
 
         binding.checkoutoverviewrecyclerview.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         adapter = CheckoutOverViewItemsAdapter(context!!)
 
         binding.checkoutoverviewrecyclerview.adapter = adapter
-      //  binding.checkoutoverviewrecyclerview.addItemDecoration(DividerItemDecoration(context!!,RecyclerView.VERTICAL))
+        //  binding.checkoutoverviewrecyclerview.addItemDecoration(DividerItemDecoration(context!!,RecyclerView.VERTICAL))
         adapter!!.submitList(list)
 
 
@@ -108,18 +94,6 @@ class CheckoutOverViewFragment(
         return v
     }
 
-    private fun openWebView() {
-        parentFragment!!.childFragmentManager.beginTransaction()
-            .replace(
-                R.id.container1,
-                WebViewFragment(
-                    ApplicationClass.weburl!!,
-                    "checkout"
-                )
-            )
-            .addToBackStack(null)
-            .commit()
-    }
 
     private fun selectShippingProviders(
         binding: CheckoutOverviewLayoutBinding,
@@ -152,41 +126,6 @@ class CheckoutOverViewFragment(
         alertDialog.show()
     }
 
-
-    fun getNewWebAddressBasedOnShippingProvider(modelclass: UserDetailsModelClass) {
-        val query1 = Storefront.mutation { m: Storefront.MutationQuery ->
-            m.checkoutShippingLineUpdate(
-                ID(checkoutId), modelclass.subTitle,
-                Storefront.CheckoutShippingLineUpdatePayloadQueryDefinition { update: Storefront.CheckoutShippingLineUpdatePayloadQuery ->
-
-                    update.userErrors { errors: Storefront.UserErrorQuery ->
-                         errors.field().message()
-                    }.checkout { _queryBuilder ->
-                        _queryBuilder.webUrl()
-                    }
-                }
-            )
-        }
-
-        var call1 =
-            CategoriesDataProvider.graphh!!.mutateGraph(query1)
-        call1.enqueue(object : GraphCall.Callback<Storefront.Mutation> {
-
-
-            override fun onResponse(response: GraphResponse<Storefront.Mutation>) {
-
-                ApplicationClass.weburl =
-                    response.data()!!.checkoutShippingLineUpdate.checkout.webUrl
-                openWebView()
-
-            }
-
-            override fun onFailure(error: GraphError) {
-
-            }
-
-        })
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = TransitionInflater.from(requireContext())

@@ -91,6 +91,8 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
             } else {
+                (activity as MainActivity).binding!!.mainactivityprogressbar.visibility=View.VISIBLE
+                proceedTextViewCart!!.isClickable=false
                 (activity as MainActivity).createCheckout(Constants.NORMAL_SIGN_IN)
             }
 
