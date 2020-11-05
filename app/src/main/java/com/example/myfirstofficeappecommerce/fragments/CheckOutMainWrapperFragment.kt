@@ -22,7 +22,7 @@ class CheckOutMainWrapperFragment(var checkoutid: String, var totaltax: Float) :
             .replace(R.id.container1, FinalisingOrderFragment(checkoutid, totaltax))
             .addToBackStack(null).commit()
 
-        activity!!.onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+        activity!!.onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 Log.d("wrapperdischargercalled","yes")
 
@@ -45,8 +45,8 @@ class CheckOutMainWrapperFragment(var checkoutid: String, var totaltax: Float) :
     fun clearAllFragmets() {
         childFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         activity!!.supportFragmentManager.popBackStackImmediate(
-            null,
-            FragmentManager.POP_BACK_STACK_INCLUSIVE
+            "home",
+          0
         )
     }
 

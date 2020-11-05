@@ -10,18 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/checkoutOverViewItemImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="16dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imagecardwrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/download"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/checkoutOverViewitemNameTextView">
+
+            <ImageView
+                android:id="@+id/checkoutOverViewItemImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+
+                android:scaleType="fitXY"
+                android:src="@drawable/download" />
+        </androidx.cardview.widget.CardView>
+
+
 
         <TextView
             android:id="@+id/checkoutOverViewitemNameTextView"
@@ -34,7 +41,7 @@
             android:textColor="#6b6b6b"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/checkoutOverViewItemImageView"
+            app:layout_constraintEnd_toStartOf="@+id/imagecardwrap"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +68,7 @@
             android:textColor="@color/red"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/checkoutOverViewItemImageView"
+            app:layout_constraintEnd_toStartOf="@+id/imagecardwrap"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkoutOverViewQunatityTextView" />
 

@@ -1,33 +1,32 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.transition.TransitionInflater
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.databinding.FragmentProfile2Binding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.shopify.buy3.GraphCall
 import com.shopify.buy3.GraphError
 import com.shopify.buy3.GraphResponse
 import com.shopify.buy3.Storefront
 import com.shopify.buy3.Storefront.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class loginFragment(
@@ -53,12 +52,36 @@ class loginFragment(
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_profile2, container, false)
+
+        setUpViews(view)
+
+        setUpToolbar()
+
+        toggleViewsVisibilityBasedOnLogIn()
+
+        setUpClickListeners()
+
+        return view
+    }
+
+
+    private fun toggleViewsVisibilityBasedOnLogIn() {
+        if (signInType == Constants.GUEST_SIGN_IN)
+            binding!!.guestsigninTextView.visibility = View.VISIBLE
+        else
+            binding!!.guestsigninTextView.visibility = View.GONE
+    }
+
+    private fun setUpToolbar() {
+        (activity as AppCompatActivity).setSupportActionBar(binding!!.loginToolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun setUpViews(view: View) {
         binding = FragmentProfile2Binding.bind(view)
         (activity as MainActivity).lockDrawer()
         setHasOptionsMenu(true)
-        //isCancelable=false
-//        if((activity!!.application as ApplicationClass).getCustomerToken(activity = activity as MainActivity).isNotEmpty())
-//            activity!!.supportFragmentManager.popBackStackImmediate("login",FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
         nameInputTxetView = binding!!.nameEditText
         phnInputTxetView = binding!!.PhonenumberEditText
         emailInputTxetView = binding!!.emailEditText
@@ -66,64 +89,6 @@ class loginFragment(
         createAccountButton = binding!!.registrationSubmitButton
         signInButton = binding!!.signInButton
         progressbar = binding!!.profileProgressBar
-
-        (activity as AppCompatActivity).setSupportActionBar(binding!!.loginToolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        if (signInType == Constants.GUEST_SIGN_IN)
-            binding!!.guestsigninTextView.visibility = View.VISIBLE
-        else
-            binding!!.guestsigninTextView.visibility = View.GONE
-
-        binding!!.registrationSubmitButton2.setOnClickListener {
-
-            it.visibility = View.GONE
-
-        }
-
-        binding!!.guestsigninTextView.setOnClickListener {
-
-            (activity as MainActivity).createCheckout(Constants.GUEST_SIGN_IN)
-        }
-
-
-
-        signInButton!!.setOnClickListener {
-
-            if (signInButton!!.text.toString().toLowerCase().contains("create")) {
-
-                binding!!.phnEditTextWrapper.visibility = View.VISIBLE
-                binding!!.nameEditTextWrapper.visibility = View.VISIBLE
-                createAccountButton!!.visibility = View.VISIBLE
-                binding!!.textView6.visibility = View.VISIBLE
-                binding!!.registrationSubmitButton2.visibility = View.GONE
-                binding!!.view5.visibility = View.VISIBLE
-                signInButton!!.text = "log in"
-                createAccountButton!!.text = "Create Account"
-            } else {
-                signInButton!!.text = "Create Account"
-                createAccountButton!!.text = "sign in"
-                binding!!.phnEditTextWrapper.visibility = View.GONE
-                binding!!.nameEditTextWrapper.visibility = View.GONE
-
-                binding!!.textView6.visibility = View.GONE
-
-
-            }
-
-        }
-        createAccountButton!!.setOnClickListener {
-
-            if (createAccountButton!!.text.toString().toLowerCase().contains("sign")) {
-
-                startSignInFlow()
-            } else {
-                startRegistrationFlow()
-
-            }
-        }
-
-        return view
     }
 
     private fun startRegistrationFlow() {
@@ -249,7 +214,7 @@ class loginFragment(
                         progressbar!!.visibility = View.GONE
                         Toast.makeText(
                             context,
-                            "Could not log you in please check your details\n " + response.errors(),
+                            "Could not create your account . please check your details\n " + response.errors(),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -351,7 +316,7 @@ class loginFragment(
 
             var sharedPref = activity!!.getPreferences(Activity.MODE_PRIVATE)
             sharedPref.edit().putString(
-                "token",
+                Constants.LOGGED_IN_TOKEN,
                 response.data()!!.customerAccessTokenCreate.customerAccessToken.accessToken
             ).apply()
 
@@ -373,24 +338,24 @@ class loginFragment(
     }
 
     private fun openCorrespondingFragment() {
-        //dismiss()
+
 
         when (fragment) {
 
-            is MainFragment ->    activity!!.runOnUiThread {
+            is MainFragment -> activity!!.runOnUiThread {
                 (activity as MainActivity).setSupportActionBar((fragment!! as MainFragment).toolbar)
                 activity!!.supportFragmentManager.popBackStackImmediate()
 
 
             }
-            is OrdersFragment ->{
+            is OrdersFragment -> {
                 activity!!.runOnUiThread {
                     (activity as MainActivity).setSupportActionBar((fragment!! as OrdersFragment).toolbar)
                     activity!!.supportFragmentManager.popBackStackImmediate()
 
 
-        }
-    }
+                }
+            }
             is WishListFragment -> {
                 activity!!.runOnUiThread {
                     (activity as MainActivity).setSupportActionBar((fragment!! as WishListFragment).toolbar)
@@ -399,14 +364,21 @@ class loginFragment(
                 }
             }
             is CartFragment -> {
-                activity!!.runOnUiThread {
-                    activity!!.supportFragmentManager.popBackStackImmediate()
 
-                }
+                  CoroutineScope(Dispatchers.Default).launch {
+                      (activity as MainActivity).createCheckout(Constants.NORMAL_SIGN_IN)
+                  }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        activity!!.supportFragmentManager.popBackStackImmediate()
+                    }
+
+
+
             }
 
 
-            is EditUserDetailsFragment -> { (activity as MainActivity).setSupportActionBar((fragment!! as EditUserDetailsFragment).binding!!.editprofileToolbar)
+            is EditUserDetailsFragment -> {
+                (activity as MainActivity).setSupportActionBar((fragment!! as EditUserDetailsFragment).binding!!.editprofileToolbar)
                 activity!!.runOnUiThread {
                     activity!!.supportFragmentManager.popBackStackImmediate()
 
@@ -414,23 +386,13 @@ class loginFragment(
             }
 
             is MyAccountFragment -> {
-                (activity as MainActivity).setSupportActionBar((fragment!! as  MyAccountFragment).toolbar)
+                (activity as MainActivity).setSupportActionBar((fragment!! as MyAccountFragment).toolbar)
                 activity!!.runOnUiThread {
                     activity!!.supportFragmentManager.popBackStackImmediate()
 
                 }
 
-                //  activity !!. supportFragmentManager .popBackStackImmediate()
-                //beginTransaction ()
-//               // .addToBackStack("login")
-////                .replace(
-////                    R.id.container,
-////                    fragment!!
-////                )
 
-
-//
-                //  .commit()
             }
 
 
@@ -449,31 +411,34 @@ class loginFragment(
         binding!!.root?.focusedChild?.clearFocus()
     }
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        val inflater = TransitionInflater.from(requireContext())
-//        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
-//        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
-//
-//        super.onCreate(savedInstanceState)
-//    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val inflater = android.transition.TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
+        exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
+
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == android.R.id.home) {
-            Log.d("backcalled", "loginbackcalled")
-//            if(isAdded)
-//                activity!!.supportFragmentManager.beginTransaction().remove(this).show(fragment!!).commit()
-            activity!!.supportFragmentManager.popBackStack(
-                activity!!.supportFragmentManager.getBackStackEntryAt(
-                    activity!!.supportFragmentManager.backStackEntryCount - 2
-                ).id, FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
 
-            //dismiss()
+
+            goBackToOriginalFragment()
+
+
 
             return true
         }
         return true
+    }
+
+    private fun goBackToOriginalFragment() {
+        activity!!.supportFragmentManager.popBackStack(
+            activity!!.supportFragmentManager.getBackStackEntryAt(
+                activity!!.supportFragmentManager.backStackEntryCount - 2
+            ).id, FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -483,21 +448,64 @@ class loginFragment(
         }
         super.onPrepareOptionsMenu(menu)
     }
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-//        bottomSheetDialog.setOnShowListener { dia ->
-//            val dialog = dia as BottomSheetDialog
-//            val bottomSheet =
-//
-//                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).state =
-//                BottomSheetBehavior.STATE_EXPANDED
-//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).skipCollapsed = false
-//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).isHideable = true
-//            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).peekHeight = 0
-//            bottomSheet.layoutParams.height=resources.displayMetrics.heightPixels
-//        }
-//        return bottomSheetDialog
-//    }
+
+    private fun setUpClickListeners() {
+
+        activity!!.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                goBackToOriginalFragment()
+                isEnabled = false
+            }
+
+        })
+
+        binding!!.registrationSubmitButton2.setOnClickListener {
+
+            it.visibility = View.GONE
+
+        }
+
+        binding!!.guestsigninTextView.setOnClickListener {
+
+            (activity as MainActivity).createCheckout(Constants.GUEST_SIGN_IN)
+        }
+
+
+
+        signInButton!!.setOnClickListener {
+
+            if (signInButton!!.text.toString().toLowerCase().contains("create")) {
+
+                binding!!.phnEditTextWrapper.visibility = View.VISIBLE
+                binding!!.nameEditTextWrapper.visibility = View.VISIBLE
+                createAccountButton!!.visibility = View.VISIBLE
+                binding!!.textView6.visibility = View.VISIBLE
+                binding!!.registrationSubmitButton2.visibility = View.GONE
+                binding!!.view5.visibility = View.VISIBLE
+                signInButton!!.text = "log in"
+                createAccountButton!!.text = "Create Account"
+            } else {
+                signInButton!!.text = "Create Account"
+                createAccountButton!!.text = "sign in"
+                binding!!.phnEditTextWrapper.visibility = View.GONE
+                binding!!.nameEditTextWrapper.visibility = View.GONE
+
+                binding!!.textView6.visibility = View.GONE
+
+
+            }
+
+        }
+        createAccountButton!!.setOnClickListener {
+
+            if (createAccountButton!!.text.toString().toLowerCase().contains("sign")) {
+
+                startSignInFlow()
+            } else {
+                startRegistrationFlow()
+
+            }
+        }
+    }
 
 }

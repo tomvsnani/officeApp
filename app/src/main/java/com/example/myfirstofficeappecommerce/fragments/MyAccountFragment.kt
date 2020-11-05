@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Constants
-import com.example.myfirstofficeappecommerce.EditUserDetailsFragment
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentMyAccountBinding
 

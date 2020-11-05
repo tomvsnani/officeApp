@@ -29,7 +29,7 @@ class HorizontalImageScrollFragment(
         var view: View? = null
         //var horizontalScrollBinding=HorizontalScrollBanner2Binding.bind()
         if (type == Constants.HORIZONTAL_SCROLL_TYPE_BANNER1 || type == Constants.HORIZONTAL_SCROLL_TYPE_BANNER2) {
-            view = inflater.inflate(R.layout.horizontal_scroll_banner1, container, false)
+            view = inflater.inflate(R.layout.horizontal_scroll_banner1, container, true)
 
             imageView = view.findViewById(R.id.scrollableimageviewviewpagerbanner1)
             imageView!!.layoutParams.height =
@@ -38,7 +38,7 @@ class HorizontalImageScrollFragment(
 
         } else if (type == Constants.HORIZONTAL_SCROLL_PRODUCT_FRAG) {
 
-            view = inflater.inflate(R.layout.product_fragment_imagescroll_layout, container, false)
+            view = inflater.inflate(R.layout.product_fragment_imagescroll_layout, container, true)
 
             Glide.with(requireActivity()).load(listDataForHorizontalScroll.imageUrl)
                 .into(

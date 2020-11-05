@@ -25,8 +25,7 @@ import com.shopify.graphql.support.ID
 class PaymentFragment(var shippingList: List<UserDetailsModelClass>, var checkoutId: String) :
     Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     var binding: FragmentPaymentBinding? = null
 
 
@@ -41,14 +40,10 @@ class PaymentFragment(var shippingList: List<UserDetailsModelClass>, var checkou
 
         binding!!.backbuttonimage.setOnClickListener { parentFragment!!.childFragmentManager.popBackStackImmediate() }
         binding!!.otherpaymenttextview.setOnClickListener {
-            if (ApplicationClass.weburl != null && ApplicationClass.weburl!!.isNotBlank() && ApplicationClass!!.weburl!!.isNotEmpty())
-                openWebView()
-            else {
+
                 if (shippingList.isNotEmpty())
                     getNewWebAddressBasedOnShippingProvider(shippingList[0])
 
-
-            }
         }
 
 

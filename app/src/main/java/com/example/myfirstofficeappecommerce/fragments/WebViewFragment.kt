@@ -34,6 +34,12 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
     ): View? {
         binding = FragmentWebViewBinding.inflate(layoutInflater)
         webview = binding!!.webviewfragWebview
+
+        if (parentFragment != null)
+            binding!!.stepinclude.include4.visibility = View.VISIBLE
+        else
+            binding!!.stepinclude.include4.visibility = View.GONE
+
         webview!!.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -44,38 +50,32 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
                 binding!!.webviewprogressbar.visibility = View.GONE
 
                 if (url!!.contains("thank_you")) {
-                    binding!!.stepinclude.checkoutTextView3.apply {
-                        setTextColor(Color.WHITE)
-                        setBackground(resources.getDrawable(R.drawable.circle_background_drawable_highlighted))
-                        var builder = AlertDialog.Builder(context!!)
+                    binding!!.stepinclude.include4.statusView.currentCount = 3
+                    var builder = AlertDialog.Builder(context!!)
 
-                        var alert = builder.create()
-                        alert.setMessage("Your order has been placed successfully")
-                        alert.setButton(
-                            AlertDialog.BUTTON_POSITIVE, ""
-                        ) { p0, p1 -> }
-                        alert.show()
-                        Thread.sleep(2000)
-                        webview!!.clearHistory()
-                        webview = null
-                        (parentFragment as CheckOutMainWrapperFragment).clearAllFragmets()
-//                        parentFragment!!.childFragmentManager.popBackStackImmediate(
-//                            null,
-//                            FragmentManager.POP_BACK_STACK_INCLUSIVE
-//                        )
+                    var alert = builder.create()
+                    alert.setMessage("Your order has been placed successfully")
+                    alert.setButton(
+                        AlertDialog.BUTTON_POSITIVE, ""
+                    ) { p0, p1 -> }
+                    alert.show()
+                    Thread.sleep(2000)
+                    webview!!.clearHistory()
+                    webview = null
+                    (parentFragment as CheckOutMainWrapperFragment).clearAllFragmets()
+//
 
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (ApplicationClass.selectedVariantList
+                            !!.find { it.isfav } != null
+                        )
+                            MyDatabase.getDbInstance(context!!).dao()
+                                .delete(
+                                    ApplicationClass.selectedVariantList
+                                    !!.find { it.isfav }!!
+                                )
+                        ApplicationClass.selectedVariantList!!.clear()
 
-                        CoroutineScope(Dispatchers.IO).launch {
-                            if (ApplicationClass.selectedVariantList
-                                !!.find { it.isfav } != null
-                            )
-                                MyDatabase.getDbInstance(context!!).dao()
-                                    .delete(
-                                        ApplicationClass.selectedVariantList
-                                        !!.find { it.isfav }!!
-                                    )
-                            ApplicationClass.selectedVariantList!!.clear()
-                        }
                     }
                 }
                 super.onPageFinished(view, url)
@@ -87,7 +87,7 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
         toolbar = binding!!.webviewToolbar
 
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        if (parentFragment!!.childFragmentManager.backStackEntryCount == 0) {
+        if (parentFragment != null && parentFragment!!.childFragmentManager.backStackEntryCount == 0) {
             (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
             (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_keyboard_arrow_left_24)
         } else
@@ -101,28 +101,28 @@ class WebViewFragment(var link: String, var type: String) : Fragment() {
         webview!!.settings.loadWithOverviewMode = true;
 
         if (activity != null)
-            activity!!.onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
+            activity!!.onBackPressedDispatcher.addCallback(this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
 
-
-                    if (webview != null && webview!!.canGoBack()) {
-
-                        webview!!.goBack()
-                    } else {
-                        if (parentFragment!!.childFragmentManager.backStackEntryCount > 1) {
+                        if (webview != null && webview!!.canGoBack()) {
+                            webview!!.goBack()
+                        } else {
+                            if (parentFragment != null && parentFragment!!.childFragmentManager.backStackEntryCount > 1) {
 
                                 parentFragment!!.childFragmentManager.popBackStackImmediate()
 
                                 isEnabled = false
                                 activity?.onBackPressed()
 
+                            } else {
+                                isEnabled = false
+                                activity?.onBackPressed()
+                            }
                         }
-                        else
-                            isEnabled=false
                     }
-                }
 
-            })
+                })
 
         return binding!!.root
     }

@@ -79,7 +79,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
                 ) { customer: CustomerQuery ->
                     customer
                         .orders(
-                            { arg: OrdersArguments -> arg.first(10) }
+                            { arg: OrdersArguments -> arg.first(100) }
                         ) { connection: OrderConnectionQuery ->
                             connection
                                 .edges { edge: OrderEdgeQuery ->
@@ -95,7 +95,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
                                                 }
                                                 .lineItems({ args: OrderQuery.LineItemsArguments? ->
                                                     args!!.first(
-                                                        10
+                                                        100
                                                     )
                                                 }, { _queryBuilder ->
                                                     _queryBuilder.edges { _queryBuilder ->

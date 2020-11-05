@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
+import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentEditAddressBinding
@@ -26,7 +27,10 @@ import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
 
 
-class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) :
+class EditAddressFragment(
+    var userDetailsModelClass: UserDetailsModelClass,
+    var fragment: BottomSheetFragment
+) :
     BottomSheetDialogFragment() {
 
     var newAddressLayoutBinding: FragmentEditAddressBinding? = null
@@ -39,11 +43,117 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) :
     ): View? {
         var v = inflater.inflate(R.layout.fragment_edit_address, container, false);
         newAddressLayoutBinding = FragmentEditAddressBinding.bind(v)
+
         (activity as MainActivity).lockDrawer()
+
         setHasOptionsMenu(true)
 
+        setUserDataToViews()
+
+        newAddressLayoutBinding!!.addCardButton.setOnClickListener {
+
+            changeAddress()
+        }
+
+        return v
+    }
+
+    private fun changeAddress() {
+        if (isUserEnteredRequiedData()
+        ) {
+            newAddressLayoutBinding!!.editaddressprogressbar.visibility = View.VISIBLE
+            val input = getMainAddressInput()
+
+            val query = customerAddressUpdateQuery(input)
+
+            var call =
+                CategoriesDataProvider.graphh!!.mutateGraph(query)
+
+            call.enqueue(object : GraphCall.Callback<Mutation> {
+
+                override fun onResponse(response: GraphResponse<Mutation>) {
+                    Log.d("addressup", response.errors().toString())
+
+                    activity!!.runOnUiThread {
+                        newAddressLayoutBinding!!.editaddressprogressbar.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Address updated",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        for (i in parentFragment!!.childFragmentManager.fragments) {
+
+                            if (i is FinalisingOrderFragment)
+                                (i as FinalisingOrderFragment).apply {
+                                    retrieve_all_the_addresses()
+
+                                }
+                            try {
+                                fragment.dismiss()
+                                dismiss()
+                            } catch (e: Exception) {
+                            }
 
 
+                        }
+                    }
+                }
+
+
+                override fun onFailure(error: GraphError) {
+                    activity!!.runOnUiThread {
+                        newAddressLayoutBinding!!.editaddressprogressbar.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Address not updated",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+            })
+        } else Toast.makeText(context, "Please enter all details", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun customerAddressUpdateQuery(input: MailingAddressInput?): MutationQuery? {
+        return mutation { mutationQuery: MutationQuery ->
+            mutationQuery
+                .customerAddressUpdate(
+                    activity!!.getPreferences(Activity.MODE_PRIVATE)
+                        .getString("token", ""), ID(userDetailsModelClass.id), input
+                ) { _queryBuilder ->
+                    _queryBuilder.customerAddress { _queryBuilder ->
+
+                    }
+                        .userErrors { _queryBuilder -> _queryBuilder.field().message() }
+                }
+
+        }
+    }
+
+    private fun getMainAddressInput(): MailingAddressInput? {
+        return MailingAddressInput()
+            .setAddress1(newAddressLayoutBinding!!.cityEditText.text.toString())
+            .setCity(newAddressLayoutBinding!!.cityEditText.text.toString())
+            .setFirstName(newAddressLayoutBinding!!.nameEditText.text.toString())
+            .setPhone(newAddressLayoutBinding!!.PhonenumberEditText.text.toString())
+            .setProvince(newAddressLayoutBinding!!.provinceEditText.text.toString())
+            .setZip(newAddressLayoutBinding!!.zipEditText.text.toString())
+            .setLastName(newAddressLayoutBinding!!.lastnameEditText.text.toString())
+            .setCountry(newAddressLayoutBinding!!.countryEditText.text.toString())
+    }
+
+    private fun isUserEnteredRequiedData(): Boolean {
+        return newAddressLayoutBinding!!.cityEditText.text.toString().isNotBlank() &&
+                newAddressLayoutBinding!!.cityEditText.text.toString().isNotBlank() &&
+                newAddressLayoutBinding!!.nameEditText.text.toString().isNotBlank() &&
+                newAddressLayoutBinding!!.provinceEditText.text.toString().isNotBlank() &&
+                newAddressLayoutBinding!!.zipEditText.text.toString().isNotBlank() &&
+                newAddressLayoutBinding!!.lastnameEditText.text.toString().isNotBlank() &&
+                newAddressLayoutBinding!!.countryEditText.text.toString().isNotBlank()
+    }
+
+    private fun setUserDataToViews() {
         newAddressLayoutBinding!!.cityEditText.setText(userDetailsModelClass.city)
 
         newAddressLayoutBinding!!.nameEditText.setText(userDetailsModelClass.title)
@@ -52,81 +162,7 @@ class EditAddressFragment(var userDetailsModelClass: UserDetailsModelClass) :
         newAddressLayoutBinding!!.lastnameEditText.setText(userDetailsModelClass.subTitle)
         newAddressLayoutBinding!!.countryEditText.setText(userDetailsModelClass.country)
         newAddressLayoutBinding!!.emailEditText.setText(userDetailsModelClass.email)
-
-        newAddressLayoutBinding!!.addCardButton.setOnClickListener {
-
-            if (newAddressLayoutBinding!!.cityEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.cityEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.nameEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.provinceEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.zipEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.lastnameEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.countryEditText.text.toString().isNotBlank() &&
-                newAddressLayoutBinding!!.emailEditText.text.toString().contains("@")
-            ) {
-
-                val input = MailingAddressInput()
-                    .setAddress1(newAddressLayoutBinding!!.cityEditText.text.toString())
-                    .setCity(newAddressLayoutBinding!!.cityEditText.text.toString())
-                    .setFirstName(newAddressLayoutBinding!!.nameEditText.text.toString())
-                    .setPhone(newAddressLayoutBinding!!.PhonenumberEditText.text.toString())
-                    .setProvince(newAddressLayoutBinding!!.provinceEditText.text.toString())
-                    .setZip(newAddressLayoutBinding!!.zipEditText.text.toString())
-                    .setLastName(newAddressLayoutBinding!!.lastnameEditText.text.toString())
-                    .setCountry(newAddressLayoutBinding!!.countryEditText.text.toString())
-
-                Log.d(
-                    "customerq", activity!!.getPreferences(Activity.MODE_PRIVATE)
-                        .getString("checkoutid", "")!!
-                )
-                val query = mutation { mutationQuery: MutationQuery ->
-                    mutationQuery
-                        .customerAddressUpdate(
-                            activity!!.getPreferences(Activity.MODE_PRIVATE)
-                                .getString("token", ""), ID(userDetailsModelClass.id), input
-                        ) { _queryBuilder ->
-                            _queryBuilder.customerAddress { _queryBuilder ->
-
-                            }
-                                .userErrors { _queryBuilder -> _queryBuilder.field().message() }
-                        }
-
-                }
-
-
-                var call =
-                    CategoriesDataProvider.graphh!!.mutateGraph(query)
-                call.enqueue(object : GraphCall.Callback<Storefront.Mutation> {
-
-
-                    override fun onResponse(response: GraphResponse<Mutation>) {
-                        Log.d("addressup", response.errors().toString())
-
-                        activity!!.runOnUiThread {
-                            Toast.makeText(
-                                context,
-                                "Address updated",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-
-
-                    override fun onFailure(error: GraphError) {
-                        activity!!.runOnUiThread {
-                            Toast.makeText(
-                                context,
-                                "Address not updated",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-
-                })
-            } else Toast.makeText(context, "Please enter all details", Toast.LENGTH_SHORT).show()
-        }
-
-        return v
+        newAddressLayoutBinding!!.PhonenumberEditText.setText(userDetailsModelClass.phoneNumber)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

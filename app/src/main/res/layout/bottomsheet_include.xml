@@ -5,7 +5,7 @@
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
     android:background="#fff"
-    app:behavior_peekHeight="200dp"
+    app:behavior_peekHeight="210dp"
     app:layout_behavior="@string/bottom_sheet_behavior"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

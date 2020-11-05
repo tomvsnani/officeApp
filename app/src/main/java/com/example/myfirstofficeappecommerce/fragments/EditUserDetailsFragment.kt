@@ -1,4 +1,4 @@
-package com.example.myfirstofficeappecommerce
+package com.example.myfirstofficeappecommerce.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +10,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
+import com.example.myfirstofficeappecommerce.ApplicationClass
+import com.example.myfirstofficeappecommerce.CategoriesDataProvider
+import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentEditUserDetailsBinding
 import com.shopify.buy3.GraphCall
 import com.shopify.buy3.GraphError

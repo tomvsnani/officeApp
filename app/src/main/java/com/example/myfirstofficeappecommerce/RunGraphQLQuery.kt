@@ -40,9 +40,6 @@ class RunGraphQLQuery {
 
                         when {
 
-                            shouldApplyCoupon() ->
-
-                                applyDiscountQuery(checkoutId)
 
                             signinType == Constants.NORMAL_SIGN_IN -> {
                                 doSignedInTask(checkoutId, response)
@@ -77,89 +74,9 @@ class RunGraphQLQuery {
                     response: GraphResponse<Storefront.Mutation>
                 ) {
                     associateWithUserQuery(checkoutId, mainActivity)
-//                    else
-//
-//
-//                        mainActivity!!.supportFragmentManager.beginTransaction().add(
-//                            R.id.container, loginFragment(
-//                                Constants.NORMAL_SIGN_IN,
-//                                fragment = CheckOutMainWrapperFragment(
-//                                    checkoutId, response.data()!!.checkoutCreate
-//                                        .checkout.totalTax.toFloat()
-//                                )
-//                            )
-//                        ).addToBackStack(null).commit()
+
                 }
 
-                private fun applyDiscountQuery(checkoutId: String) {
-                    var queryy = Storefront.mutation { _queryBuilder ->
-                        _queryBuilder.checkoutDiscountCodeApply(
-                            mainActivity.DISCOUNT,
-                            ID(checkoutId)
-                        ) { _queryBuilder ->
-                            _queryBuilder.checkout { _queryBuilder ->
-                                _queryBuilder.totalPrice()
-                            }.userErrors { _queryBuilder ->
-                                _queryBuilder.field().message()
-                            }
-                        }
-                    }
-
-                    CategoriesDataProvider.graphh!!.mutateGraph(queryy).enqueue(object :
-                        GraphCall.Callback<Storefront.Mutation> {
-
-                        override fun onResponse(response: GraphResponse<Storefront.Mutation>) {
-
-                            if (!response.hasErrors() && response.data()!!.checkoutDiscountCodeApply.userErrors.isEmpty()) {
-
-
-                                val f: Fragment? =
-                                    mainActivity.supportFragmentManager.findFragmentById(R.id.container)
-                                if (f is CartFragment) {
-                                    mainActivity.runOnUiThread {
-                                        mainActivity.binding!!.mainactivityprogressbar.visibility =
-                                            View.GONE
-                                        Toast.makeText(
-                                            mainActivity.applicationContext,
-                                            "Discount Applied",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        (f as CartFragment?)?.setTotalPriceAfterDiscount(
-                                            response.data()
-                                            !!.checkoutDiscountCodeApply.checkout.totalPrice.toString()
-                                        )
-//                                        (f as CartFragment?)?.binding!!.applycoupontextview.setText(
-//                                            ""
-//                                        )
-//                                        (f as CartFragment?)?.binding!!.applycoupontextview.hint =
-//                                            "Discount Applied"
-                                    }
-
-                                }
-
-                            } else {
-                                if (response.data()!!.checkoutDiscountCodeApply.userErrors.isNotEmpty())
-                                    for (i in response.data()!!.checkoutDiscountCodeApply.userErrors)
-                                        mainActivity.runOnUiThread {
-                                            mainActivity.binding!!.mainactivityprogressbar.visibility =
-                                                View.GONE
-                                            Toast.makeText(
-                                                mainActivity.applicationContext,
-                                                i.message,
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                            }
-                        }
-
-                        override fun onFailure(error: GraphError) {
-                            mainActivity.binding!!.mainactivityprogressbar.visibility = View.GONE
-                        }
-                    })
-                    MainActivity.applyCoupon = false
-                }
-
-                private fun shouldApplyCoupon() = MainActivity.applyCoupon
 
                 override fun onFailure(error: GraphError) {
 
@@ -230,7 +147,7 @@ class RunGraphQLQuery {
 
                                 _queryBuilder ->
                             _queryBuilder.checkout { _queryBuilder ->
-                                _queryBuilder.totalTax()
+                                _queryBuilder.totalTax().webUrl()
 
                             }
                         }
@@ -248,15 +165,15 @@ class RunGraphQLQuery {
                         val checkoutWebUrl =
                             response.data()!!.checkoutCustomerAssociate.checkout.webUrl
 
-                        ApplicationClass.weburl=checkoutWebUrl
+                        ApplicationClass.weburl = checkoutWebUrl
 
                         mainActivity.supportFragmentManager.beginTransaction()
                             .replace(
                                 R.id.container,
                                 CheckOutMainWrapperFragment(
                                     checkoutIdd,
-                                    response.data()!!.checkoutCustomerAssociate.checkout.totalTax.precision()
-                                        .toFloat()
+                                    response.data()!!.checkoutCustomerAssociate.checkout.totalTax.toFloat()
+
                                 )
                             )
                             .addToBackStack(null).commit()

@@ -6,6 +6,8 @@
         <item name="colorPrimaryDark">#000</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">#212121</item>
+<!--        <item name="fontFamily">@font/asar</item>-->
+        <item name="fontFamily">@font/amiko</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
 
     </style>

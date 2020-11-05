@@ -22,10 +22,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
+import kotlinx.android.synthetic.main.recyclerview_last_row_layout.*
 import java.util.concurrent.TimeUnit
 
 
-class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTax: Float) :
+class NewAddressFragment(
+    var checkoutId: String,
+    var totalTax: Float,
+    var fragment: BottomSheetFragment
+) :
     BottomSheetDialogFragment() {
 
     var newAddressLayoutBinding: NewAddressLayoutBinding? = null
@@ -55,21 +60,6 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
 
         return v
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private fun checkIfAddressDetailsAreNotEmpty(): Boolean {
@@ -110,6 +100,7 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
         country: String,
         email: String
     ) {
+        newAddressLayoutBinding!!.newaddressprogressbar.visibility = View.VISIBLE
         val input = MailingAddressInput()
             .setAddress1(address1)
             .setCity(city)
@@ -153,8 +144,6 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
 
         })
     }
-
-
 
 
     private fun associateEmailToShippingAddress(
@@ -226,6 +215,7 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
         webUrl: String,
         id: ID
     ) {
+
         val queryy = query { rootQuery ->
             rootQuery
                 .node(
@@ -257,7 +247,7 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
                 GraphCall.Callback<QueryRoot> {
                 @SuppressLint("UseCompatLoadingForDrawables")
                 override fun onResponse(response: GraphResponse<QueryRoot>) {
-                    if(!response.hasErrors() && response.data()!=null) {
+                    if (!response.hasErrors() && response.data() != null) {
                         val checkout = response.data()!!.node as Checkout
                         Log.d("ratessffl", response.errors().toString())
                         val shippingRates =
@@ -275,33 +265,77 @@ class NewAddressFragment(var checkoutId: String, var webUrl: String, var totalTa
                         }
 
 
-
                         activity!!.runOnUiThread {
-                            parentFragment!!.childFragmentManager.beginTransaction()
-                                .replace(
-                                    R.id.container1,
-                                    CheckoutOverViewFragment(
-                                        this@NewAddressFragment.webUrl,
-                                        userDetailsModelList,
-                                        userDetailsModelList[0].shippingPrice.toFloat(),
-                                        totalTax,
-                                        modelClass,
 
-                                        checkoutId
-                                    )
-                                )
-                                .addToBackStack(null)
-                                .commit()
-                            Toast.makeText(
-                                context,
-                                "Address Added",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            for (i in parentFragment!!.childFragmentManager.fragments) {
+
+
+                                if (i is FinalisingOrderFragment)
+                                    (i as FinalisingOrderFragment).apply {
+                                        ApplicationClass.defaultAdress=MailingAddress().apply {
+                                            zip = modelClass.pinCode
+                                            phone = modelClass.phoneNumber
+                                            city = modelClass.city
+                                            country = modelClass.country
+                                            province = modelClass.state
+                                            name = modelClass.title
+                                        }
+                                        displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
+
+                                            displayShippingRates(userDetailsModelList[0])
+                                        this.userDetailsModelList = userDetailsModelList
+                                        toggleViewsOnSignIn()
+                                        modelClass.isSelectedAddress = true
+                                        addressList.add(modelClass)
+                                //        ApplicationClass.addressList.add(modelClass)
+
+                                        Log.d("newadd", "yes")
+
+                                    }
+                                try {
+                                    fragment.dismiss()
+                                } catch (e: Exception) {
+                                }
+
+                                dismiss()
+
+
+                            }
+                            newAddressLayoutBinding!!.newaddressprogressbar.visibility  =
+                                View.GONE
                         }
+
+
+//                        activity!!.runOnUiThread {
+//                            parentFragment!!.childFragmentManager.beginTransaction()
+//                                .replace(
+//                                    R.id.container1,
+//                                    CheckoutOverViewFragment(
+//
+//                                        userDetailsModelList,
+//                                        userDetailsModelList[0].shippingPrice.toFloat(),
+//                                        totalTax,
+//                                        modelClass,
+//
+//                                        checkoutId
+//                                    )
+//                                )
+//                                .addToBackStack(null)
+//                                .commit()
+//                            Toast.makeText(
+//                                context,
+//                                "Address Added",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
                     }
                 }
 
                 override fun onFailure(error: GraphError) {
+                    activity!!.runOnUiThread {
+                        newAddressLayoutBinding!!.newaddressprogressbar.visibility  =
+                            View.GONE
+                    }
                     Log.d("ratessff", error.message.toString())
                 }
             },

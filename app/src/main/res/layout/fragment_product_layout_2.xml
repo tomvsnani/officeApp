@@ -49,7 +49,7 @@
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,8 @@
                 android:id="@+id/productviewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/red" />
+                android:minHeight="200dp"
+             />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/producttablayout"
@@ -69,7 +70,7 @@
                 app:tabBackground="@drawable/tabselectorindicator"
                 app:tabGravity="center"
                 app:tabIndicator="@null"
-
+android:layout_margin="8dp"
                 />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

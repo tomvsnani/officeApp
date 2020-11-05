@@ -58,8 +58,6 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
         list = selectedItemsList!!.toMutableList()
 
-        //      setUpRecommendedItemsRecyclerView()
-
 
         setUpOnClickListener()
 
@@ -83,9 +81,6 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
     }
 
 
-    fun setTotalPriceAfterDiscount(price: String) {
-        binding!!.ptotalAmountTextViewCart.text = "  ${activity!!.getString(R.string.Rs)} ${price}"
-    }
 
     private fun setUpOnClickListener() {
         proceedTextViewCart!!.setOnClickListener {
@@ -109,22 +104,7 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
 
         }
-//        discountApplyButton!!.setOnClickListener {
-//            binding!!.applycoupontextview.clearFocus()
-//            var view = binding!!.applycoupontextview
-//            var inputManager: InputMethodManager =
-//                activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            inputManager.hideSoftInputFromWindow(view.windowToken, 0)
-//
-//            MainActivity.applyCoupon = true
-//            if (binding!!.applycoupontextview.text.toString().isNotBlank())
-//                (activity as MainActivity).DISCOUNT = binding!!.applycoupontextview.text.toString()
-//            else
-//                Toast.makeText(context!!, "Please enter a coupon code", Toast.LENGTH_SHORT).show()
-//            (activity as MainActivity).createCheckout(Constants.GUEST_SIGN_IN)
-//
-//
-//        }
+
 
     }
 
@@ -184,10 +164,10 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
         emptycartlayout = view.findViewById(R.id.emptycartlayout)
         slecetdItemsRecycler = view.findViewById(R.id.cartSelecetedRecyclerview)
-        //recommendedItemsRecycler = view.findViewById(R.id.cartRecyclerviewRecommondedItems)
+
         proceedTextViewCart = view.findViewById(R.id.proceedTextViewCart)
         cartNestedScroll = view.findViewById(R.id.constraint)
-        //discountApplyButton = view.findViewById(R.id.discountapplybutton)
+
 
 
     }
@@ -204,8 +184,6 @@ class CartFragment(var selectedItemsList: List<VariantsModelClass>?) : Fragment(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-//            if(loginfrag!=null)
-//                loginfrag!!.dismiss()
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)

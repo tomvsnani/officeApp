@@ -1,4 +1,4 @@
-package com.example.myfirstofficeappecommerce.Adapters
+package com.example.myfirstofficeappecommerce.fragments
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,13 +11,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
-import com.example.myfirstofficeappecommerce.fragments.FinalisingOrderFragment
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
-import com.example.myfirstofficeappecommerce.fragments.BottomSheetFragment
-import com.example.myfirstofficeappecommerce.fragments.EditAddressFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.Checkout
 import com.shopify.buy3.Storefront.QueryRoot
@@ -45,7 +41,7 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
             editButton?.setOnClickListener {
 
 
-                EditAddressFragment(currentList[absoluteAdapterPosition]).show(
+                EditAddressFragment(currentList[absoluteAdapterPosition],(context as BottomSheetFragment)).show(
                     (context as BottomSheetFragment).parentFragment!!.childFragmentManager,
                     ""
                 )

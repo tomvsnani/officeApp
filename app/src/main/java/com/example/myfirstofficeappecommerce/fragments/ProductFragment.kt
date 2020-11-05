@@ -289,7 +289,7 @@ webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
 
 
             //adding product model to selected items
-            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant!!.id } == null && selectedVariant != null && selectedVariant!!.quantityOfItem >= 0) {
+            if (ApplicationClass.selectedVariantList?.find { it.id == selectedVariant?.id } == null && selectedVariant != null && selectedVariant!!.quantityOfItem >= 0) {
                 selectedVariant!!.quantityOfItem++
                 selectedVariant!!.isSelected = true
 
@@ -299,8 +299,8 @@ webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
             } else
                 Toast.makeText(context, "Please choose a color or size", Toast.LENGTH_SHORT).show()
 
-            itemQuantitiyTextView!!.text = selectedVariant!!.quantityOfItem.toString()
-            if (selectedVariant!!.quantityOfItem > 0)
+            itemQuantitiyTextView!!.text = selectedVariant?.quantityOfItem.toString()
+            if (selectedVariant!=null && selectedVariant!!.quantityOfItem > 0)
                 startCartAnimation()
 
         }

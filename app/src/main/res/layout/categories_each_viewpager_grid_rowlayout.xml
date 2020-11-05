@@ -186,7 +186,7 @@
                             android:id="@+id/addToCartButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="#c62828"
+
                             android:text="Add to CArt"
                             android:textSize="12sp"
                             android:visibility="gone" />

@@ -38,7 +38,7 @@ class MainActivity() : AppCompatActivity() {
 
 
     companion object {
-        var applyCoupon: Boolean = false
+      public  var applyCoupon: Boolean = false
     }
 
     override fun onStart() {
@@ -104,8 +104,8 @@ Log.d("backcalled","mainac")
 
     private fun getMenuData() {
         var retrofit = Retrofit.Builder().apply {
-                // baseUrl("https://my-json-server.typicode.com/tomvsnani/testfakerestapi/")
-            baseUrl("http://127.0.0.1:8080/storage/downloads/")
+                baseUrl("https://my-json-server.typicode.com/tomvsnani/testfakerestapi/")
+           // baseUrl("http://127.0.0.1:8080/storage/downloads/")
             addConverterFactory(GsonConverterFactory.create())
 
         }.build()

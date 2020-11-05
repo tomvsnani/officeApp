@@ -37,18 +37,33 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include
+
+        <params.com.stepview.StatusViewScroller
             android:id="@+id/addressstepsinclude"
-            layout="@layout/order_processing_steps_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_margin="16dp"
-            app:layout_constraintBottom_toTopOf="@id/addressroot"
-
+            app:circleColor="#CC004B8D"
+            app:circleColorCurrent="#004B8D"
+            app:circleColorIncomplete="#BCBCBE"
+            app:circleColorType="fillStroke"
+            app:circleStrokeColorCurrent="#91A8D0"
+            app:circleStrokeWidth="4dp"
+            app:currentCount="1"
+            app:drawLabels="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+            app:layout_constraintTop_toBottomOf="@+id/appbar"
+            app:lineColor="@android:color/black"
+            app:lineColorCurrent="#91A8D0"
+            app:lineColorIncomplete="#B4B7BA"
+            app:lineGap="5dp"
+            app:lineWidth="3dp"
+            app:stepCount="3"
+            app:textColorLabels="@android:color/white"
+            app:textColorLabelsCurrent="@android:color/white"
+            app:textColorLabelsIncomplete="@android:color/black"
+            app:textSizeLabels="15sp" />
 
 
         <LinearLayout
