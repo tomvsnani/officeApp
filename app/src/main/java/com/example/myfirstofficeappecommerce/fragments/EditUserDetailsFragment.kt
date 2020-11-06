@@ -57,6 +57,8 @@ class EditUserDetailsFragment : Fragment() {
         binding!!.savedetailsbutton.setOnClickListener {
             updateUserData()
         }
+
+
         return view
     }
 

@@ -322,6 +322,8 @@ class loginFragment(
 
         }
 
+        RunGraphQLQuery.retrieve_all_the_addresses(activity = activity as MainActivity)
+
         openCorrespondingFragment()
     }
 

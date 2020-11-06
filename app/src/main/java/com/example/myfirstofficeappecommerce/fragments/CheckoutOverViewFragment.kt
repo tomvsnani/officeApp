@@ -1,27 +1,19 @@
 package com.example.myfirstofficeappecommerce.fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstofficeappecommerce.Adapters.CheckoutOverViewItemsAdapter
-import com.example.myfirstofficeappecommerce.Adapters.ShippingRatesAdapter
 import com.example.myfirstofficeappecommerce.ApplicationClass
-import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.DiscountBottomSheet
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
-import com.example.myfirstofficeappecommerce.Models.VariantsModelClass
 import com.example.myfirstofficeappecommerce.R
-import com.example.myfirstofficeappecommerce.databinding.ChangeShippingRatesLayoutBinding
 import com.example.myfirstofficeappecommerce.databinding.CheckoutOverviewLayoutBinding
-import com.shopify.buy3.*
-import com.shopify.graphql.support.ID
 
 
 class CheckoutOverViewFragment(
@@ -44,10 +36,39 @@ class CheckoutOverViewFragment(
         savedInstanceState: Bundle?
     ): View? {
         val v = inflater.inflate(R.layout.checkout_overview_layout, container, false)
+
       binding = CheckoutOverviewLayoutBinding.bind(v)
-        var a = 0f;
+
+        var totalPriceOfAllProducts = calculatePriceOfProducts()
+
+        initializeClickListeners()
+
+
+        assignDataToViews(totalPriceOfAllProducts)
+
+        initializeItemsRecyclerView()
+
+        return v
+    }
+
+    private fun initializeItemsRecyclerView() {
+        binding!!.checkoutoverviewrecyclerview.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        adapter = CheckoutOverViewItemsAdapter(context!!)
+
+        binding!!.checkoutoverviewrecyclerview.adapter = adapter
+        //  binding.checkoutoverviewrecyclerview.addItemDecoration(DividerItemDecoration(context!!,RecyclerView.VERTICAL))
+        adapter!!.submitList(list)
+    }
+
+    private fun calculatePriceOfProducts(): Float {
+        var totalPriceOfAllProducts = 0f;
         for (i in ApplicationClass.selectedVariantList!!)
-            a += i.price!!
+            totalPriceOfAllProducts += i.price!!
+        return totalPriceOfAllProducts
+    }
+
+    private fun initializeClickListeners() {
         binding!!.backbuttonimage.setOnClickListener { parentFragment!!.childFragmentManager.popBackStackImmediate() }
 
         binding!!.continuetopaymentbutton.setOnClickListener {
@@ -60,7 +81,14 @@ class CheckoutOverViewFragment(
             DiscountBottomSheet(this, checkoutId).show(activity!!.supportFragmentManager, "")
         }
 
+        binding!!.changeaddressbutton.setOnClickListener {
 
+            activity!!.onBackPressed()
+
+        }
+    }
+
+    private fun assignDataToViews(a: Float) {
         binding!!.checkoutOverViewPriceTextView.text =
             a.toString()
         binding!!.checkoutOverViewShippingCostTextView.text =
@@ -74,22 +102,6 @@ class CheckoutOverViewFragment(
             userDetailsModelClass.phoneNumber
         binding!!.chooseAddressaddressTextView.text =
             userDetailsModelClass.hnum + " , " + userDetailsModelClass.city + " - " + userDetailsModelClass.pinCode + " \n \n" + userDetailsModelClass.state + " , " + userDetailsModelClass.country
-
-        binding!!.checkoutoverviewrecyclerview.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        adapter = CheckoutOverViewItemsAdapter(context!!)
-
-        binding!!.checkoutoverviewrecyclerview.adapter = adapter
-        //  binding.checkoutoverviewrecyclerview.addItemDecoration(DividerItemDecoration(context!!,RecyclerView.VERTICAL))
-        adapter!!.submitList(list)
-
-
-        binding!!.changeaddressbutton.setOnClickListener {
-
-            activity!!.onBackPressed()
-
-        }
-        return v
     }
 
 
@@ -97,7 +109,6 @@ class CheckoutOverViewFragment(
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.fragment_slide_anim)
         exitTransition = inflater.inflateTransition(R.transition.fragment_fade_trans)
-
 
         super.onCreate(savedInstanceState)
     }

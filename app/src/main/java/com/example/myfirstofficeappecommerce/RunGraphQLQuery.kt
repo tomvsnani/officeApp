@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.fragments.CartFragment
@@ -186,31 +187,11 @@ class RunGraphQLQuery {
                 })
         }
 
-        fun retrieve_all_the_addresses(activity: MainActivity) {
-            val query = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
-                rootQuery
-                    .customer(
-                        (activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", ""))
-                    ) { _queryBuilder ->
-                        _queryBuilder.addresses({ args: Storefront.CustomerQuery.AddressesArguments? ->
 
-                            args!!.first(10)
-                        }, { _queryBuilder ->
+        fun retrieve_all_the_addresses(activity: MainActivity): MutableLiveData<List<UserDetailsModelClass>> {
 
-                            _queryBuilder.edges { _queryBuilder ->
-                                _queryBuilder.node { _queryBuilder ->
-                                    _queryBuilder.address1().city().province().zip().phone()
-                                        .firstName()
-                                        .lastName().country()
-                                }
-                            }
-                        }).defaultAddress { _queryBuilder ->
-                            _queryBuilder!!.address1().phone().name().province().country().zip()
-                                .city().firstName()
-                        }
-                    }
-            }
-
+            val query = retrieveAllAddressesQuery(activity)
+            var mutableAddressList = MutableLiveData<List<UserDetailsModelClass>>()
 
             var call =
                 CategoriesDataProvider.graphh!!.queryGraph(query)
@@ -236,13 +217,11 @@ class RunGraphQLQuery {
                             )
                         )
                     }
-                    Log.d(
-                        "applicationaddresssize",
-                        ApplicationClass.addressList.size.toString()
-                    )
-                    ApplicationClass.defaultAdress = response.data()!!.customer.defaultAddress
 
+                    ApplicationClass.defaultAdress = response.data()!!.customer.defaultAddress
+                    mutableAddressList.postValue(ApplicationClass.addressList)
                 }
+
 
                 override fun onFailure(error: GraphError) {
 
@@ -257,6 +236,33 @@ class RunGraphQLQuery {
                     }
                     .maxCount(12)
                     .build())
+            return mutableAddressList
+        }
+
+        private fun retrieveAllAddressesQuery(activity: MainActivity): Storefront.QueryRootQuery? {
+            return Storefront.query { rootQuery: Storefront.QueryRootQuery ->
+                rootQuery
+                    .customer(
+                        (activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", ""))
+                    ) { _queryBuilder ->
+                        _queryBuilder.addresses({ args: Storefront.CustomerQuery.AddressesArguments? ->
+
+                            args!!.first(10)
+                        }, { _queryBuilder ->
+
+                            _queryBuilder.edges { _queryBuilder ->
+                                _queryBuilder.node { _queryBuilder ->
+                                    _queryBuilder.address1().city().province().zip().phone()
+                                        .firstName()
+                                        .lastName().country()
+                                }
+                            }
+                        }).defaultAddress { _queryBuilder ->
+                            _queryBuilder!!.address1().phone().name().province().country().zip()
+                                .city().firstName()
+                        }
+                    }
+            }
         }
     }
 

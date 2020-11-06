@@ -54,6 +54,7 @@ class EditAddressFragment(
 
             changeAddress()
         }
+        newAddressLayoutBinding!!.closeBottomSheetImageView.setOnClickListener { dismiss() }
 
         return v
     }
@@ -85,7 +86,15 @@ class EditAddressFragment(
 
                             if (i is FinalisingOrderFragment)
                                 (i as FinalisingOrderFragment).apply {
-                                    retrieve_all_the_addresses()
+                                    ApplicationClass.addressList.filter {
+                                        if (it.isSelectedAddress)
+                                            it.isSelectedAddress = false
+                                        return@filter true
+                                    }
+                                    userDetailsModelClass.isSelectedAddress = true
+
+                                    retrieve_addresses()
+
 
                                 }
                             try {
@@ -132,6 +141,13 @@ class EditAddressFragment(
     }
 
     private fun getMainAddressInput(): MailingAddressInput? {
+        userDetailsModelClass.city = newAddressLayoutBinding!!.cityEditText.text.toString()
+        userDetailsModelClass.phoneNumber =
+            newAddressLayoutBinding!!.PhonenumberEditText.text.toString()
+        userDetailsModelClass.country = newAddressLayoutBinding!!.countryEditText.text.toString()
+        userDetailsModelClass.title = newAddressLayoutBinding!!.nameEditText.text.toString()
+        userDetailsModelClass.subTitle = newAddressLayoutBinding!!.lastnameEditText.text.toString()
+        userDetailsModelClass.state = newAddressLayoutBinding!!.provinceEditText.text.toString()
         return MailingAddressInput()
             .setAddress1(newAddressLayoutBinding!!.cityEditText.text.toString())
             .setCity(newAddressLayoutBinding!!.cityEditText.text.toString())

@@ -22,7 +22,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
-import kotlinx.android.synthetic.main.recyclerview_last_row_layout.*
 import java.util.concurrent.TimeUnit
 
 
@@ -57,6 +56,8 @@ class NewAddressFragment(
 
                 Toast.makeText(context, "Please enter all details", Toast.LENGTH_SHORT).show()
         }
+
+        newAddressLayoutBinding!!.closeBottomSheetImageView.setOnClickListener { dismiss() }
 
         return v
     }
@@ -280,7 +281,7 @@ class NewAddressFragment(
                                             province = modelClass.state
                                             name = modelClass.title
                                         }
-                                        displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
+                                        displaySelectedAddressDetails(ApplicationClass.defaultAdress!!,modelClass)
 
                                             displayShippingRates(userDetailsModelList[0])
                                         this.userDetailsModelList = userDetailsModelList

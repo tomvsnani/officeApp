@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
 
-class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String) :
+class ChooseAddressRecyclerAdapter(var context: BottomSheetFragment, var checkoutId: String) :
     ListAdapter<UserDetailsModelClass, ChooseAddressRecyclerAdapter.ChooseAddressViewHolder>(
         UserDetailsModelClass.DIFF_UTIL
     ) {
@@ -51,7 +51,7 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
 
             radioButton!!.setOnClickListener {
                 var modelclass = currentList[absoluteAdapterPosition]
-                var list = ArrayList(currentList)
+
                 currentList.filter {
                     if (it.isSelectedAddress)
                         it.isSelectedAddress = false
@@ -60,150 +60,10 @@ class ChooseAddressRecyclerAdapter(var context: Fragment, var checkoutId: String
                 modelclass.isSelectedAddress = true
                 notifyDataSetChanged()
 
-                val input = Storefront.MailingAddressInput()
-                    .setAddress1(modelclass.hnum)
-                    .setCity(modelclass.city)
-                    .setFirstName(modelclass.title)
-                    .setPhone(modelclass.phoneNumber)
-                    .setProvince(modelclass.state)
-                    .setZip(modelclass.pinCode)
-                    .setLastName(modelclass.subTitle)
-                    .setCountry(modelclass.country)
-
-
-                val query1 = Storefront.mutation { mutationQuery: Storefront.MutationQuery ->
-                    mutationQuery
-                        .checkoutShippingAddressUpdate(
-                            input, ID(checkoutId)
-                        ) { shippingAddressUpdatePayloadQuery: Storefront.CheckoutShippingAddressUpdatePayloadQuery ->
-                            shippingAddressUpdatePayloadQuery
-                                .checkout { checkoutQuery: Storefront.CheckoutQuery ->
-                                    checkoutQuery
-                                        .webUrl()
-                                }
-                                .userErrors { userErrorQuery: Storefront.UserErrorQuery ->
-                                    userErrorQuery
-                                        .field()
-                                        .message()
-                                }
-                        }
-
-                }
-
-
-                var call1 =
-                    CategoriesDataProvider.graphh!!.mutateGraph(query1)
-                call1.enqueue(object : GraphCall.Callback<Storefront.Mutation> {
-
-
-                    override fun onResponse(response: GraphResponse<Storefront.Mutation>) {
-
-                        val queryy = Storefront.query { rootQuery ->
-                            rootQuery
-                                .node(
-                                    ID(checkoutId)
-                                ) { nodeQuery ->
-                                    nodeQuery
-                                        .onCheckout { checkoutQuery ->
-                                            checkoutQuery
-                                                .availableShippingRates { availableShippingRatesQuery ->
-                                                    availableShippingRatesQuery
-                                                        .ready()
-                                                        .shippingRates { shippingRateQuery ->
-                                                            shippingRateQuery
-                                                                .handle()
-                                                                .price()
-                                                                .title()
-                                                        }
-                                                }
-                                        }
-                                }
-                        }
-
-                        CategoriesDataProvider.graphh!!.queryGraph(queryy).enqueue(
-                            object :
-                                GraphCall.Callback<Storefront.QueryRoot> {
-                                override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
-                                    val checkout = response.data()!!.node as Storefront.Checkout
-                                    val shippingRates =
-                                        checkout!!.availableShippingRates.shippingRates
-
-
-                                }
-
-                                override fun onFailure(error: GraphError) {
-                                    Log.d("ratessf", error.message.toString())
-                                }
-                            },
-                            null,
-                            RetryHandler.exponentialBackoff(800, TimeUnit.MILLISECONDS, 1.2f)
-                                .whenResponse<Storefront.QueryRoot> { response: GraphResponse<Storefront.QueryRoot> ->
-                                    ((response as GraphResponse<QueryRoot>).data()!!
-                                        .node as Checkout).availableShippingRates.ready == false
-                                }
-                                .maxCount(20)
-                                .build()
-                        )
-
-
-                    }
-
-                    override fun onFailure(error: GraphError) {
-
-                    }
-
-                })
-
 
             }
 
 
-//            val query1 = Storefront.query { rootQuery: Storefront.QueryRootQuery ->
-//                rootQuery
-//                    .customer(
-//                        ((context.activity!!).getPreferences(Activity.MODE_PRIVATE)
-//                            .getString("token", ""))
-//                    ) { _queryBuilder ->
-//                        _queryBuilder.defaultAddress { _queryBuilder ->
-//                            _queryBuilder.address1().city().province().zip().phone().firstName().lastName().country()
-//                        }
-//                    }
-//            }
-//
-//
-//            var call1 =
-//                CategoriesDataProvider.graphh!!.queryGraph(query1)
-//            call1.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
-//                var addressList = ArrayList<ModelClass>()
-//
-//                override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
-//
-//                    var address = response.data()!!.customer.defaultAddress
-//
-//                    var modelClass = ModelClass(
-//                        title = address.firstName,
-//                        subTitle = address.lastName,
-//                        hnum = address.address1,
-//                        city = address.city,
-//                        state = address.province,
-//                        pinCode = address.zip,
-//                        phoneNumber = if (address.phone == "" || address.phone.isNullOrBlank()) " no Phone number provided"
-//                        else address.phone, id = address.id.toString(),
-//                        country = address.country
-//                    )
-//                //    Log.d("isnull",(currentList.find {  it.id==address.id.toString()}==null).toString())
-//                    currentList.find {
-//                        it.phoneNumber == modelClass.phoneNumber && it.subTitle == modelClass.subTitle && it.title == modelClass.title
-//                    }!!.isSelectedAddress = true
-//                    (context.activity!!).runOnUiThread { notifyDataSetChanged() }
-//
-//                }
-//
-//                override fun onFailure(error: GraphError) {
-//
-//                }
-//
-//            })
         }
 
     }

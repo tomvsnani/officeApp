@@ -17,7 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.shopify.buy3.Storefront
-import java.lang.Exception
 
 
 class BottomSheetFragment(
@@ -36,10 +35,11 @@ class BottomSheetFragment(
         binding = FragmentShowAddressBottomsheetBinding.bind(view)
         var recyclerView = binding!!.chooseaddressrecyclerview
         adapter = ChooseAddressRecyclerAdapter(this, checkoutId)
-        recyclerView = view.findViewById(R.id.chooseaddressrecyclerview)
         recyclerView!!.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         recyclerView!!.adapter = adapter
         var addressList = ApplicationClass.addressList
+
+        binding!!.closeBottomSheetImageView.setOnClickListener { dismiss() }
 
 
         if (addressList.size <= 0)
@@ -47,20 +47,6 @@ class BottomSheetFragment(
         else
             binding!!.chooseaddressrecyclerview.visibility = View.VISIBLE
 
-        binding!!.confirmButton.setOnClickListener {
-            finalisingFragment.doTasksBasedOnSelectedAddress(Storefront.MailingAddress().apply {
-                city = getDeliveryAddress(addressList)?.city
-                province = getDeliveryAddress(addressList)?.state
-                country = getDeliveryAddress(addressList)?.country
-                name = getDeliveryAddress(addressList)?.title
-                zip = getDeliveryAddress(addressList)?.pinCode
-                phone = getDeliveryAddress(addressList)?.phoneNumber
-
-
-            })
-            isCancelable=true
-            dismiss()
-        }
 
 
         activity!!.runOnUiThread {
@@ -85,16 +71,46 @@ class BottomSheetFragment(
 
         }
 
+        initializeClickListeners(addressList)
+
+        return view
+    }
+
+    private fun initializeClickListeners(addressList: MutableList<UserDetailsModelClass>) {
+        binding!!.confirmButton.setOnClickListener {
+            doTasksBasedOnSelectedAddress(addressList)
+            isCancelable = true
+            dismiss()
+        }
+
+
         binding!!.viewmoreaddressesbutton.setOnClickListener {
 
             NewAddressFragment(
                 checkoutId,
-                totalTax,this
+                totalTax, this
             ).show(parentFragment!!.childFragmentManager, "")
 
 
         }
-        return view
+    }
+
+    fun doTasksBasedOnSelectedAddress(addressList: MutableList<UserDetailsModelClass>) {
+        if (addressList.size > 0) {
+            finalisingFragment.doTasksBasedOnSelectedAddress(Storefront.MailingAddress().apply {
+                var model = getDeliveryAddress(addressList)
+
+                model?.isSelectedAddress = true
+                city = model?.city
+                province = model?.state
+                country = model?.country
+                name = model?.title
+                zip = model?.pinCode
+                phone = model?.phoneNumber
+
+
+            }, getDeliveryAddress(addressList)!!)
+        }
     }
 
     private fun getDeliveryAddress(addressList: MutableList<UserDetailsModelClass>): UserDetailsModelClass? {
@@ -105,7 +121,7 @@ class BottomSheetFragment(
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        isCancelable=false
+        //   isCancelable = false
 
 
         bottomSheetDialog.setOnShowListener { dia ->
@@ -113,25 +129,26 @@ class BottomSheetFragment(
             val bottomSheet =
 
                 dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            var behaviour=  BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!)
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).state =
+            var behaviour = BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!)
+            behaviour.state =
                 BottomSheetBehavior.STATE_EXPANDED
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).skipCollapsed = true
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).isHideable = true
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).peekHeight = 0
-            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).addBottomSheetCallback(object :
-                BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                 try {
-                     behaviour.state=BottomSheetBehavior.STATE_EXPANDED
-                 }catch (e:Exception){}
-
-                }
-
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
-                }
-            })
+            behaviour.skipCollapsed = true
+            behaviour.isHideable = true
+            behaviour.peekHeight = 0
+//            behaviour.addBottomSheetCallback(object :
+//                BottomSheetBehavior.BottomSheetCallback() {
+//                override fun onStateChanged(bottomSheet: View, newState: Int) {
+//                    try {
+//                        behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+//                    } catch (e: Exception) {
+//                    }
+//
+//                }
+//
+//                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+//
+//                }
+//            })
         }
         return bottomSheetDialog
     }

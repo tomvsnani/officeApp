@@ -15,9 +15,11 @@ import com.example.myfirstofficeappecommerce.Adapters.ExpandableMenuListViewAdap
 import com.example.myfirstofficeappecommerce.Models.CategoriesModelClass
 import com.example.myfirstofficeappecommerce.Models.Item
 import com.example.myfirstofficeappecommerce.Models.MenuJson
+import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.databinding.ActivityMainBinding
 import com.example.myfirstofficeappecommerce.fragments.*
 import com.google.android.material.navigation.NavigationView
+import com.shopify.buy3.Storefront
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -117,7 +119,7 @@ Log.d("backcalled","mainac")
 
         c.observe(this,
             Observer<MenuJson> { t ->
-                Log.d("dataloaded", "ok");
+
                 menudata = t!!.menu
                 var hashMap: HashMap<com.example.myfirstofficeappecommerce.Models.Menu, List<Item>> =
                     HashMap()
@@ -314,12 +316,25 @@ Log.d("backcalled","mainac")
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        Log.d("menucreatedact", "yes")
+
         menuInflater.inflate(R.menu.toolbarmenu, menu)
         return true
     }
 
     fun createCheckout(signinType: String) {
         RunGraphQLQuery.getCheckoutData(this, signinType)
+    }
+
+
+    fun getMailingAddressFromModelClass(userDetailsModelClass: UserDetailsModelClass):Storefront.MailingAddress{
+     return   Storefront.MailingAddress().apply {
+            city=userDetailsModelClass.city
+            province=userDetailsModelClass.state
+            phone=userDetailsModelClass.phoneNumber
+            zip=userDetailsModelClass.pinCode
+            name=userDetailsModelClass.title
+            country=userDetailsModelClass.country
+
+        }
     }
 }

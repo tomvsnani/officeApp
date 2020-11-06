@@ -1,7 +1,6 @@
 package com.example.myfirstofficeappecommerce.fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -12,13 +11,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.observe
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentFinalisingOrderBinding
-import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
@@ -26,16 +24,15 @@ import java.util.concurrent.TimeUnit
 
 
 class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fragment() {
-    var recyclerView: RecyclerView? = null
+
     var adapter: ChooseAddressRecyclerAdapter? = null
     var binding: FragmentFinalisingOrderBinding? = null
     private var toolbar: Toolbar? = null
-    var newAddressLayoutBinding: NewAddressLayoutBinding? = null
-
     var addressList = ApplicationClass.addressList
     var bottomsheetFragment: BottomSheetFragment? = null
     var userDetailsModelList: MutableList<UserDetailsModelClass> =
         ArrayList()
+    var tempAddress:UserDetailsModelClass?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,19 +60,15 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
         if (ApplicationClass.signInType == Constants.NORMAL_SIGN_IN) {
 
-            performSignedInTasks()
+            toggleViewsVisibilityWhenSignedIn()
+            retrieve_addresses()
 
         } else {
 
-            performNotSignedInTask()
+            toggleViewsVisibilityWhenNotSignedIn()
         }
 
-        if (ApplicationClass.addressList.find { it.isSelectedAddress } != null) {
-            toggleViewsOnSignIn()
-            if (ApplicationClass.defaultAdress != null)
-                displaySelectedAddressDetails(ApplicationClass.defaultAdress!!)
-            getShippingRates()
-        }
+
 
         initializeClickListeners()
 
@@ -83,7 +76,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
     }
 
 
-    private fun performNotSignedInTask() {
+    private fun toggleViewsVisibilityWhenNotSignedIn() {
         binding!!.addressconstraint.visibility = View.GONE
         binding!!.addAddressButton.visibility = View.VISIBLE
         binding!!.viewmoreaddressesbutton.visibility = View.GONE
@@ -91,10 +84,30 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         binding!!.shippingaddresslinear.visibility = View.GONE
     }
 
-    fun performSignedInTasks() {
-        retrieve_all_the_addresses()
+    fun toggleViewsVisibilityWhenSignedIn() {
+
 
         toggleViewsOnSignIn()
+    }
+
+    fun retrieve_addresses() {
+        if (ApplicationClass.addressList.isEmpty())
+            RunGraphQLQuery.retrieve_all_the_addresses(activity as MainActivity).observe(this) {
+                ApplicationClass.addressList = it as MutableList<UserDetailsModelClass>
+                doTasksBasedOnSelectedAddress(
+                    (parentFragment!!.activity as MainActivity).getMailingAddressFromModelClass(
+                        getSelectedorDefaultAddress()!!
+                    ),  getSelectedorDefaultAddress()!!
+                )
+            }
+        else{
+            if(  getSelectedorDefaultAddress()!=null)
+            doTasksBasedOnSelectedAddress(
+                (parentFragment!!.activity as MainActivity).getMailingAddressFromModelClass(
+                    getSelectedorDefaultAddress()!!
+                ),
+                getSelectedorDefaultAddress()!!
+            )}
     }
 
     fun toggleViewsOnSignIn() {
@@ -106,7 +119,13 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         binding!!.viewmoreaddressesbutton.visibility = View.VISIBLE
     }
 
-    fun displaySelectedAddressDetails(defaultAdress: MailingAddress) {
+    fun displaySelectedAddressDetails(
+        defaultAdress: MailingAddress,
+        modelClass: UserDetailsModelClass
+    ) {
+
+        tempAddress=modelClass
+
         binding!!.chooseAddressnameTextView.text = defaultAdress?.name
         binding!!.chooseAddressPhoneNumber.text = defaultAdress?.phone
         binding!!.chooseAddressaddressTextView.text =
@@ -118,22 +137,20 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
             selectShippingProviders()
         }
 
-        binding!!.shippingratespricetextview.text
-
-        binding!!.shippingratestitletextview.text
-
 
         binding!!.viewmoreaddressesbutton.setOnClickListener {
-
-            bottomsheetFragment = BottomSheetFragment(totalTax, checkoutId, this)
-
-            bottomsheetFragment!!.show(parentFragment!!.childFragmentManager, "")
+            ApplicationClass.addressList.filter {
+                if (it.isSelectedAddress)
+                    it.isSelectedAddress = false
+                return@filter true
+            }
+           tempAddress?.isSelectedAddress = true
+            displayAddressBottomSheet()
         }
 
         binding!!.addAddressButton.setOnClickListener {
-            bottomsheetFragment = BottomSheetFragment(totalTax, checkoutId, this)
 
-            bottomsheetFragment!!.show(parentFragment!!.childFragmentManager, "")
+            displayAddressBottomSheet()
         }
 
 
@@ -164,21 +181,33 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         }
     }
 
-    private fun getShippingRates() {
-        var a =
-            addressList.find { it.isSelectedAddress }
+    private fun displayAddressBottomSheet() {
 
-                ?: addressList.find { it.id == ApplicationClass.defaultAdress?.id.toString() }
-        if (a != null) {
+
+
+        bottomsheetFragment = BottomSheetFragment(totalTax, checkoutId, this)
+
+        bottomsheetFragment!!.show(parentFragment!!.childFragmentManager, "")
+
+
+    }
+
+    fun getShippingRates() {
+
+        // if an address is selected from list of addresses select it else select the default address and retrieve shipping rates
+        // based on it
+        var addressToRetrieveShippingRates =
+            getSelectedorDefaultAddress()
+        if (addressToRetrieveShippingRates != null) {
             getTheShippingRatesBasedOnSelectedAddress(
-                a!!.hnum,
-                a!!.city,
-                a!!.title,
-                a.subTitle,
-                a.phoneNumber!!,
-                a.state,
-                a.pinCode,
-                a.country
+                addressToRetrieveShippingRates!!.hnum,
+                addressToRetrieveShippingRates!!.city,
+                addressToRetrieveShippingRates!!.title,
+                addressToRetrieveShippingRates.subTitle,
+                addressToRetrieveShippingRates.phoneNumber!!,
+                addressToRetrieveShippingRates.state,
+                addressToRetrieveShippingRates.pinCode,
+                addressToRetrieveShippingRates.country
             )
             binding!!.finalisingcheckoutfragmentprogressbar.visibility = View.VISIBLE
         } else
@@ -187,6 +216,12 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                 "Please select an address or add an address",
                 Toast.LENGTH_SHORT
             ).show()
+    }
+
+    private fun getSelectedorDefaultAddress(): UserDetailsModelClass? {
+        return (addressList.find { it.isSelectedAddress }
+
+            ?: addressList.find { it.id == ApplicationClass.defaultAdress?.id.toString() })
     }
 
     private fun selectShippingProviders(
@@ -234,16 +269,6 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
             .setLastName(lname)
             .setCountry(country)
 
-        val modelClass = UserDetailsModelClass(
-            hnum = address1,
-            city = city,
-            title = fname,
-            subTitle = lname,
-            phoneNumber = phone,
-            state = province,
-            pinCode = zip,
-            country = country
-        )
 
         val shippingAddressupdateQuery = shippingAddressUpdateQuery(input)
 
@@ -265,12 +290,11 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                         override fun onResponse(response: GraphResponse<QueryRoot>) {
                             val checkout = response.data()!!.node as Checkout
 
-                            //     ApplicationClass.checkoutId = checkout?.id?.toString()!!
-//                            ApplicationClass.weburl = checkout.webUrl
                             val shippingRates =
                                 checkout.availableShippingRates.shippingRates
 
                             userDetailsModelList.clear()
+
                             for (i in shippingRates) {
                                 var model = UserDetailsModelClass(
                                     title = i.title,
@@ -369,101 +393,18 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
     }
 
-    fun retrieve_all_the_addresses() {
 
-        val query = retrieveAddressesQuery()
-        var call =
-            CategoriesDataProvider.graphh!!.queryGraph(query)
-        call.enqueue(object : GraphCall.Callback<QueryRoot> {
-
-
-            override fun onResponse(response: GraphResponse<QueryRoot>) {
-                if (!response.hasErrors() && response.data() != null) {
-                    var address = response.data()!!.customer.addresses.edges
-                    addressList.clear()
-                    for (i in address) {
-                        addressList.add(
-                            UserDetailsModelClass(
-                                title = i.node.firstName,
-                                subTitle = i.node.lastName,
-                                hnum = i.node.address1,
-                                city = i.node.city,
-                                state = i.node.province,
-                                pinCode = i.node.zip,
-                                phoneNumber = if (i.node.phone == "" || i.node.phone.isNullOrBlank()) " no Phone number provided"
-                                else i.node.phone, id = i.node.id.toString(),
-                                country = i.node.country
-                            )
-                        )
-                    }
-                    ApplicationClass.defaultAdress = response.data()!!.customer.defaultAddress
-
-                    doTasksBasedOnSelectedAddress(ApplicationClass.defaultAdress)
-
-                }
-            }
-
-            override fun onFailure(error: GraphError) {
-                Log.d("cameherefailed", error.message.toString())
-            }
-
-        },
-            null,
-            RetryHandler.exponentialBackoff(500, TimeUnit.MILLISECONDS, 1.2f)
-                .whenResponse<QueryRoot> { responsee: GraphResponse<QueryRoot> ->
-                    ((responsee as GraphResponse<QueryRoot>).data()!!
-                        .customer.addresses.edges.size == 0)
-                }
-                .maxCount(12)
-                .build())
-    }
-
-    fun doTasksBasedOnSelectedAddress(defaultAdress: MailingAddress?) {
+    fun doTasksBasedOnSelectedAddress(
+        defaultAdress: MailingAddress?,
+        selectedorDefaultAddress: UserDetailsModelClass
+    ) {
         activity?.runOnUiThread {
             if (defaultAdress != null) {
-                displaySelectedAddressDetails(defaultAdress)
+                displaySelectedAddressDetails(defaultAdress, selectedorDefaultAddress)
                 getShippingRates()
             }
-
-            //                        var a =
-            //                            addressList.find { it.id == response.data()!!.customer.defaultAddress.id.toString() }
-            //                        if (a != null) {
-            //                            a!!.isSelectedAddress = true
-            //
-            //                            adapter!!.submitList(if (addressList.size > 0) mutableListOf(a) else null)
-            //
-            //                            adapter!!.notifyDataSetChanged()
-            //                        } else Toast.makeText(context!!, "Add an address", Toast.LENGTH_SHORT)
-            //                            .show()
-
-
         }
     }
 
-    private fun retrieveAddressesQuery(): QueryRootQuery? {
-        val query = query { rootQuery: QueryRootQuery ->
-            rootQuery
-                .customer(
-                    (activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", ""))
-                ) { _queryBuilder ->
-                    _queryBuilder.addresses({ args: CustomerQuery.AddressesArguments? ->
-
-                        args!!.first(10)
-                    }, { _queryBuilder ->
-
-                        _queryBuilder.edges { _queryBuilder ->
-                            _queryBuilder.node { _queryBuilder ->
-                                _queryBuilder.address1().city().province().zip().phone().firstName()
-                                    .lastName().country()
-                            }
-                        }
-                    }).defaultAddress { _queryBuilder ->
-                        _queryBuilder!!.address1().phone().name().province().country().zip()
-                            .city().firstName()
-                    }
-                }
-        }
-        return query
-    }
 
 }
