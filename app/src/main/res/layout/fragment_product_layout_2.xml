@@ -9,11 +9,11 @@
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/productfragmentouterlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff"
         android:orientation="vertical"
-        android:id="@+id/productfragmentouterlayout"
         tools:context=".fragments.OrdersFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -59,19 +59,17 @@
                 android:id="@+id/productviewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="200dp"
-             />
+                android:minHeight="200dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/producttablayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_margin="8dp"
                 app:tabBackground="@drawable/tabselectorindicator"
                 app:tabGravity="center"
-                app:tabIndicator="@null"
-android:layout_margin="8dp"
-                />
+                app:tabIndicator="@null" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

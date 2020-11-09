@@ -51,10 +51,7 @@ class OrdersFragment(var orderList: List<VariantsModelClass>) : Fragment() {
         return view
     }
 
-    override fun onStart() {
 
-        super.onStart()
-    }
 
     override fun onResume() {
         var token = activity!!.getPreferences(Activity.MODE_PRIVATE).getString("token", "")

@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:fillViewport="true">
+    <androidx.core.widget.NestedScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bottomsheeet"
+        android:id="@+id/productfragmentouterlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#fff"
         android:orientation="vertical"
-
         tools:context=".fragments.OrdersFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -48,7 +53,7 @@
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,18 +63,18 @@
                 android:id="@+id/productviewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/red" />
+                android:minHeight="150dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/producttablayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_margin="8dp"
                 app:tabBackground="@drawable/tabselectorindicator"
                 app:tabGravity="center"
-                app:tabIndicator="@null"
+                app:tabIndicator="@null" />
 
-                />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <View
@@ -77,180 +82,271 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
-            android:background="#6b6b6b"
+            android:background="#e0e0e0"
             app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout" />
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productcolorRecyclerView"
             android:layout_width="0dp"
-            android:layout_height="388dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/view8" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productsizeRecyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/productcolorRecyclerView" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Color : "
+
+            app:layout_constraintBottom_toBottomOf="@+id/productcolorRecyclerView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/productcolorRecyclerView" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Size : "
+            app:layout_constraintBottom_toBottomOf="@+id/productsizeRecyclerview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/productsizeRecyclerview" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="#fff"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:fillViewport="true"
+            android:layout_gravity="bottom"
+            android:layout_marginVertical="16dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view8">
+            app:layout_constraintTop_toBottomOf="@+id/productsizeRecyclerview"
+            app:layout_constraintVertical_bias="1.0">
 
-            <TextView
-                android:id="@+id/productItemNameTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="Makeup Brush sett t t t  t  t t t tt t t t t t  t t t t  t t  t t "
-                android:textColor="#090909"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/productPageMessagesImageView"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/productPagePriceTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Price : 200"
-                android:textColor="#E62121"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/productItemNameTextView"
-                app:layout_constraintTop_toBottomOf="@+id/productItemNameTextView" />
-
-            <ImageView
-                android:id="@+id/productPageMessagesImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_baseline_message_24"
-                app:layout_constraintEnd_toStartOf="@+id/productPageShareTImageView"
-                app:layout_constraintTop_toTopOf="@+id/productPageShareTImageView" />
-
-            <ImageView
-                android:id="@+id/productPageShareTImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:background="@drawable/ic_baseline_share_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view2"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bottomsheet"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#6b6b6b"
-                app:layout_constraintTop_toBottomOf="@+id/productPagePriceTextView"
-                tools:layout_editor_absoluteX="-40dp" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="18dp"
-                android:layout_weight="1"
-                android:text="Quantity"
-                android:textColor="#292727"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-            <LinearLayout
-                android:id="@+id/productaddorremoveitemslinearlayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/view3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2">
+                android:background="#fff"
 
-                <ImageButton
-                    android:id="@+id/productremoveitemsImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#fbe9e7"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_baseline_remove_24"
-                    android:textColor="@color/red"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/productitemquantitiytextview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:padding="8dp"
-                    android:text="2"
-                    android:textColor="#6b6b6b"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/productadditemsImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#fbe9e7"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_baseline_add_24"
-                    android:textColor="@color/red"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/productaddToCartButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="#c62828"
-                android:text="Add to CArt"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/view3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-
-            <View
-                android:id="@+id/view3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#6b6b6b"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-            <WebView
-                android:id="@+id/productpageDescriptionTextView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="description"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view3" />
+                app:layout_constraintTop_toBottomOf="@+id/view8">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/oo"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#e0e0e0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/productItemNameTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Makeup Brush se "
+                    android:textColor="#090909"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/productPageMessagesImageView"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/productPagePriceTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Price : 200"
+                    android:textColor="#E62121"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/productItemNameTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/productItemNameTextView" />
+
+                <ImageView
+                    android:id="@+id/productPageMessagesImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_baseline_message_24"
+                    app:layout_constraintEnd_toStartOf="@+id/productPageShareTImageView"
+                    app:layout_constraintTop_toTopOf="@+id/productPageShareTImageView" />
+
+                <ImageView
+                    android:id="@+id/productPageShareTImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/ic_baseline_share_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#6b6b6b"
+                    app:layout_constraintTop_toBottomOf="@+id/productPagePriceTextView"
+                    tools:layout_editor_absoluteX="-40dp" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_weight="1"
+                    android:text="Quantity"
+                    android:textColor="#292727"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+                <LinearLayout
+                    android:id="@+id/productaddorremoveitemslinearlayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/view3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2">
+
+                    <ImageButton
+                        android:id="@+id/productremoveitemsImageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="#fbe9e7"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_baseline_remove_24"
+                        android:textColor="@color/red"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/productitemquantitiytextview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"
+                        android:text="2"
+                        android:textColor="#6b6b6b"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/productadditemsImageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="#fbe9e7"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_baseline_add_24"
+                        android:textColor="@color/red"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/productaddToCartButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="#c62828"
+                    android:text="Add to CArt"
+                    android:textColor="#fff"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toTopOf="@+id/view3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#6b6b6b"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+                <ScrollView
+                    android:id="@+id/htmldescriptionscrollview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view3">
+
+                    <WebView
+                        android:id="@+id/productpageDescriptionTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="500dp"
+                        android:text="description"
+                        android:textColor="#6b6b6b"
+
+                        />
+                </ScrollView>
+
+                <ProgressBar
+                    android:id="@+id/productbottomsheetprogressbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view3"
+                    app:layout_constraintVertical_bias="0.04000002" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
+
+    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/productfragmentprogressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/red" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

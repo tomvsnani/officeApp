@@ -19,6 +19,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -66,7 +67,12 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
     private var selectedVariant: VariantsModelClass? = null
     private var variantList: List<VariantsModelClass>? = null
     private var htmlDescriptionScroll: ScrollView? = null
+    lateinit var progressbar:ProgressBar
     var binding: FragmentProductLayout2Binding? = null
+    var type:String="1"
+    var bottomsheetProgressbar:ProgressBar?=null
+    var rootlayout:CoordinatorLayout?=null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,11 +94,17 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
         savedInstanceState: Bundle?
     ): View? {
 
-        var view: View = inflater.inflate(R.layout.fragment_product_layout_2, container, false)
+        var view: View?=null
+        if(type=="2")
+        view= inflater.inflate(R.layout.fragment_product_layout_2, container, false)
+        else view=inflater.inflate(R.layout.fragment_product, container, false)
 
         initializeViews(view)
+        if(type=="2")
         binding = FragmentProductLayout2Binding.bind(view)
-        binding!!.productfragmentouterlayout.visibility = View.GONE
+
+        binding?.productfragmentouterlayout?.visibility = View.GONE
+
         (activity as MainActivity).lockDrawer()
 
         getProductData()
@@ -103,7 +115,8 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         setUpProductImageViewPager(view)
 
-        setUpBottomSheet(view)
+        if(type=="2")
+            setUpBottomSheet(view)
 
         setUpProductColorRecyclerView()
 
@@ -111,8 +124,9 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
 
         setUpClickListeners()
 
-        binding!!.textView2.text = modelClass.variantparam0
-        binding!!.textView4.text = modelClass.variantParam1
+        binding?.textView2?.text = modelClass.variantparam0
+
+        binding?.textView4?.text = modelClass.variantParam1
 
         return view
     }
@@ -129,8 +143,9 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                     getSelectedVariant()
                     assignDataToViews()
                     submitDataToSizeColorAdapters()
-                    binding!!.productfragmentprogressbar.visibility = View.GONE
-                    binding!!.productfragmentouterlayout.visibility = View.VISIBLE
+                    binding?.productfragmentprogressbar?.visibility = View.GONE
+                    progressbar.visibility=View.GONE
+                    binding?.productfragmentouterlayout?.visibility = View.VISIBLE
                 }
             })
     }
@@ -220,7 +235,9 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
             webview!!.settings.loadWithOverviewMode = true;
             webview!!.webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    binding!!.bottomsheeet.productbottomsheetprogressbar.visibility = View.GONE
+                    binding?.bottomsheeet?.productbottomsheetprogressbar?.visibility = View.GONE
+                    bottomsheetProgressbar?.visibility=View.GONE
+                    Log.d("camehere","ok")
                     super.onPageFinished(view, url)
                 }
             }
@@ -231,17 +248,19 @@ class ProductFragment(private var modelClass: CategoriesModelClass) : Fragment()
                 "utf-8",
                 null
             )
-webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
-    override fun onScrollChange(
-        v: View?,
-        scrollX: Int,
-        scrollY: Int,
-        oldScrollX: Int,
-        oldScrollY: Int
-    ) {
-        TODO("Not yet implemented")
-    }
-})
+
+            htmlDescriptionScroll?.viewTreeObserver?.addOnScrollChangedListener {
+                bottomSheetBehavior?.isDraggable = !htmlDescriptionScroll!!.canScrollVertically(-1)
+
+
+            }
+
+            binding?.bottomsheeet?.bottomsheet?.setOnTouchListener { v, event ->
+
+                bottomSheetBehavior?.state=BottomSheetBehavior.STATE_COLLAPSED
+                htmlDescriptionScroll?.scrollTo(0,0)
+               return@setOnTouchListener true
+            }
 
         } else {
             Toast.makeText(
@@ -294,13 +313,13 @@ webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
                 selectedVariant!!.isSelected = true
 
                 ApplicationClass.selectedVariantList!!.add(selectedVariant!!.copy())
-                addTocartButton!!.visibility = View.GONE
+                addTocartButton!!.visibility = View.INVISIBLE
                 addOrRemoveItemsLinear!!.visibility = View.VISIBLE
             } else
                 Toast.makeText(context, "Please choose a color or size", Toast.LENGTH_SHORT).show()
 
             itemQuantitiyTextView!!.text = selectedVariant?.quantityOfItem.toString()
-            if (selectedVariant!=null && selectedVariant!!.quantityOfItem > 0)
+            if (selectedVariant != null && selectedVariant!!.quantityOfItem > 0)
                 startCartAnimation()
 
         }
@@ -353,7 +372,10 @@ webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        binding!!.root.coordinator.addView(textView)
+        if(type=="2")
+        binding?.root?.coordinator?.addView(textView)
+        else
+            rootlayout?.addView(textView)
 
         var addCartButtonPosition: IntArray = IntArray(2)
         var cartPositionn: IntArray = IntArray(2)
@@ -556,25 +578,30 @@ webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
 
     private fun setUpBottomSheet(view: View) {
         bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomsheeet.bottomsheet)
+
+
+        binding?.bottomsheeet?.bottomsheet?.layoutParams?.height =
+            resources.displayMetrics.heightPixels - (56 * resources.displayMetrics.density).toInt()
+
         bottomSheetBehavior!!.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-//                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-//                    htmlDescriptionScroll!!.viewTreeObserver.addOnScrollChangedListener {
-//                        bottomSheetBehavior!!.isDraggable = htmlDescriptionScroll!!.scrollY == 0
-//                    }
-//                }
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    //      bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+
+
+                }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                if (slideOffset >= 0.9f) {
-                    toolbar!!.visibility = View.INVISIBLE
-                } else
-                    toolbar!!.visibility = View.VISIBLE
+
+                if (slideOffset >= 0.7f) {
+
+
+                }
             }
         })
     }
-
 
 
     private fun initializeViews(view: View) {
@@ -606,6 +633,12 @@ webview!!.setOnScrollChangeListener(object :View.OnScrollChangeListener{
         addOrRemoveItemsLinear = view.findViewById(R.id.productaddorremoveitemslinearlayout)
 
         htmlDescriptionScroll = view.findViewById(R.id.htmldescriptionscrollview)
+
+        progressbar=view.findViewById(R.id.productfragmentprogressbar)
+
+        bottomsheetProgressbar=view.findViewById(R.id.productbottomsheetprogressbar)
+
+        rootlayout=view.findViewById(R.id.coordinator)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
