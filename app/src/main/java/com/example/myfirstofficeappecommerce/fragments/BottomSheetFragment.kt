@@ -7,11 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstofficeappecommerce.Activities.MainActivity
+import com.example.myfirstofficeappecommerce.Adapters.ChooseAddressRecyclerAdapter
 import com.example.myfirstofficeappecommerce.ApplicationClass
+import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
+import com.example.myfirstofficeappecommerce.RunGraphQLQuery
 import com.example.myfirstofficeappecommerce.databinding.FragmentShowAddressBottomsheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,9 +26,9 @@ import com.shopify.buy3.Storefront
 
 
 class BottomSheetFragment(
-    var totalTax: Float,
-    var checkoutId: String,
-    var finalisingFragment: FinalisingOrderFragment
+
+    var checkoutId: String = "",
+    var finalisingFragment: Fragment
 ) : BottomSheetDialogFragment() {
     var adapter: ChooseAddressRecyclerAdapter? = null
     var binding: FragmentShowAddressBottomsheetBinding? = null
@@ -47,7 +53,15 @@ class BottomSheetFragment(
         else
             binding!!.chooseaddressrecyclerview.visibility = View.VISIBLE
 
+        if (ApplicationClass.addresstype == Constants.ADD_ADDRESS_TYPE_USER_ADDRESS) {
+            binding!!.confirmButton.visibility = View.GONE
+            RunGraphQLQuery.retrieve_all_the_addresses((activity as MainActivity)).observe(this) {
 
+                ApplicationClass.addressList = it as MutableList<UserDetailsModelClass>
+                adapter?.submitList(it)
+            }
+        } else
+            binding!!.confirmButton.visibility = View.VISIBLE
 
         activity!!.runOnUiThread {
 
@@ -62,7 +76,8 @@ class BottomSheetFragment(
 
                 addressList.add(0, a)
 
-                adapter!!.submitList(addressList)
+
+                    adapter!!.submitList(addressList)
 
                 adapter!!.notifyDataSetChanged()
 
@@ -85,31 +100,37 @@ class BottomSheetFragment(
 
 
         binding!!.viewmoreaddressesbutton.setOnClickListener {
-
-            NewAddressFragment(
-                checkoutId,
-                totalTax, this
-            ).show(parentFragment!!.childFragmentManager, "")
-
+            if (ApplicationClass.addresstype == Constants.ADD_ADDRESS_TYPE_ORDER_ADDRESS)
+                NewAddressFragment(
+                    checkoutId,
+                    this
+                ).show(parentFragment?.childFragmentManager!!, "")
+            else
+                NewAddressFragment(
+                    checkoutId,
+                    this
+                ).show(activity!!.supportFragmentManager, "")
 
         }
     }
 
     fun doTasksBasedOnSelectedAddress(addressList: MutableList<UserDetailsModelClass>) {
         if (addressList.size > 0) {
-            finalisingFragment.doTasksBasedOnSelectedAddress(Storefront.MailingAddress().apply {
-                var model = getDeliveryAddress(addressList)
+            (finalisingFragment as FinalisingOrderFragment).doTasksBasedOnSelectedAddress(
+                Storefront.MailingAddress().apply {
+                    var model = getDeliveryAddress(addressList)
 
-                model?.isSelectedAddress = true
-                city = model?.city
-                province = model?.state
-                country = model?.country
-                name = model?.title
-                zip = model?.pinCode
-                phone = model?.phoneNumber
+                    model?.isSelectedAddress = true
+                    city = model?.city
+                    province = model?.state
+                    country = model?.country
+                    name = model?.title
+                    zip = model?.pinCode
+                    phone = model?.phoneNumber
 
 
-            }, getDeliveryAddress(addressList)!!)
+                }, getDeliveryAddress(addressList)!!
+            )
         }
     }
 

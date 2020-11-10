@@ -26,6 +26,7 @@ class ApplicationClass : Application() {
         var addressList:MutableList<UserDetailsModelClass> =ArrayList()
         var defaultAdress:Storefront.MailingAddress?=null
         var shippingratesAddressList:MutableList<UserDetailsModelClass>?=null
+        var addresstype:String=Constants.ADD_ADDRESS_TYPE_ORDER_ADDRESS
     }
 
 

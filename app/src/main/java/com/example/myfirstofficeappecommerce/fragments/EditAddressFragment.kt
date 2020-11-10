@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
 import com.example.myfirstofficeappecommerce.ApplicationClass
+import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentEditAddressBinding
@@ -82,28 +83,31 @@ class EditAddressFragment(
                             "Address updated",
                             Toast.LENGTH_SHORT
                         ).show()
-                        for (i in parentFragment!!.childFragmentManager.fragments) {
+                        if (ApplicationClass.addresstype != Constants.ADD_ADDRESS_TYPE_USER_ADDRESS) {
+                            for (i in parentFragment!!.childFragmentManager.fragments) {
 
-                            if (i is FinalisingOrderFragment)
-                                (i as FinalisingOrderFragment).apply {
-                                    ApplicationClass.addressList.filter {
-                                        if (it.isSelectedAddress)
-                                            it.isSelectedAddress = false
-                                        return@filter true
+                                if (i is FinalisingOrderFragment)
+                                    (i as FinalisingOrderFragment).apply {
+                                        ApplicationClass.addressList.filter {
+                                            if (it.isSelectedAddress)
+                                                it.isSelectedAddress = false
+                                            return@filter true
+                                        }
+                                        userDetailsModelClass.isSelectedAddress = true
+
+                                        retrieve_addresses()
+
+
                                     }
-                                    userDetailsModelClass.isSelectedAddress = true
-
-                                    retrieve_addresses()
 
 
-                                }
-                            try {
-                                fragment.dismiss()
-                                dismiss()
-                            } catch (e: Exception) {
+
                             }
-
-
+                        }
+                        try {
+                            fragment.dismiss()
+                            dismiss()
+                        } catch (e: Exception) {
                         }
                     }
                 }

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.example.myfirstofficeappecommerce.*
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
+import com.example.myfirstofficeappecommerce.Adapters.ChooseAddressRecyclerAdapter
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.FragmentFinalisingOrderBinding
@@ -32,7 +33,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
     var bottomsheetFragment: BottomSheetFragment? = null
     var userDetailsModelList: MutableList<UserDetailsModelClass> =
         ArrayList()
-    var tempAddress:UserDetailsModelClass?=null
+    var tempAddress: UserDetailsModelClass? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,17 +98,18 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                 doTasksBasedOnSelectedAddress(
                     (parentFragment!!.activity as MainActivity).getMailingAddressFromModelClass(
                         getSelectedorDefaultAddress()!!
-                    ),  getSelectedorDefaultAddress()!!
+                    ), getSelectedorDefaultAddress()!!
                 )
             }
-        else{
-            if(  getSelectedorDefaultAddress()!=null)
-            doTasksBasedOnSelectedAddress(
-                (parentFragment!!.activity as MainActivity).getMailingAddressFromModelClass(
+        else {
+            if (getSelectedorDefaultAddress() != null)
+                doTasksBasedOnSelectedAddress(
+                    (parentFragment!!.activity as MainActivity).getMailingAddressFromModelClass(
+                        getSelectedorDefaultAddress()!!
+                    ),
                     getSelectedorDefaultAddress()!!
-                ),
-                getSelectedorDefaultAddress()!!
-            )}
+                )
+        }
     }
 
     fun toggleViewsOnSignIn() {
@@ -124,7 +126,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
         modelClass: UserDetailsModelClass
     ) {
 
-        tempAddress=modelClass
+        tempAddress = modelClass
 
         binding!!.chooseAddressnameTextView.text = defaultAdress?.name
         binding!!.chooseAddressPhoneNumber.text = defaultAdress?.phone
@@ -144,7 +146,7 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
                     it.isSelectedAddress = false
                 return@filter true
             }
-           tempAddress?.isSelectedAddress = true
+            tempAddress?.isSelectedAddress = true
             displayAddressBottomSheet()
         }
 
@@ -183,9 +185,9 @@ class FinalisingOrderFragment(var checkoutId: String, var totalTax: Float) : Fra
 
     private fun displayAddressBottomSheet() {
 
+        ApplicationClass.addresstype = Constants.ADD_ADDRESS_TYPE_ORDER_ADDRESS
 
-
-        bottomsheetFragment = BottomSheetFragment(totalTax, checkoutId, this)
+        bottomsheetFragment = BottomSheetFragment(checkoutId, this)
 
         bottomsheetFragment!!.show(parentFragment!!.childFragmentManager, "")
 

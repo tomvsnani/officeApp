@@ -197,11 +197,10 @@ class RunGraphQLQuery {
                 CategoriesDataProvider.graphh!!.queryGraph(query)
             call.enqueue(object : GraphCall.Callback<Storefront.QueryRoot> {
 
-
                 override fun onResponse(response: GraphResponse<Storefront.QueryRoot>) {
 
                     var address = response.data()!!.customer.addresses.edges
-
+                    ApplicationClass.addressList.clear()
                     for (i in address) {
                         ApplicationClass.addressList.add(
                             UserDetailsModelClass(

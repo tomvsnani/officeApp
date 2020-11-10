@@ -21,6 +21,8 @@ package com.example.myfirstofficeappecommerce
        const val MESSAGE_STATUS_NOT_SENT="NOT_SENT"
        const val MESSAGE_STATUS_DELIVERED="DELIVERED"
        const val LOGGED_IN_TOKEN="token"
+       const val ADD_ADDRESS_TYPE_USER_ADDRESS="user_address"
+       const val ADD_ADDRESS_TYPE_ORDER_ADDRESS="order_address"
    }
 
 

@@ -46,6 +46,11 @@ class MyAccountFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         binding!!.addressbookconstraint.setOnClickListener {
+            ApplicationClass.addresstype = Constants.ADD_ADDRESS_TYPE_USER_ADDRESS
+            BottomSheetFragment(finalisingFragment = this).show(
+                activity?.supportFragmentManager!!,
+                ""
+            )
 
         }
 
@@ -105,7 +110,7 @@ class MyAccountFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-       // Log.d("onprepareaccount", "yess")
+        // Log.d("onprepareaccount", "yess")
         if (item.itemId == android.R.id.home) {
 //            if(loginfrag!=null) {
             Log.d("backcalled", "accountbackcalled")
@@ -119,7 +124,7 @@ class MyAccountFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-      //  Log.d("onprepareaccount", "yess")
+        //  Log.d("onprepareaccount", "yess")
         for (i in 0..1) {
             menu.getItem(i).isVisible = false
         }

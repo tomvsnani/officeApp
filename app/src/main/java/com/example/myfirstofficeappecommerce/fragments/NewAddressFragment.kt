@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import com.example.myfirstofficeappecommerce.ApplicationClass
 import com.example.myfirstofficeappecommerce.CategoriesDataProvider
 import com.example.myfirstofficeappecommerce.Activities.MainActivity
+import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
 import com.example.myfirstofficeappecommerce.databinding.NewAddressLayoutBinding
@@ -22,12 +23,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.shopify.buy3.*
 import com.shopify.buy3.Storefront.*
 import com.shopify.graphql.support.ID
+import kotlinx.android.synthetic.main.recyclerview_last_row_layout.*
 import java.util.concurrent.TimeUnit
 
 
 class NewAddressFragment(
     var checkoutId: String,
-    var totalTax: Float,
+
     var fragment: BottomSheetFragment
 ) :
     BottomSheetDialogFragment() {
@@ -49,8 +51,12 @@ class NewAddressFragment(
         newAddressLayoutBinding!!.addAddressButton.setOnClickListener {
 
             if (checkIfAddressDetailsAreNotEmpty()) {
-
-                getShippingRatesWrapper()
+                if (ApplicationClass.addresstype == Constants.ADD_ADDRESS_TYPE_USER_ADDRESS) {
+                    var customeraddresscreatequery = getCustomerCreateAddressQuery()
+                    (activity as MainActivity).binding?.mainactivityprogressbar?.visibility=View.VISIBLE
+                    addUserAddress(customeraddresscreatequery)
+                } else
+                    getShippingRatesWrapper()
 
             } else
 
@@ -60,6 +66,62 @@ class NewAddressFragment(
         newAddressLayoutBinding!!.closeBottomSheetImageView.setOnClickListener { dismiss() }
 
         return v
+    }
+
+    private fun addUserAddress(customeraddresscreatequery: MutationQuery?) {
+        var call = CategoriesDataProvider.graphh?.mutateGraph(customeraddresscreatequery)
+        call?.enqueue(object : GraphCall.Callback<Mutation> {
+            override fun onResponse(response: GraphResponse<Mutation>) {
+                if (!response.hasErrors() && response.data() != null) {
+                    if (response.data()!!.customerAddressCreate.userErrors.isEmpty()) {
+                      activity!!.runOnUiThread {
+                          Toast.makeText(context,"Address has been added successfully",Toast.LENGTH_SHORT).show()
+                          (activity as MainActivity).binding?.mainactivityprogressbar?.visibility=View.GONE
+                      }
+                        dismiss()
+                        fragment.dismiss()
+
+                    } else {
+                       activity?.runOnUiThread {  Toast.makeText(
+                           context,
+                           "Please check the details entered",
+                           Toast.LENGTH_SHORT
+                       ).show()
+                           (activity as MainActivity).binding?.mainactivityprogressbar?.visibility=View.GONE}
+                    }
+                }
+            }
+
+            override fun onFailure(error: GraphError) {
+               activity?.runOnUiThread {    (activity as MainActivity).binding?.mainactivityprogressbar?.visibility=View.GONE }
+            }
+
+        })
+    }
+
+    private fun getCustomerCreateAddressQuery(): MutationQuery? {
+        return mutation { _queryBuilder ->
+            _queryBuilder.customerAddressCreate(
+                ((activity!!.application as ApplicationClass).getCustomerToken(
+                    (activity as MainActivity)
+                )), getMailingaddress(
+                    newAddressLayoutBinding!!.cityEditText.text.toString(),
+                    newAddressLayoutBinding!!.cityEditText.text.toString(),
+                    newAddressLayoutBinding!!.nameEditText.text.toString(),
+                    newAddressLayoutBinding!!.PhonenumberEditText.text.toString(),
+                    newAddressLayoutBinding!!.provinceEditText.text.toString(),
+                    newAddressLayoutBinding!!.zipEditText.text.toString(),
+                    newAddressLayoutBinding!!.lastnameEditText.text.toString(),
+                    newAddressLayoutBinding!!.countryEditText.text.toString()
+                )
+            ) { _queryBuilder ->
+                _queryBuilder.customerAddress { _queryBuilder ->
+
+                }.userErrors { _queryBuilder ->
+                    _queryBuilder.message().field()
+                }
+            }
+        }
     }
 
 
@@ -102,15 +164,7 @@ class NewAddressFragment(
         email: String
     ) {
         newAddressLayoutBinding!!.newaddressprogressbar.visibility = View.VISIBLE
-        val input = MailingAddressInput()
-            .setAddress1(address1)
-            .setCity(city)
-            .setFirstName(fname)
-            .setPhone(phone)
-            .setProvince(province)
-            .setZip(zip)
-            .setLastName(lname)
-            .setCountry(country)
+        val input = getMailingaddress(address1, city, fname, phone, province, zip, lname, country)
 
 
         val modelClass = UserDetailsModelClass(
@@ -144,6 +198,28 @@ class NewAddressFragment(
             }
 
         })
+    }
+
+    private fun getMailingaddress(
+        address1: String,
+        city: String,
+        fname: String,
+        phone: String,
+        province: String,
+        zip: String,
+        lname: String,
+        country: String
+    ): MailingAddressInput? {
+        val input = MailingAddressInput()
+            .setAddress1(address1)
+            .setCity(city)
+            .setFirstName(fname)
+            .setPhone(phone)
+            .setProvince(province)
+            .setZip(zip)
+            .setLastName(lname)
+            .setCountry(country)
+        return input
     }
 
 
@@ -268,12 +344,12 @@ class NewAddressFragment(
 
                         activity!!.runOnUiThread {
 
-                            for (i in parentFragment!!.childFragmentManager.fragments) {
+                            for (i in parentFragment?.childFragmentManager?.fragments!!) {
 
 
                                 if (i is FinalisingOrderFragment)
                                     (i as FinalisingOrderFragment).apply {
-                                        ApplicationClass.defaultAdress=MailingAddress().apply {
+                                        ApplicationClass.defaultAdress = MailingAddress().apply {
                                             zip = modelClass.pinCode
                                             phone = modelClass.phoneNumber
                                             city = modelClass.city
@@ -281,14 +357,17 @@ class NewAddressFragment(
                                             province = modelClass.state
                                             name = modelClass.title
                                         }
-                                        displaySelectedAddressDetails(ApplicationClass.defaultAdress!!,modelClass)
+                                        displaySelectedAddressDetails(
+                                            ApplicationClass.defaultAdress!!,
+                                            modelClass
+                                        )
 
-                                            displayShippingRates(userDetailsModelList[0])
+                                        displayShippingRates(userDetailsModelList[0])
                                         this.userDetailsModelList = userDetailsModelList
                                         toggleViewsOnSignIn()
                                         modelClass.isSelectedAddress = true
                                         addressList.add(modelClass)
-                                //        ApplicationClass.addressList.add(modelClass)
+                                        //        ApplicationClass.addressList.add(modelClass)
 
                                         Log.d("newadd", "yes")
 
@@ -302,7 +381,7 @@ class NewAddressFragment(
 
 
                             }
-                            newAddressLayoutBinding!!.newaddressprogressbar.visibility  =
+                            newAddressLayoutBinding!!.newaddressprogressbar.visibility =
                                 View.GONE
                         }
 
@@ -334,7 +413,7 @@ class NewAddressFragment(
 
                 override fun onFailure(error: GraphError) {
                     activity!!.runOnUiThread {
-                        newAddressLayoutBinding!!.newaddressprogressbar.visibility  =
+                        newAddressLayoutBinding!!.newaddressprogressbar.visibility =
                             View.GONE
                     }
                     Log.d("ratessff", error.message.toString())

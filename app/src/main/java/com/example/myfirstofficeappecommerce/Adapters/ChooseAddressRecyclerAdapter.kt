@@ -1,4 +1,4 @@
-package com.example.myfirstofficeappecommerce.fragments
+package com.example.myfirstofficeappecommerce.Adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,17 +8,15 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myfirstofficeappecommerce.CategoriesDataProvider
+import com.example.myfirstofficeappecommerce.ApplicationClass
+import com.example.myfirstofficeappecommerce.Constants
 import com.example.myfirstofficeappecommerce.Models.UserDetailsModelClass
 import com.example.myfirstofficeappecommerce.R
-import com.shopify.buy3.*
-import com.shopify.buy3.Storefront.Checkout
-import com.shopify.buy3.Storefront.QueryRoot
-import com.shopify.graphql.support.ID
-import java.util.concurrent.TimeUnit
+import com.example.myfirstofficeappecommerce.fragments.BottomSheetFragment
+import com.example.myfirstofficeappecommerce.fragments.EditAddressFragment
+import com.example.myfirstofficeappecommerce.fragments.NewAddressFragment
 import kotlin.math.max
 
 
@@ -40,11 +38,22 @@ class ChooseAddressRecyclerAdapter(var context: BottomSheetFragment, var checkou
 
             editButton?.setOnClickListener {
 
-
-                EditAddressFragment(currentList[absoluteAdapterPosition],(context as BottomSheetFragment)).show(
-                    (context as BottomSheetFragment).parentFragment!!.childFragmentManager,
-                    ""
-                )
+                if (ApplicationClass.addresstype == Constants.ADD_ADDRESS_TYPE_ORDER_ADDRESS)
+                    EditAddressFragment(
+                        currentList[absoluteAdapterPosition],
+                        (context as BottomSheetFragment)
+                    ).show(
+                        (context as BottomSheetFragment).parentFragment?.childFragmentManager!!,
+                        ""
+                    )
+                else
+                    EditAddressFragment(
+                        currentList[absoluteAdapterPosition],
+                        (context as BottomSheetFragment)
+                    ).show(
+                        (context as BottomSheetFragment).activity?.supportFragmentManager!!,
+                        ""
+                    )
 
 
             }
@@ -85,6 +94,11 @@ class ChooseAddressRecyclerAdapter(var context: BottomSheetFragment, var checkou
     override fun onBindViewHolder(holder: ChooseAddressViewHolder, position: Int) {
         var userDetailsModelClass: UserDetailsModelClass = currentList[position]
 
+        if (ApplicationClass.addresstype == Constants.ADD_ADDRESS_TYPE_USER_ADDRESS)
+            holder.radioButton?.visibility = View.GONE
+        else
+            holder.radioButton?.visibility = View.VISIBLE
+
         holder.radioButton!!.isChecked = userDetailsModelClass.isSelectedAddress
         holder.ItemNameTextView?.text = userDetailsModelClass.title
 
@@ -100,6 +114,6 @@ class ChooseAddressRecyclerAdapter(var context: BottomSheetFragment, var checkou
     }
 
     override fun getItemCount(): Int {
-        return max(0,currentList.size)
+        return max(0, currentList.size)
     }
 }
